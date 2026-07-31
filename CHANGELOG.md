@@ -9,6 +9,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.31.1] - 2026-07-31
+
+**Maintenance patch: merge-pipeline trust repair and a security-queue drain.** A required-check misconfiguration had silently deadlocked every site-only PR for three weeks: `validate-plugin` is required by the main-branch ruleset, but its workflow only triggered on plugin paths, so a PR touching only the docs site or a lockfile never reported the check and sat blocked forever with all-green visible checks. Nine PRs piled up, eight of them Dependabot updates carrying ten open security alerts (four high). This patch removes the trap, drains the queue to zero open alerts, repairs the two latent site-build defects the updates surfaced, and fixes a nondeterministic validator race. It is also the first S1 shadow exit-gate observation for the zero-drift program: this manual cut is diffed against release-please's shadow Release PR (#237), with findings recorded there for the S2 cutover decision. No new skills; catalog stays 68 skills (30 phase + 11 foundation + 12 utility + 15 tool), 6 sub-agents unchanged. Maintenance PATCH.
+
+### Fixed
+
+- **Required-check deadlock (#244):** removed the `paths:` filter from `validate-plugin`'s pull-request trigger so the required check reports on every PR (the job runs in about 20 seconds). A workflow comment documents that the filter must not return without first removing the check from the ruleset.
+- **Site build on astro 7.1 (#240):** `@astrojs/markdown-remark` is now a declared direct dependency. Astro 7 stopped bundling it, and the site's remark-based link resolver (`markdown.remarkPlugins`) hard-fails config validation without it; it had only ever arrived transitively. A call-site comment explains why it must not be pruned as unused and why the deprecated keys are kept (astro-mermaid injects through them).
+- **Site build on Starlight 0.41.5 (#233):** the content schema no longer re-declares Starlight's built-in `draft` field inside its `extend` object. Starlight 0.41.4 fixed extend merging, so the re-declaration shadowed the built-in `.default(false)`, every page's `draft` became `undefined`, and the production route filter emptied the entire route collection, failing the build with a misleading missing-slug error. Extend is for new fields only; a comment marks the rule.
+- **AGENTS.md sync validator race (#246):** the bash leg combined `set -o pipefail` with `printf | grep -q`, which nondeterministically reports present entries as missing when grep closes the pipe early (SIGPIPE). It survived fourteen consecutive green runs before firing on `main`. Replaced with a pure-bash membership loop, verified in both directions (passes on the real tree; still fails when an entry is genuinely missing).
+- **README version badge (#228):** the badge and Current-version row are now generator-owned (`pmskills:version-badge` / `pmskills:version-row` markers in `gen-derived-surfaces.mjs`), replacing the release-please annotation path whose semver regex corrupted the badge URL at the v2.31.0 S1 observation (issue #136).
+
+### Security
+
+- Dependency alert queue drained from ten open Dependabot alerts (four high severity) to zero: `astro` 7.0.2 to 7.1.6 (also removes a nested vulnerable `sharp` copy), `@astrojs/starlight` 0.41.0 to 0.41.5, `sharp` 0.35.1 to 0.35.3, `svgo` 4.0.1 to 4.0.2, `dompurify` 3.4.11 to 3.4.12, `postcss` 8.5.15 to 8.5.25, `astro-mermaid` 2.0.2 to 2.1.0, `js-yaml` 4.2.0 to 4.3.0 (root, dev), and a lockfile-only transitive `js-yaml` 3.14.2 to 3.15.0 in `.github/scripts` for which no Dependabot PR existed (#231, #233, #234, #240, #241, #242, #243, #245, #247).
+
+### Changed
+
+- CI actions upgraded: `actions/checkout` v5 to v7 (#211), `actions/setup-node` v5 to v7 (#239), `googleapis/release-please-action` v4 to v5 (#230; runtime moves node20 to node24, zero input changes, verified against the upstream action.yml diff).
+- `LICENSE` copyright owner set for Apache-2.0 (#236); the ADR format divergence from the external audit is recorded (#238).
+
 ## [2.31.0] - 2026-07-05
 
 **Zero-drift releases: generation becomes the only write path.** v2.30.0 fixed every live instance of count drift; this release removes the hand-write path that produced it. A new generator, `scripts/gen-derived-surfaces.mjs`, now owns the README catalog tables and badges, both quickstarts, the sub-agent compatibility matrix, the three plugin manifest description headlines, and the release-notes mirrors, each inside a `pmskills:*` marker pair with a `--check` tripwire that fails CI on a hand edit. Alongside it, release-please goes live in shadow (its Release PR is observed and diffed against this manual cut, never merged this cycle), the two awk `RSTART`/`RLENGTH` hazard validators that hung v2.27.1 CI are ported to single-source Node, trigger-fixture coverage climbs from 31 to 43 of 68 skills, an output-eval CI lane and a published evals page ship, and SECURITY.md gains a provenance page. No new skills; catalog stays 68 skills (30 phase + 11 foundation + 12 utility + 15 tool), 6 sub-agents unchanged. Additive MINOR.

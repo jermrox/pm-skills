@@ -2,7 +2,6 @@
 slug: releases/Release_v2.31.1
 title: Release v2.31.1
 description: A maintenance patch that fixes a required-check misconfiguration which had silently blocked all site-only PRs, drains the dependency security queue from ten open alerts to zero, and repairs two latent site-build defects the updates surfaced.
-draft: true
 ---
 
 **Released 2026-07-31.** PATCH. No skill behavior change; catalog stays 68 skills / 6 sub-agents.
