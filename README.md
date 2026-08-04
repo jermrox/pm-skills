@@ -1,12 +1,12 @@
 <a id="readme-top"></a>
 
-<h1 align="center">
+<h1>
   <a href="https://github.com/product-on-purpose/pm-skills">PM-Skills</a>
 </h1>
 
-<h4 align="center">A curated library of 68 best-practice, plug-and-play product management skills covering the complete product lifecycle - plus templates, workflows, and 200+ real-world sample outputs that set the quality bar.</h4>
+<h4 >A curated library of 68 best-practice, plug-and-play product management skills covering the complete product lifecycle - plus templates, workflows, and 200+ real-world sample outputs that set the quality bar.</h4>
 
-<p align="center">
+<p>
   <a href="https://github.com/product-on-purpose/pm-skills/issues/new?labels=bug">Report a Bug</a>
   ·
   <a href="https://github.com/product-on-purpose/pm-skills/issues/new?labels=enhancement">Request a Feature</a>
@@ -14,7 +14,7 @@
   <a href="https://github.com/product-on-purpose/pm-skills/discussions">Ask a Question</a>
 </p>
 
-<p align="center">
+<p>
   <img src="https://img.shields.io/badge/Status-Active-success?style=flat-square" alt="Project Status: Active">
   <a href="https://github.com/product-on-purpose/pm-skills/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square" alt="License">
@@ -38,7 +38,7 @@
   </a>
 </p>
 
-<p align="center">
+<p>
   <a href="https://github.com/product-on-purpose/pm-skills/stargazers">
     <img src="https://badgen.net/github/stars/product-on-purpose/pm-skills" alt="Stars">
   </a>
@@ -56,13 +56,13 @@
   </a>
 </p>
 
-<p align="center">
+<p>
   <a href="https://github.com/product-on-purpose/pm-skills-mcp">
     <img src="https://img.shields.io/badge/MCP_Server-maintenance%20mode-yellow.svg?style=flat-square" alt="MCP Server: Maintenance Mode">
   </a>
 </p>
 
-<p align="center">
+<p>
   <a href="#the-big-idea">About</a> •
   <a href="#installation-and-setup">Install</a> •
   <a href="#the-skill-library">Skills</a> •
