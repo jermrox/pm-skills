@@ -45,10 +45,10 @@ Populated as of each release from what is actually checked into the repo at tag 
 
 | Measure | As of v2.32.0 |
 |---|---|
-| Trigger-fixture coverage | **53 measured + 15 excluded by design = 68.** Complete, with nothing unclassified (see below) |
+| Trigger-fixture coverage | **53 fixture-covered + 15 excluded by design = 68.** Complete, with nothing unclassified (see below). Carrying a fixture pack means the pack's structure is enforced in CI; it is not a claim that the skill's routing is continuously scored (see the row below) |
 | Skills with output-eval scenario assets | 12 of 68 (15 scenario files; a skill may carry more than one) |
 | Output-eval family rubrics defined | 7 (`docs/internal/eval-rubrics/`) |
-| Router-eval committed baseline | Haiku-pinned, calibration 6/6 on the instrument's own sanity queries |
+| Router-eval committed baseline | Haiku-pinned, calibration 6/6 on the instrument's own sanity queries. Covers **29 of the 53** rostered skills; the remaining 24 have fixtures but no committed baseline row, and `diffBaseline` skips a skill it has no baseline for, so they are not yet drift-gated. Refreshing the baseline to the full roster is tracked for a later release |
 | Trigger-fixture structural validity | enforcing in CI (`check-trigger-fixtures.mjs`) |
 | Output-eval asset presence | advisory in CI (`check-output-eval-assets.mjs`), promotes to enforcing once the roster is pinned |
 

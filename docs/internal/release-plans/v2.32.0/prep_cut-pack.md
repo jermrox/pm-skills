@@ -55,7 +55,7 @@ your research with `discover-interview-synthesis`, then run `deliver-prd` and it
 you already produced instead of asking you to paste them again. Nothing happens until you opt in:
 with no file present, every skill and both hooks behave exactly as they did in v2.31.1, and writes
 are proposed for your confirmation rather than applied. Alongside it, trigger-eval coverage closes
-as an accounting rather than a percentage: 53 skills measured and 15 excluded by design, covering
+as an accounting rather than a percentage: 53 skills carry a trigger-eval fixture pack and 15 are excluded by design, covering
 all 68 with nothing unclassified, asserted in test so it cannot drift. Release automation gains the
 three mechanisms its cutover was missing. No new skills; catalog stays 68 skills (30 phase + 11
 foundation + 12 utility + 15 tool), 6 sub-agents unchanged. Additive MINOR.
@@ -144,7 +144,7 @@ foundation + 12 utility + 15 tool), 6 sub-agents unchanged. Additive MINOR.
   backfilled.
 - **Two published reference pages that stated this release's own facts wrong.** The evals page
   carried "43 of 68 (about 63%)" for trigger coverage, the number this release replaces, and now
-  states the accounting (53 measured + 15 excluded by design = 68) with a section on why coverage
+  states the accounting (53 fixture-covered + 15 excluded by design = 68) with a section on why coverage
   here is a closed accounting rather than a percentage climbing toward 100. The runtime-components
   page described `.claude/pm-skills.local.md` as "deferred to v2.17+", a file live since v2.25.0 and
   now the project-memory substrate; it is rewritten around the portability split that section is
@@ -212,7 +212,7 @@ filename, so memory carries durable context there rather than duplicating a mech
 #### Trigger-eval coverage closes
 
 Ten more skills gain fixture packs at 20 queries each. The number that matters is not a coverage
-percentage: **53 skills are measured and 15 are excluded by design, which accounts for all 68 with
+percentage: **53 skills carry a fixture pack and 15 are excluded by design, which accounts for all 68 with
 nothing unclassified.** The 15 are the sprint-family steps, which are entered through a family
 workflow rather than by typing, and that exclusion is now recorded as data in the roster with its
 counter-argument and reversal path written alongside it. The 53 + 15 = 68 equation is asserted in a
@@ -327,17 +327,33 @@ release cycle where every criterion holds **simultaneously**. This cut is that c
 and 5 are already demonstrated from prior cycles; items 2, 4, and 6 shipped engineering in WS-6 and
 need this cycle as their evidence. **Record each observation as it happens, not afterward.**
 
-| # | Criterion | Prior state | What to observe in this cut | Observed |
-|---|---|---|---|---|
-| 1 | Shadow's version bump and notes match the manual cut | DEMONSTRATED at v2.31.1 (version + date matched) | Does the shadow Release PR propose 2.32.0 with a matching date at the G2 window? | |
-| 2 | Zero hand-fixes to the shadow diff | ENGINEERING SHIPPED (generator-owned marketplace pin) | Does `marketplace.json` show `plugins[0].version` and a v-prefixed `source.ref` advanced, with no reformatting? Any hand-fix at all fails this item | |
-| 3 | Token triggers CI on the Release PR | DONE (PR #229) | Confirm still true | |
-| 4 | Clean version-only branch diff | ENGINEERING SHIPPED (regen workflow) | Does the Release PR branch pass `validate` without stale generated files? This is the exact failure PR #229 hit | |
-| 5 | PR-title lint active | DONE (advisory) | Confirm still true. Promotion to required is decision D8, relocated per section 6 | |
-| 6 | Generator run + regenerated mirrors committed on the branch | ENGINEERING SHIPPED (same workflow) | Did `release-please-regen.yml` actually fire, and did it commit mirrors when they changed? **This workflow has never run.** Pre-enrichment, a neutral exit with a notice is the designed path, not a failure | |
-| 7 | Maintainer ratification | OPEN, maintainer-only | Only after 1-6 are all observed green in this one cycle. No agent may self-promote this | |
+**FILLED 2026-08-14 from the live cut.** Immutable record posted as
+[#136 comment 5295208645](https://github.com/product-on-purpose/pm-skills/issues/136#issuecomment-5295208645).
+Shadow Release PR observed: [#266](https://github.com/product-on-purpose/pm-skills/pull/266)
+(`chore(main): release 2.32.0`), branch `release-please--branches--main`, carrying two commits:
+`df974145` (release-please's own) and `26e7f245` (the regen workflow's).
 
-If any of 1, 2, 4, or 6 fails, the correct outcome is to record the failure on
+| # | Criterion | Prior state | Observed in this cut |
+|---|---|---|---|
+| 1 | Shadow's version bump and notes match the manual cut | DEMONSTRATED at v2.31.1 | **PASS on version and date.** #266 proposed exactly `2.32.0` dated 2026-08-14, derived from the single `feat:` squash title of PR #257 (`54744ceb`). Notes remained the thin auto-skeleton, which is the ZD-1 design, not a defect. **New finding:** release-please inserted its `## [2.32.0]` heading ABOVE the existing `## [Unreleased]`, which would have orphaned the #265 entry under "Unreleased" below a released version. The manual G2 consumed the heading instead. This will recur every cycle and needs a standing rule before cutover |
+| 2 | Zero hand-fixes to the shadow diff | ENGINEERING SHIPPED | **PASS.** `plugins[0].version` advanced 2.31.1 to 2.32.0 and `plugins[0].source.ref` advanced `v2.31.1` to `v2.32.0`, v-prefix intact, with the compact single-line `"source": { ... }` object preserved byte-for-byte. Zero hand-fixes were required. Provenance verified rather than assumed: `df974145` does not touch `marketplace.json` at all (WS-6 removed its jsonpath entry); `26e7f245` wrote it from `plugin.json` via `evalMarketplacePin` |
+| 3 | Token triggers CI on the Release PR | DONE (PR #229) | **PASS**, still true. All 7 checks ran on #266 |
+| 4 | Clean version-only branch diff | ENGINEERING SHIPPED | **PASS.** Seven files, every one version-bearing: three manifests, `.release-please-manifest.json`, `CHANGELOG.md`, `README.md` (badge + current-version row), and the compat-matrix stamp. `validate` green on **both** ubuntu-latest and windows-latest. This is the exact failure mode PR #229 died on |
+| 5 | PR-title lint active | DONE (advisory) | **PASS**, `lint-pr-title` green on #266. Promotion to required is D8, relocated to v2.33.0 per section 6 |
+| 6 | Generator run + regenerated mirrors committed on the branch | ENGINEERING SHIPPED | **PASS, and idempotent.** `release-please-regen.yml` fired for the first time ever (run `31809855645`), ran the full generator on the branch and committed `26e7f245` touching `marketplace.json`, `README.md` and `sub-agent-compatibility.md`. That push re-triggered the workflow, whose follow-up run reported `All derived surfaces already current on this branch; nothing to commit`. It has now fired three times across this cut, all successful, so the mechanism does not loop on its own commits |
+| 7 | Maintainer ratification | OPEN, maintainer-only | **STILL OPEN by deliberate ruling.** Criteria 1-6 were all observed green simultaneously, which is exactly the evidence item 7 waited for. The maintainer nevertheless ruled to cut v2.32.0 manually and defer ratification, to preserve a control group: ratifying an automation and exercising it for the first time in the same release leaves no way to attribute a failure. Prerequisite added before ratifying: [#267](https://github.com/product-on-purpose/pm-skills/issues/267) |
+
+**All 7 checks green on #266**: `Analyze`, `CodeQL`, `lint-pr-title`, `regen`, `validate (ubuntu-latest)`,
+`validate (windows-latest)`, `validate-plugin`. First fully green Release PR in the program's history.
+
+**Phantom-minor window: did not occur.** Runbook Section 8.5 predicts the shadow flipping to a
+spurious next-minor once the manifest sits ahead of the tag, as observed at v2.31.1 on PR #237.
+It did not happen here: #266 still proposed `2.32.0` after the G2 commit. The likely reason is that
+release-please reads `.release-please-manifest.json`, which stays at `2.31.1` until the G4
+reconciliation, so from its point of view nothing got ahead of the tag. If that holds, 8.5's rule is
+narrower than written and should be scoped when the runbooks are reconciled (#269).
+
+If any of 1, 2, 4, or 6 had failed, the correct outcome would have been to record the failure on
 [#136](https://github.com/product-on-purpose/pm-skills/issues/136) and keep the cutover open. A
 failed observation is a successful test, not a release defect.
 

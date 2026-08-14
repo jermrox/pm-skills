@@ -1,7 +1,7 @@
 ---
 slug: releases/Release_v2.32.0
 title: Release v2.32.0
-description: Project memory lands as an opt-in state file eight skills read, trigger-eval coverage closes as a 53-plus-15-equals-68 accounting, release automation gains the three mechanisms its cutover was missing, and the AI-product skill family gets a tracked scope spec with a control-arm build gate.
+description: Project memory lands as an opt-in state file eight skills read, trigger-eval fixture coverage closes as a 53-plus-15-equals-68 accounting, release automation gains the three mechanisms its cutover was missing, and the AI-product skill family gets a tracked scope spec with a control-arm build gate.
 ---
 
 **Released 2026-08-14.** Additive MINOR. No new skills; catalog stays 68 skills (30 phase + 11 foundation + 12 utility + 15 tool), 6 sub-agents unchanged.
@@ -24,11 +24,13 @@ The posture is opt-in throughout, deliberately. With no file, every skill and bo
 
 Two of the eight are pure readers by design. The meeting family already chains its artifacts by filename, so memory carries durable context there rather than duplicating a mechanism that works.
 
-The full schema, including the `artifacts[]` entry shape and the four provenance tags, is documented in [Hooks and project memory](../concepts/hooks.md). That page also states what the file does not yet guarantee: nothing normalizes it at runtime, and concurrent sessions have no conflict detection.
+The full schema, including the `artifacts[]` entry shape and the four provenance tags, is documented in [Hooks and project memory](../concepts/hooks.md). Each of the six writing contracts also carries a **Write discipline** bullet: re-read immediately before writing, merge rather than overwrite, re-propose if the file changed in between. That page is equally plain about what this is not. It is an instruction the agent follows, not a runtime guarantee, because nothing normalizes or locks the file.
 
 ### Trigger-eval coverage closes
 
-Ten more skills gain fixture packs at 20 queries each. The number that matters is not a coverage percentage: **53 skills are measured and 15 are excluded by design, which accounts for all 68 with nothing unclassified.**
+Ten more skills gain fixture packs at 20 queries each. The number that matters is not a coverage percentage: **53 skills carry a fixture pack and 15 are excluded by design, which accounts for all 68 with nothing unclassified.**
+
+Being precise about what that claims, because it would be easy to overstate: carrying a fixture pack means the pack's structure is enforced on every pull request. It does not mean the skill's routing is continuously scored. The lane that actually scores recall and precision runs on manual dispatch, and its committed baseline covers 29 of the 53, so the other 24 have fixtures but are not yet drift-gated. Closing that gap is a later release's work, and the evals page states the current numbers rather than rounding them up.
 
 The 15 are the sprint-family stages, which are entered through a family or workflow entry point rather than by typing a request. Measuring whether "run the magic lenses exercise" routes correctly measures a path users do not take. That exclusion is now recorded as data in the roster, with its counter-argument and reversal path written alongside it, and a new skill must land in exactly one of the two states in the merge that adds it.
 

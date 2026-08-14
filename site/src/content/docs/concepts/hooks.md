@@ -152,7 +152,9 @@ The distinction is load-bearing rather than decorative: it is what lets a reader
 
 `## Decisions` is a prose section, not frontmatter. Each entry is a durable choice with its date and the skill or person that recorded it. It is deliberately not a YAML list, because decisions carry reasoning that does not survive being flattened into fields.
 
-**Known limit, stated rather than implied.** Nothing enforces any of this at runtime. The advisory `check-memory-contracts` validator checks that a skill *declares* a contract, not that a written file matches this shape, and concurrent sessions writing the same file have no conflict detection today. If two agents append from separate sessions, later writes can overwrite earlier ones. Eight skills ship a contract in v2.32.0; treat the file as a convenience that compounds context, not as a system of record.
+**Concurrent writes: what is guaranteed, and what is not.** Every contract that writes carries a **Write discipline** bullet requiring the skill to re-read the file immediately before writing, merge its entry into current state rather than overwriting, and re-propose if the file changed since the proposal was drafted. The `check-memory-contracts` validator enforces that a writing contract states this.
+
+What that buys is an *instruction*, not a guarantee. Nothing enforces it at runtime: a skill is text an agent follows, the agent chooses its own edit primitive, and the validator checks the declaration rather than the resulting file. So the honest position is that two sessions writing the same file are now told how to avoid clobbering each other, and are not prevented from it. The file is gitignored, so a bad write is not recoverable through git. Eight skills ship a contract in v2.32.0, six of which write; treat the file as a convenience that compounds context, not as a system of record.
 
 ## Output-quality checks (advisory CI)
 

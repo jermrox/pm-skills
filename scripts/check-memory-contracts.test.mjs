@@ -11,6 +11,7 @@ const VALID = [
   '- **Reads:** `phase`, `active_initiative`',
   '- **Writes:** the synthesis as an `interpretation` artifact',
   '- **Posture:** propose the entry and wait for confirmation, unless `memory_auto_append: true`.',
+  '- **Write discipline:** re-read the file immediately before writing and merge rather than overwrite.',
   '',
 ].join('\n');
 
@@ -94,4 +95,29 @@ test('a write that is not `nothing` still must name a tag', () => {
   // The escape hatch is the literal word, not a way to skip the tag rule.
   const body = extractContract(VALID.replace('the synthesis as an `interpretation` artifact', 'the recap document'));
   assert.ok(validateContract(body).some((p) => /names no provenance tag/.test(p)));
+});
+
+// Rule 5. The state file is gitignored, so a write from a stale read is unrecoverable.
+// An adversarial review at the v2.32.0 cut refused the argument that instructing "append"
+// implies append semantics: the agent chooses the edit primitive, so the contract has to
+// say what safe looks like.
+
+test('a contract that writes but omits the Write discipline bullet is reported', () => {
+  const body = extractContract(VALID.replace(/- \*\*Write discipline:\*\*.*\n/, ''));
+  assert.ok(validateContract(body).some((p) => /no `- \*\*Write discipline:\*\*` bullet/.test(p)));
+});
+
+test('a Write discipline bullet that does not require a re-read is reported', () => {
+  const body = extractContract(
+    VALID.replace('re-read the file immediately before writing and merge rather than overwrite.', 'be careful.')
+  );
+  assert.ok(validateContract(body).some((p) => /re-read/.test(p)));
+});
+
+test('a pure reader needs no Write discipline bullet', () => {
+  // Nothing to clobber, so demanding the bullet would be noise.
+  const readerOnly = VALID
+    .replace('the synthesis as an `interpretation` artifact', 'nothing')
+    .replace(/- \*\*Write discipline:\*\*.*\n/, '');
+  assert.deepEqual(validateContract(extractContract(readerOnly)), []);
 });

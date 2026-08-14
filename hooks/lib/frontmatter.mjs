@@ -20,15 +20,41 @@ export function splitFrontmatter(fileText) {
  *
  *  Preserved on purpose: `issue#42` (no leading whitespace, so not a comment),
  *  `"Sprint #14 cleanup"` (inside quotes), and `[a, b] # note` (after the list). */
+/** Index of the closing quote of a quoted scalar starting at 0, or -1 if unterminated.
+ *  Honours both YAML escape forms, because a naive indexOf stops at the first inner
+ *  quote and truncates the value: `"say \"hi\" now"` became `say \`, and
+ *  `'it''s here'` became `it`. Both are valid YAML and both parsed correctly before
+ *  comment stripping was added, so getting this wrong is a regression, not a gap. */
+function endOfQuotedScalar(value, quote) {
+  for (let i = 1; i < value.length; i++) {
+    if (quote === '"' && value[i] === '\\') { i++; continue; }      // \" escape
+    if (value[i] !== quote) continue;
+    if (quote === "'" && value[i + 1] === "'") { i++; continue; }   // '' literal quote
+    return i;
+  }
+  return -1;
+}
+
 function stripComment(value) {
   const first = value[0];
   if (first === '"' || first === "'") {
-    const end = value.indexOf(first, 1);
+    const end = endOfQuotedScalar(value, first);
     return end === -1 ? value : value.slice(0, end + 1); // unterminated: leave as-is
   }
   if (first === '[') {
-    const end = value.indexOf(']');
-    return end === -1 ? value : value.slice(0, end + 1);
+    // Skip quoted items while looking for the closing bracket, so a `]` inside an
+    // item does not end the sequence early: `["a]b"]` must not become `["a"]`.
+    for (let i = 1; i < value.length; i++) {
+      const c = value[i];
+      if (c === '"' || c === "'") {
+        const end = endOfQuotedScalar(value.slice(i), c);
+        if (end === -1) return value; // unterminated item: leave as-is
+        i += end;
+        continue;
+      }
+      if (c === ']') return value.slice(0, i + 1);
+    }
+    return value;
   }
   const m = /(^|\s)#/.exec(value);
   return m ? value.slice(0, m.index) : value;

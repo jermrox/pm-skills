@@ -71,3 +71,22 @@ test('getList drops a comment after the array without eating list items', () => 
   assert.deepEqual(getList('guardrail_checks: ["em-dash"]  # only this check', 'guardrail_checks'), ['em-dash']);
   assert.deepEqual(getList('guardrail_checks: ["issue #42"]  # hash inside an item', 'guardrail_checks'), ['issue #42']);
 });
+
+// Both YAML escape forms, and a bracket inside a quoted item. A scanner that stops
+// at the first inner quote or the first `]` silently TRUNCATES valid YAML, which is
+// worse than not stripping comments at all: the value parses, it is just wrong.
+
+test('getField honours escaped double quotes inside a double-quoted scalar', () => {
+  assert.equal(getField('active_initiative: "say \\"hi\\" now"', 'active_initiative'), 'say \\"hi\\" now');
+  assert.equal(getField('active_initiative: "say \\"hi\\""  # note', 'active_initiative'), 'say \\"hi\\"');
+});
+
+test('getField honours doubled single quotes inside a single-quoted scalar', () => {
+  assert.equal(getField("active_initiative: 'Customer''s billing migration'", 'active_initiative'), "Customer''s billing migration");
+  assert.equal(getField("active_initiative: 'it''s here'  # note", 'active_initiative'), "it''s here");
+});
+
+test('getList does not end the sequence at a bracket inside a quoted item', () => {
+  assert.deepEqual(getList('guardrail_checks: ["a]b"]', 'guardrail_checks'), ['a]b']);
+  assert.deepEqual(getList('guardrail_checks: ["a]b", "c"]  # note', 'guardrail_checks'), ['a]b', 'c']);
+});

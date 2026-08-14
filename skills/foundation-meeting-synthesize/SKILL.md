@@ -119,6 +119,11 @@ and behave exactly as described above.
 - **Writes:** the synthesis as an `interpretation` artifact.
 - **Posture:** propose the entry and wait for confirmation before writing, unless
   `memory_auto_append: true` is set, in which case append and echo what was written.
+- **Write discipline:** re-read the file immediately before writing, never from the copy that
+  produced the proposal. If it changed in between, merge your entry into the current state and
+  re-propose rather than overwriting; add only your own entry and leave every other field and
+  section byte-identical. Nothing enforces this at runtime and the file is gitignored, so a
+  careless whole-file write loses another session's work with no way to recover it.
 
 This complements the family's filename-based chaining rather than replacing it: filenames still locate the sibling artifacts of one meeting, while project memory carries the durable product context across meetings.
 ## Quality Checklist

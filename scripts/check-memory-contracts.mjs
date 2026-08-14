@@ -29,9 +29,14 @@
 //   3. a Posture bullet exists and names the `memory_auto_append` opt-in
 //   4. the section names `.claude/pm-skills.local.md`, so the opt-in condition is
 //      stated in the skill the agent is actually reading, not only in the docs
+//   5. a contract that WRITES carries a Write discipline bullet requiring a re-read
+//      immediately before writing (pure readers are exempt)
 //
 // Rule 4 is the one that matters most for trust. The opt-in posture is load-bearing
-// and it is only real if it is visible at the point of use.
+// and it is only real if it is visible at the point of use. Rule 5 is the one that
+// matters most for safety: the state file is gitignored, so a write from a stale read
+// is unrecoverable data loss, and instructing "append" does not make the agent's chosen
+// edit primitive an append.
 //
 // Usage:  node scripts/check-memory-contracts.mjs [--root <dir>]
 // Exit:   0 = every declared contract is well-formed (or none exist)
@@ -65,6 +70,7 @@ export function validateContract(body) {
     problems.push('missing a `- **Reads:**` bullet');
   }
 
+  let isWriter = false;
   const writes = /\*\*Writes:\*\*(.*)/.exec(body);
   if (!writes) {
     problems.push('missing a `- **Writes:**` bullet');
@@ -74,6 +80,7 @@ export function validateContract(body) {
     // already chains its own artifacts by filename. Demanding a write from them would
     // manufacture a fake provenance tag, which is worse than declaring none.
   } else {
+    isWriter = true;
     const named = PROVENANCE_TAGS.filter((t) => new RegExp('`' + t + '`').test(writes[1]));
     if (named.length === 0) {
       problems.push(
@@ -91,6 +98,21 @@ export function validateContract(body) {
     problems.push('missing a `- **Posture:**` bullet');
   } else if (!body.includes(AUTO_KEY)) {
     problems.push('the Posture bullet does not name the `' + AUTO_KEY + '` opt-in');
+  }
+
+  // Rule 5. A contract that writes must state the optimistic-concurrency discipline.
+  // The state file is gitignored, so a whole-file write from a stale read destroys
+  // another session's entries with no way to recover them. The discipline is specified
+  // in the parked ledger delta spec; before v2.32.0 no shipped contract carried it, and
+  // an adversarial review at the cut correctly refused the argument that instructing
+  // "append" implies append semantics. It does not: the agent picks the edit primitive.
+  // Pure readers are exempt, having nothing to lose.
+  if (isWriter) {
+    if (!/\*\*Write discipline:\*\*/.test(body)) {
+      problems.push('the contract writes but has no `- **Write discipline:**` bullet');
+    } else if (!/re-read/i.test(body)) {
+      problems.push('the Write discipline bullet does not require a re-read immediately before writing');
+    }
   }
 
   if (!body.includes(STATE_FILE)) {

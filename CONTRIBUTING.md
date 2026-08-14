@@ -97,7 +97,7 @@ scaffolds all of this for you; if you author a skill by hand, supply it yourself
    typing a free-text request: the 15 `tool-*` sprint-family steps are excluded because they are
    stages inside a registered sprint family, reached through a family or workflow entry point.
    The counts are asserted in the test suite (currently 53 rostered + 15 excluded = 68), so a skill
-   that lands in neither state fails CI rather than quietly going unmeasured. This is what
+   that lands in neither state fails CI rather than quietly going unaccounted for. This is what
    "eval-complete from day one" means in practice.
 3. **Output scenario + family rubric.** `evals/output-scenarios/<id>.md` with frontmatter
    `scenario` / `skill` / `family` and a realistic input brief. `family` maps to a rubric under
