@@ -65,7 +65,11 @@ foundation + 12 utility + 15 tool), 6 sub-agents unchanged. Additive MINOR.
 - **Project memory (opt-in).** A `schema: 1` state file at `.claude/pm-skills.local.md` carrying
   `phase`, `active_initiative`, an `artifacts[]` ledger, and a `## Decisions` section, under a
   four-tag provenance model. The SessionStart phase router reads a declared phase; `memory_auto_append`
-  is an opt-in flag that fails closed. Documented in `concepts/hooks.md`.
+  is an opt-in flag that fails closed. Fully documented in `concepts/hooks.md`, including the
+  `artifacts[]` entry shape and the provenance tags, because nothing normalizes the file at runtime:
+  two skills inventing different shapes could not hand off, which is the whole point of the feature.
+  The same section states what the file does not yet guarantee, notably that concurrent sessions have
+  no conflict detection.
 - **`## Project Memory Contract` on eight skills:** `discover-interview-synthesis`, `deliver-prd`,
   `foundation-okr-writer`, `iterate-retrospective`, and all four `foundation-meeting-*` skills. Two
   meeting skills are pure readers by design, since that family already chains artifacts by filename
@@ -113,6 +117,19 @@ foundation + 12 utility + 15 tool), 6 sub-agents unchanged. Additive MINOR.
 
 **Fixed**
 
+- **The documented project-memory config did not parse.** The frontmatter reader did not strip
+  trailing YAML comments, and the example published in `concepts/hooks.md` carries them, so anyone
+  who copied it verbatim got no declared phase and no active initiative, silently, because that
+  reader fails open by design. Comment handling is now quote- and list-aware, so `issue#42`,
+  `"Sprint #14 cleanup"` and `[a, b] # note` are all preserved. The regression test parses the
+  example out of the real documentation file rather than a copy of it, which is the gap that let
+  this ship: every prior test wrote its own input.
+- **The trigger-coverage completeness claim is now actually asserted.** The suite checked
+  `ROSTER.length === 53` with the 53 + 15 = 68 accounting written only in a comment; `EXCLUDED` was
+  exported but imported nowhere and the catalog was never consulted, so a new skill added to neither
+  list would have left CI green while the published claim quietly became false. Now asserted as
+  exact set equality between `skill-manifest.json` and the disjoint union of roster and exclusions,
+  in both directions, with every excluded name required to be tool-classified.
 - **The marketplace release pin.** `plugins[0].version` and `plugins[0].source.ref` now advance with
   the version (v-prefixed) without re-serializing `marketplace.json`, replacing the release-please
   jsonpath entry that corrupted the file's formatting and could not write the ref at all (S2
@@ -343,6 +360,33 @@ evidence can be read without a tag waiting on it.
   the strongest single argument that promotion alone does not close the gap.
 - Whether any title this cycle needed a manual nudge, since the workflow's own promotion criterion
   is "a full shadow cycle shows clean titles land without a manual nudge."
+
+## 6b. G1 adversarial review record (2026-08-14)
+
+Run against the merged release content (`--base 2977fcf6 --scope branch`) after PR #257 landed at
+`54744ceb`. Verdict: **needs-attention, five findings (3 high, 2 medium)**. Every finding was checked
+against the actual files before acting, per the standing rule that this repo has seen a Codex audit
+that was accurate in substance while citing fabricated line numbers. This time the citations held.
+
+| Finding | Verified | Disposition |
+|---|---|---|
+| Published memory config example does not parse (inline YAML comments) | **CONFIRMED, reproduced.** `memoryPhase` returned `null` for the verbatim example; `deliver` after the fix | **Fixed before tag** (`925a7183`). Fixed in the reader, not the doc: a comment is valid YAML and users write them. Regression test parses the real doc file |
+| `53 + 15 = 68` asserted in test | **CONFIRMED, and worse than reported.** Only `ROSTER.length === 53` was asserted; the accounting was a comment, `EXCLUDED` was imported nowhere, the catalog was never read | **Fixed before tag** (`925a7183`). Real set equality, falsified by injecting a phantom 69th skill and confirming the suite fails |
+| `artifacts[]` format not publicly documented | **CONFIRMED.** One mention of "artifacts" in `hooks.md`, about the router heuristic. The only definition sat in an unreleased internal spec | **Fixed before tag** (`925a7183`). Entry shape, fields, the four provenance tags, and the concurrency limit now documented |
+| About-sync token cannot update repo metadata | **CONFIRMED, but mis-scoped by the review.** The step is gated on `release_created`, which only fires on an authoritative merge. It cannot execute in a manual cut and has never run | **Carried:** [#267](https://github.com/product-on-purpose/pm-skills/issues/267), named as a prerequisite on the S2 ratification decision. Not a v2.32.0 defect |
+| Concurrency discipline specified but not shipped | **CONFIRMED as a gap, severity overstated.** The review assumed whole-file snapshot writes; the contracts say *append*, and propose-then-confirm is the default | **Carried:** [#268](https://github.com/product-on-purpose/pm-skills/issues/268), routed to the ledger build where the discipline was specified. `hooks.md` states the limit plainly meanwhile |
+
+**Correction recorded rather than buried.** The completeness claim was published in CONTRIBUTING, the
+evals page, this plan, and comments on [#225](https://github.com/product-on-purpose/pm-skills/issues/225)
+and [#136](https://github.com/product-on-purpose/pm-skills/issues/136) before it was true. The fix
+makes the claim true rather than weakening the prose, so those surfaces are accurate as written from
+`925a7183` onward. Nothing needed retracting, but the ordering is worth remembering.
+
+**The pattern worth keeping.** Both shipped defects were claims verified against the artifact that
+produced them rather than the artifact a user meets: the parser was tested against fixtures its own
+author wrote, never against the published example, and the roster was asserted against a hardcoded
+number rather than against the catalog. In both cases the test passed and the claim was false. This
+is the control-arm discipline from the AI-family spec, applied to tests instead of skills.
 
 ## 7. Post-cut actions
 
