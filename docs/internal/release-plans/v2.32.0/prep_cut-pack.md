@@ -404,6 +404,22 @@ author wrote, never against the published example, and the roster was asserted a
 number rather than against the catalog. In both cases the test passed and the claim was false. This
 is the control-arm discipline from the AI-family spec, applied to tests instead of skills.
 
+## 6c. G4 execution record (2026-08-14)
+
+Tag `v2.32.0` pushed at `e8a641c3`, verified to match the G2.5-captured SHA before pushing.
+
+| Step | Outcome |
+|---|---|
+| GitHub Release | Created automatically by the tag-triggered `Release` workflow with `pm-skills-v2.32.0.zip`, its `.sha256`, and `manifest.txt`. Body enriched by hand from the generic template to lead with what shipped |
+| **P0: plugin install path** | **PASS.** `validate-plugin-install` reports `pm-skills @ 2.32.0`, marketplace entry `2.32.0`, source ref `v2.32.0`. This is the check that gates "release complete" |
+| GitHub About sync | **No action needed.** `gen-derived-surfaces --about` matched the live About byte-for-byte, because the catalog count did not change. First cut where this was a comparison rather than a retype |
+| Repo topics / homepage | Current, unchanged |
+| Pages deploy | Success at the tag SHA and after; the live `releases/Release_v2.32.0/` page returns HTTP 200 |
+| `.release-please-manifest.json` | Reconciled 2.31.1 to 2.32.0 at `7d5992db` |
+| Shadow PR [#266](https://github.com/product-on-purpose/pm-skills/pull/266) | Closed unmerged with the full observation record. release-please did **not** self-supersede it after the reconciliation push, so runbook 8.5 rule 3 (close manually) applied |
+| **MCP mirror (10.5.5)** | **SKIPPED, condition unmet.** That step fires only for releases "that change the catalog narrative or skill counts"; v2.32.0 holds at 68 skills and 6 sub-agents. Separately, `pm-skills-mcp` is frozen at v2.9.3 (last npm publish 2026-05-05, the day after maintenance mode) while the runbook still carries a full parallel release track for it. Recorded as [#269](https://github.com/product-on-purpose/pm-skills/issues/269) |
+| agent-plugins re-pin | Prepared, not executed. That repo pins pm-skills by SHA (`32e28377` / 2.31.1) and is a separate repository, so it needs its own decision |
+
 ## 7. Post-cut actions
 
 - [ ] Create the v2.33.0 stub (already seeded at `../v2.33.0/plan_v2.33.0.md`) and move the carried

@@ -1,6 +1,16 @@
 # v2.32.0 Release Plan: The full-slate cycle (scope COMMITTED 2026-08-02)
 
-**Cut status (2026-08-14):** WS-1..WS-7 all DONE and merged to `main` via [PR #257](https://github.com/product-on-purpose/pm-skills/pull/257) at `54744ceb`. WS-8 in progress: G0 bundle passed, G1 adversarial review run and converged (three findings fixed at `925a7183`, two carried as [#267](https://github.com/product-on-purpose/pm-skills/issues/267) and [#268](https://github.com/product-on-purpose/pm-skills/issues/268); record in [the cut pack](./prep_cut-pack.md) section 6b), G2 version bump and release copy applied. The S2 shadow was observed fully green for the first time in program history and [recorded on #136](https://github.com/product-on-purpose/pm-skills/issues/136#issuecomment-5295208645); ratification was deliberately deferred to v2.33.0 to preserve a control group.
+**SHIPPED 2026-08-14. Tag `v2.32.0` at `e8a641c3`.** All eight workstreams done. WS-1..WS-7 merged via [PR #257](https://github.com/product-on-purpose/pm-skills/pull/257) at `54744ceb`; WS-8 cut through the 6 gates.
+
+G1 took **three review rounds**, each smaller than the last, which is what convergence looks like:
+
+1. A Codex adversarial pass over the release content returned 5 findings. Three fixed at `925a7183` (the published memory config example did not parse; "53 + 15 = 68 asserted in test" was not actually asserted; the `artifacts[]` format was undocumented). Two carried as [#267](https://github.com/product-on-purpose/pm-skills/issues/267) and [#268](https://github.com/product-on-purpose/pm-skills/issues/268).
+2. A second pass over the cut *decision*, plus an independent advisor review, overturned the recommendation to tag as-is and returned 7 findings. Fixed at `edbbaf60`: write discipline added to all six writing memory contracts with a validator rule enforcing it, the "53 measured" overclaim corrected to fixture-covered with the 29-of-53 baseline gap stated, the parser regression completed across all three YAML escape forms, the S2 observation sheet filled, and the v2.33.0 stub's front-door premise corrected.
+3. A scoped re-check over round 2's own changes returned one medium finding: the new validator rule was bypassable by prose elsewhere in the contract. Fixed at `e8a641c3`.
+
+Findings routed rather than fixed: [#267](https://github.com/product-on-purpose/pm-skills/issues/267) (About-sync token, verified unreachable in a manual cut), [#268](https://github.com/product-on-purpose/pm-skills/issues/268) (the half of write safety a declaration cannot reach), [#269](https://github.com/product-on-purpose/pm-skills/issues/269) (runbook drift: two runbooks, a v2.5.0 baseline, an MCP release track contradicting maintenance mode). Full record in [the cut pack](./prep_cut-pack.md) section 6b.
+
+The S2 shadow was observed fully green for the first time in program history and [recorded on #136](https://github.com/product-on-purpose/pm-skills/issues/136#issuecomment-5295208645); ratification was deliberately deferred to v2.33.0 to preserve a control group. The phantom-minor window never opened, which narrows runbook Section 8.5.
 
 **Status:** COMMITTED SCOPE (decisions D1-D8 (the scope-ruling set) all RULED by the maintainer 2026-08-02; execution workstreams WS-1..WS-8 below; build starting. History: STUB 2026-07-31 at v2.31.1 G4; DECISION STAGE same day after the 7-agent research/audit workflow, the hygiene sweep (PR #249), and a 4-lens critique panel whose 23 findings are incorporated.)
 **Owner:** Maintainers
