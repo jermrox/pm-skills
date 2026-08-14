@@ -114,6 +114,46 @@ Durable choices, each dated and attributed to the skill or person that recorded 
 
 **Skills do the file I/O, not the hooks.** A memory-aware skill carries a `## Project Memory Contract` section stating what it reads and what it appends. The hook reads only `phase` and `active_initiative`, the two keys it needs to route; everything else is read by the agent following the skill's instructions. There is no daemon, no database, and no MCP server involved.
 
+### What skills record: `artifacts[]` and `## Decisions`
+
+The keys above are what the *hook* reads. Skills read and append two more things, and because no runtime parses or normalizes them, the shape below is the whole contract. It is specified here rather than left to each skill, since two skills that invent different shapes cannot hand off to each other, which is the entire point of the feature.
+
+`artifacts[]` is an optional frontmatter list, newest first, that records what the catalog has already produced for this project:
+
+```yaml
+artifacts:
+  - skill: discover-interview-synthesis
+    title: "Onboarding interviews synthesis"
+    path: docs/research/onboarding-synthesis.md
+    produced: 2026-06-17
+    provenance: interpretation
+    summary: "5 interviews; 3 personas emerged (new-admin, power-user, evaluator)"
+```
+
+| Field | Required | Meaning |
+|---|---|---|
+| `skill` | yes | The skill that produced it, by catalog name. |
+| `title` | yes | A short human label. |
+| `provenance` | yes | One of the four tags below. |
+| `produced` | yes | ISO date. |
+| `path` | no | Repo-relative path, when the artifact landed in a file. Omit for something that only ever existed in the conversation. |
+| `summary` | no | One line a downstream skill can read instead of opening the file. |
+
+Every artifact and decision carries exactly one provenance tag, so a downstream skill can weight what it reads:
+
+| Tag | Meaning | Example |
+|---|---|---|
+| `observation` | Raw, sourced data | an interview quote, a measured metric |
+| `interpretation` | A pattern read from observations | "3 personas emerged" |
+| `hypothesis` | A testable claim | "new-admins churn at setup step 3" |
+| `decision` | A committed choice | "ship guided onboarding for new-admins first" |
+
+The distinction is load-bearing rather than decorative: it is what lets a reader notice that a decision rests only on hypotheses.
+
+`## Decisions` is a prose section, not frontmatter. Each entry is a durable choice with its date and the skill or person that recorded it. It is deliberately not a YAML list, because decisions carry reasoning that does not survive being flattened into fields.
+
+**Known limit, stated rather than implied.** Nothing enforces any of this at runtime. The advisory `check-memory-contracts` validator checks that a skill *declares* a contract, not that a written file matches this shape, and concurrent sessions writing the same file have no conflict detection today. If two agents append from separate sessions, later writes can overwrite earlier ones. Eight skills ship a contract in v2.32.0; treat the file as a convenience that compounds context, not as a system of record.
+
 ## Output-quality checks (advisory CI)
 
 A CI-time tier (not a hook) that checks the recorded skill-output samples for quality invariants, not just structure. Three deterministic validators run advisory (they never fail a build today): no leftover placeholder markers, exact-quote sourcing (every source-ledger quote is a verbatim substring of the sample's input), and no fabricated metrics (a percentage in the output not traceable to the input). Two are already clean on the corpus and are candidates to become enforcing; the metrics check is a heuristic that flags percentages for human review.

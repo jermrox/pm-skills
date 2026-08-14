@@ -1,10 +1,10 @@
 // scripts/check-trigger-fixtures.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { globSync } from 'node:fs';
+import { globSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { validateFixture, missingRosterFixtures, partnersOf, ROSTER, COLLISION_PAIRS } from './check-trigger-fixtures.mjs';
+import { validateFixture, missingRosterFixtures, partnersOf, ROSTER, EXCLUDED, COLLISION_PAIRS } from './check-trigger-fixtures.mjs';
 
 const KNOWN = new Set(['deliver-prd', 'deliver-user-stories', 'deliver-acceptance-criteria', 'deliver-edge-cases']);
 const opts = (over = {}) => ({ dirName: 'deliver-prd', skillExists: (n) => KNOWN.has(n), collisionPartners: [], ...over });
@@ -96,18 +96,56 @@ test('roster completeness reports exactly the missing names', () => {
   assert.deepEqual(missingRosterFixtures(new Set()), ROSTER); // none present -> every roster skill missing
 });
 
+// The completeness claim this project publishes ("53 measured + 15 excluded by
+// design = 68, nothing unaccounted for") is asserted HERE, against the catalog
+// itself. It used to be asserted as `ROSTER.length === 53` with the accounting
+// written only in a comment, which the v2.32.0 adversarial review correctly called
+// out: EXCLUDED was exported but imported nowhere, skill-manifest.json was never
+// consulted, and a 69th skill added to neither list left this suite green while
+// the published claim silently became false.
+test('every catalog skill is either rostered or excluded, exactly once', () => {
+  const manifestPath = join(dirname(fileURLToPath(import.meta.url)), '..', 'skill-manifest.json');
+  const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+  const catalog = manifest.entries.map((e) => e.name);
+
+  assert.equal(new Set(ROSTER).size, ROSTER.length, 'duplicate entry in the roster');
+  assert.equal(new Set(EXCLUDED).size, EXCLUDED.length, 'duplicate entry in the exclusion list');
+
+  const rostered = new Set(ROSTER);
+  const excluded = new Set(EXCLUDED);
+  assert.deepEqual(
+    ROSTER.filter((n) => excluded.has(n)), [],
+    'a skill is both rostered and excluded; it must be exactly one'
+  );
+
+  // Exact set equality, in both directions, with the offenders named on failure.
+  assert.deepEqual(
+    catalog.filter((n) => !rostered.has(n) && !excluded.has(n)).sort(), [],
+    'catalog skill is neither rostered nor excluded: add a fixture pack, or add it to `excluded:` with a rationale'
+  );
+  assert.deepEqual(
+    [...rostered, ...excluded].filter((n) => !catalog.includes(n)).sort(), [],
+    'roster or exclusion names a skill that is not in the catalog (renamed or deleted?)'
+  );
+  assert.equal(rostered.size + excluded.size, catalog.length);
+  assert.equal(catalog.length, manifest.catalog.skills, 'manifest entries disagree with its own catalog count');
+
+  // The exclusion is a classification decision (D6 = C: sprint stages are entered
+  // through a family or workflow entry point, never by free-text routing), so it
+  // must stay aligned with the classification rather than drifting into a dumping
+  // ground for skills someone did not want to write fixtures for.
+  const groupOf = new Map(manifest.entries.map((e) => [e.name, e.group]));
+  assert.deepEqual(
+    EXCLUDED.filter((n) => groupOf.get(n) !== 'tool').sort(), [],
+    'only tool-classified sprint stages may be excluded by design'
+  );
+});
+
 test('roster and pairs are internally consistent', () => {
-  // Every skills/*/evals/trigger-fixtures.json on disk, sourced from
-  // trigger-eval-roster.yaml (WS-T10). 31 at v2.30.0; the v2.31.0 WS-Z5 wave-1
-  // backfill adds 12 skills across PR9-PR11 (define-, discover-, then the
-  // foundation-meeting- remainder plus adjacent collision-risk siblings),
-  // bringing this to 43 (43/68, about 65 percent). The v2.32.0 WS-4 wave-2 backfill
-  // adds the 10 remaining utility-* skills, bringing this to 53. With the 15 tool-*
-  // sprint stages ruled out by design (decision D6 = C, see the `excluded` list in
-  // trigger-eval-roster.yaml), 53 + 15 = 68 accounts for the whole catalog: every
-  // skill is now either measured or deliberately excluded with a stated reason.
+  // Drift tripwire on the current numbers. The completeness guarantee lives in the
+  // set-equality test above; these two lines only catch an unintended change in size.
   assert.equal(ROSTER.length, 53);
-  assert.equal(new Set(ROSTER).size, 53); // no duplicate roster entries
+  assert.equal(EXCLUDED.length, 15);
   for (const [a, b] of COLLISION_PAIRS) {
     assert.ok(ROSTER.includes(a), `${a} in roster`);
     assert.ok(ROSTER.includes(b), `${b} in roster`);

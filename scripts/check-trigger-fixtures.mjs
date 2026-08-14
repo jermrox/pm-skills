@@ -15,7 +15,7 @@ import { dirname, join } from 'node:path';
 // this script's own use (missingRosterFixtures, partnersOf) and re-exported so
 // check-trigger-fixtures.test.mjs keeps its existing import surface.
 import { ROSTER, partnersOf } from './trigger-eval-roster.mjs';
-export { ROSTER, COLLISION_PAIRS, partnersOf } from './trigger-eval-roster.mjs';
+export { ROSTER, EXCLUDED, COLLISION_PAIRS, partnersOf } from './trigger-eval-roster.mjs';
 
 // Phase 1 fixed constants (spec T-D): present in each file, but not yet variable.
 const RUNS_PER_QUERY = 3;

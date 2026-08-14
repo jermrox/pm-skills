@@ -1,9 +1,10 @@
 // hooks/lib/local-config.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   readLocalConfig, isGuardrailEnabled, enabledChecks, isPhaseRouterEnabled,
   memoryPhase, activeInitiative, isAutoAppendEnabled,
@@ -145,6 +146,35 @@ test('auto-append fails CLOSED: off unless explicitly true', () => {
 test('auto-append turns on for exactly `true`', () => {
   const root = projectWith('---\nschema: 1\nmemory_auto_append: true\n---\n');
   assert.equal(isAutoAppendEnabled(readLocalConfig(root)), true);
+  rmSync(root, { recursive: true, force: true });
+});
+
+// --- The published example must actually work -------------------------------
+// This reads the real documentation file rather than a copy of it. The v2.32.0
+// adversarial review found that the shipped example carried inline YAML comments
+// the reader could not strip, so a user who copied it verbatim got no declared
+// phase and no active initiative, silently, because this reader fails open. Every
+// prior test wrote its own fixture, so nothing ever exercised what users copy.
+// If the doc's example changes into something unparseable, this test fails.
+
+test('the config example published in concepts/hooks.md parses as documented', () => {
+  const docPath = join(
+    dirname(fileURLToPath(import.meta.url)),
+    '..', '..', 'site', 'src', 'content', 'docs', 'concepts', 'hooks.md'
+  );
+  const doc = readFileSync(docPath, 'utf8');
+
+  // The project-memory example is the one fenced yaml block declaring `schema:`.
+  const blocks = [...doc.matchAll(/```yaml\r?\n([\s\S]*?)```/g)]
+    .map((m) => m[1])
+    .filter((b) => /^schema:/m.test(b));
+  assert.equal(blocks.length, 1, 'expected exactly one yaml block declaring `schema:` in hooks.md');
+
+  const root = projectWith(blocks[0]);
+  const cfg = readLocalConfig(root);
+  assert.equal(memoryPhase(cfg), 'deliver', 'published example must yield a declared phase');
+  assert.equal(activeInitiative(cfg), 'Self-serve onboarding');
+  assert.equal(isAutoAppendEnabled(cfg), false, 'published example must keep writes opt-in');
   rmSync(root, { recursive: true, force: true });
 });
 

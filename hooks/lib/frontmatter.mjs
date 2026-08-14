@@ -8,12 +8,40 @@ export function splitFrontmatter(fileText) {
   return m ? m[1].trim() : '';
 }
 
-/** Read a scalar field; strip matching surrounding quotes. null if absent. */
+/** Strip a trailing YAML comment from a raw scalar value, quote- and list-aware.
+ *
+ *  YAML opens a comment at a `#` that begins the value or is preceded by
+ *  whitespace, and never inside a quoted scalar or a flow sequence. Without this
+ *  the reader returned the comment as part of the value, so a config copied from
+ *  the documented example (`phase: deliver   # a Triple Diamond phase`) parsed as
+ *  the whole line and every consumer rejected it as unrecognized - silently, since
+ *  this reader fails open by design. Found by adversarial review at the v2.32.0
+ *  cut, after the shipped docs had carried the unparseable example since v2.25.0.
+ *
+ *  Preserved on purpose: `issue#42` (no leading whitespace, so not a comment),
+ *  `"Sprint #14 cleanup"` (inside quotes), and `[a, b] # note` (after the list). */
+function stripComment(value) {
+  const first = value[0];
+  if (first === '"' || first === "'") {
+    const end = value.indexOf(first, 1);
+    return end === -1 ? value : value.slice(0, end + 1); // unterminated: leave as-is
+  }
+  if (first === '[') {
+    const end = value.indexOf(']');
+    return end === -1 ? value : value.slice(0, end + 1);
+  }
+  const m = /(^|\s)#/.exec(value);
+  return m ? value.slice(0, m.index) : value;
+}
+
+/** Read a scalar field; drop any trailing comment, then strip matching surrounding
+ *  quotes. null if absent, or if the value was nothing but a comment. */
 export function getField(frontmatter, key) {
   const re = new RegExp('^\\s*' + key + ':\\s*(.+?)\\s*$', 'm');
   const m = re.exec(frontmatter);
   if (!m) return null;
-  let v = m[1].trim();
+  let v = stripComment(m[1].trim()).trim();
+  if (!v) return null; // `key:   # only a comment` reads as unset, not as ''
   if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
     v = v.slice(1, -1);
   }
