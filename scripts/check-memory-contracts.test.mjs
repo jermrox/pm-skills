@@ -11,7 +11,7 @@ const VALID = [
   '- **Reads:** `phase`, `active_initiative`',
   '- **Writes:** the synthesis as an `interpretation` artifact',
   '- **Posture:** propose the entry and wait for confirmation, unless `memory_auto_append: true`.',
-  '- **Write discipline:** re-read the file immediately before writing and merge rather than overwrite.',
+  '- **Write discipline:** re-read the file immediately before writing, merge rather than overwrite, and re-propose if it changed.',
   '',
 ].join('\n');
 
@@ -109,9 +109,30 @@ test('a contract that writes but omits the Write discipline bullet is reported',
 
 test('a Write discipline bullet that does not require a re-read is reported', () => {
   const body = extractContract(
-    VALID.replace('re-read the file immediately before writing and merge rather than overwrite.', 'be careful.')
+    VALID.replace('re-read the file immediately before writing, merge rather than overwrite, and re-propose if it changed.', 'be careful.')
   );
   assert.ok(validateContract(body).some((p) => /re-read/.test(p)));
+});
+
+test('re-read wording elsewhere in the contract does not satisfy the discipline rule', () => {
+  // The bypass an adversarial re-check found: a body-wide search passes a contract whose
+  // Reads bullet mentions re-reading while its discipline permits an overwrite. The
+  // required wording has to be scoped to the bullet, or the failure message asserts
+  // something the check never looked at.
+  const bypass = VALID
+    .replace('- **Reads:** `phase`, `active_initiative`', '- **Reads:** `phase`; re-read it and merge and re-propose as needed')
+    .replace('re-read the file immediately before writing, merge rather than overwrite, and re-propose if it changed.', 'overwrite the file with your version.');
+  const problems = validateContract(extractContract(bypass));
+  assert.ok(problems.some((p) => /Write discipline bullet does not require/.test(p)), 'expected the bypass to be caught');
+});
+
+test('a Write discipline bullet missing merge or re-propose is reported', () => {
+  const body = extractContract(
+    VALID.replace('re-read the file immediately before writing, merge rather than overwrite, and re-propose if it changed.', 're-read the file first.')
+  );
+  const problems = validateContract(body);
+  assert.ok(problems.some((p) => /merge/.test(p)));
+  assert.ok(problems.some((p) => /re-propos/.test(p)));
 });
 
 test('a pure reader needs no Write discipline bullet', () => {

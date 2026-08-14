@@ -108,10 +108,24 @@ export function validateContract(body) {
   // "append" implies append semantics. It does not: the agent picks the edit primitive.
   // Pure readers are exempt, having nothing to lose.
   if (isWriter) {
-    if (!/\*\*Write discipline:\*\*/.test(body)) {
+    // Scope the required wording to the bullet itself, including its indented
+    // continuation lines. A body-wide search would pass a contract whose Reads bullet
+    // happens to say "re-read" while its discipline permits an overwrite, and the
+    // failure message would be asserting something the check never looked at.
+    const disc = /- \*\*Write discipline:\*\*([\s\S]*?)(?=\n\s*- \*\*|\n\n|$)/.exec(body);
+    if (!disc) {
       problems.push('the contract writes but has no `- **Write discipline:**` bullet');
-    } else if (!/re-read/i.test(body)) {
-      problems.push('the Write discipline bullet does not require a re-read immediately before writing');
+    } else {
+      const text = disc[1];
+      const required = [
+        [/re-read/i, 'a re-read immediately before writing'],
+        [/\bmerg(e|ing)\b/i, 'a merge into current state rather than an overwrite'],
+        [/re-propose/i, 're-proposing when the file changed since the proposal'],
+      ];
+      const missing = required.filter(([re]) => !re.test(text)).map(([, label]) => label);
+      if (missing.length) {
+        problems.push('the Write discipline bullet does not require ' + missing.join('; and '));
+      }
     }
   }
 
