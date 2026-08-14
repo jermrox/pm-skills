@@ -418,13 +418,17 @@ Tag `v2.32.0` pushed at `e8a641c3`, verified to match the G2.5-captured SHA befo
 | `.release-please-manifest.json` | Reconciled 2.31.1 to 2.32.0 at `7d5992db` |
 | Shadow PR [#266](https://github.com/product-on-purpose/pm-skills/pull/266) | Closed unmerged with the full observation record. release-please did **not** self-supersede it after the reconciliation push, so runbook 8.5 rule 3 (close manually) applied |
 | **MCP mirror (10.5.5)** | **SKIPPED, condition unmet.** That step fires only for releases "that change the catalog narrative or skill counts"; v2.32.0 holds at 68 skills and 6 sub-agents. Separately, `pm-skills-mcp` is frozen at v2.9.3 (last npm publish 2026-05-05, the day after maintenance mode) while the runbook still carries a full parallel release track for it. Recorded as [#269](https://github.com/product-on-purpose/pm-skills/issues/269) |
-| agent-plugins re-pin | Prepared, not executed. That repo pins pm-skills by SHA (`32e28377` / 2.31.1) and is a separate repository, so it needs its own decision |
+| agent-plugins re-pin | **DONE.** [agent-plugins#79](https://github.com/product-on-purpose/agent-plugins/pull/79) merged at `457a18e`: registry 1.63.0 to 1.64.0, pm-skills pin `32e2837` / 2.31.1 to `e8a641c` / 2.32.0, `strict: true` preserved, registry `validate` green on main. Section 7 checklist completed in the PR body with per-line evidence, including two qualifiers worth carrying forward: `library.json` is N/A because pm-skills ships none (the known L3 advisory gap), and the unauthenticated `validate-registry` run emits five `transient/infra - 403` rate-limit failures on sha-on-tag lookups for the OTHER members, so it must be run with `GITHUB_TOKEN` set to be meaningful |
 
 ## 7. Post-cut actions
 
-- [ ] Create the v2.33.0 stub (already seeded at `../v2.33.0/plan_v2.33.0.md`) and move the carried
-      items into it
-- [ ] Author the GitHub Release UI body
-- [ ] Record the S2 observation sheet results on [#136](https://github.com/product-on-purpose/pm-skills/issues/136)
+- [x] Create the v2.33.0 stub (`../v2.33.0/plan_v2.33.0.md`) and move the carried items into it.
+      Seeded with 11 candidates, including the three issues this cut produced
+- [x] Author the GitHub Release UI body. Replaced the generic template with copy that leads with
+      what shipped and names the two defects the review caught
+- [x] Record the S2 observation sheet results on
+      [#136](https://github.com/product-on-purpose/pm-skills/issues/136#issuecomment-5295208645)
+- [x] agent-plugins re-pin ([#79](https://github.com/product-on-purpose/agent-plugins/pull/79), merged)
 - [ ] Close or re-target [#223](https://github.com/product-on-purpose/pm-skills/issues/223) (memory
-      artifact ledger) against what actually shipped
+      artifact ledger) against what actually shipped. Deferred to the v2.33.0 decision stage, where
+      it is candidate C-8 and pairs with the remaining half of #268
