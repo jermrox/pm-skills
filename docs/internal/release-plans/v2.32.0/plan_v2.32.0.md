@@ -1,5 +1,7 @@
 # v2.32.0 Release Plan: The full-slate cycle (scope COMMITTED 2026-08-02)
 
+**Cut status (2026-08-14):** WS-1..WS-7 all DONE and merged to `main` via [PR #257](https://github.com/product-on-purpose/pm-skills/pull/257) at `54744ceb`. WS-8 in progress: G0 bundle passed, G1 adversarial review run and converged (three findings fixed at `925a7183`, two carried as [#267](https://github.com/product-on-purpose/pm-skills/issues/267) and [#268](https://github.com/product-on-purpose/pm-skills/issues/268); record in [the cut pack](./prep_cut-pack.md) section 6b), G2 version bump and release copy applied. The S2 shadow was observed fully green for the first time in program history and [recorded on #136](https://github.com/product-on-purpose/pm-skills/issues/136#issuecomment-5295208645); ratification was deliberately deferred to v2.33.0 to preserve a control group.
+
 **Status:** COMMITTED SCOPE (decisions D1-D8 (the scope-ruling set) all RULED by the maintainer 2026-08-02; execution workstreams WS-1..WS-8 below; build starting. History: STUB 2026-07-31 at v2.31.1 G4; DECISION STAGE same day after the 7-agent research/audit workflow, the hygiene sweep (PR #249), and a 4-lens critique panel whose 23 findings are incorporated.)
 **Owner:** Maintainers
 **Type:** MINOR (project memory B1+B2 is additive runtime surface; fixture and spec work is additive; no breaking change).
