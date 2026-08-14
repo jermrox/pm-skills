@@ -2,7 +2,7 @@
 
 Status: Active  
 Owner: Maintainers  
-Last updated: 2026-05-17 (v2.15.x trailing: added Section 10.5 external-surface sync requirement for major/minor releases)
+Last updated: 2026-08-09 (v2.32.0 WS-6: added Section 8.5 release-please phantom-minor fallback; prior: 2026-05-17 Section 10.5 external-surface sync)
 
 This runbook defines the canonical release lane for post-`v2.5.0` cuts.
 
@@ -141,6 +141,26 @@ git -C $WT_MCP push origin main
 git -C $WT_MCP push origin "v$VERSION"
 ```
 
+## 8.5) Release-Please Shadow Interaction: The Phantom-Minor Window (added v2.32.0, WS-6)
+
+Between the release commit landing on `main` (manifests already at `$VERSION`) and the
+`v$VERSION` tag being pushed, release-please sees a manifest version with no matching tag and its
+shadow Release PR can flip to proposing a spurious MINOR one step ahead. Observed 2026-07-31 on
+PR #237, which proposed a phantom 2.32.0 while the manual v2.31.1 cut was mid-window; immutable
+capture in `v2.31.1/plan_v2.31.1.md`, section "S1 shadow observation record".
+
+Fallback rules:
+
+1. **Do not chase the phantom.** The shadow PR is not a version authority; `plugin.json` plus
+   this runbook's own G2 decision own the version. A phantom proposal during the window is
+   expected behavior, not drift.
+2. **Keep the window short.** Tag the re-verified SHA immediately after the release commit
+   lands (the v2.31.0 window precedent is about 48 seconds). The longer the manifest sits ahead
+   of the tag, the longer the phantom stands.
+3. **After the tag pushes**, the next release-please run self-corrects or supersedes the phantom
+   proposal. If it does not, close the shadow PR manually citing the v2.31.1 S1 observation
+   record.
+
 ## 9) Publish and Release Objects
 
 1. Create GitHub release entries for `v$VERSION` in both repos.
@@ -173,7 +193,7 @@ For **patch** (X.Y.z) releases: skip if the description content is unchanged (ve
 
 ```bash
 gh repo edit product-on-purpose/pm-skills \
-  --description "<paste current README.md <h4> byline; reformat to <=350 chars>"
+  --description "$(node scripts/gen-derived-surfaces.mjs --about)"
 ```
 
 Verify:
@@ -182,7 +202,7 @@ Verify:
 gh api repos/product-on-purpose/pm-skills --jq '.description'
 ```
 
-Expected: matches the current README header byline modulo length truncation. The byline is the canonical source; the GitHub description is a derivative that must be re-synced manually.
+Expected: matches `node scripts/gen-derived-surfaces.mjs --about` exactly (the generator-owned About string, REQ-Z1.7, added v2.32.0 WS-6 addendum). The generator is the canonical source; the GitHub description is a derivative, synced manually here or automatically by release-please.yml's post-tag About-sync step once the automated flow is authoritative.
 
 ### 10.5.2) GitHub repo Topics
 

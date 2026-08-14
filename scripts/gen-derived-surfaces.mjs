@@ -9,6 +9,7 @@
 // Modes:
 //   node scripts/gen-derived-surfaces.mjs           rewrite every derived surface in place
 //   node scripts/gen-derived-surfaces.mjs --check    exit non-zero if any surface is stale
+//   node scripts/gen-derived-surfaces.mjs --about    print ONLY the GitHub About string
 //
 // SOURCE OF TRUTH. Every count comes from skill-manifest.json (itself generated
 // from skills/*/SKILL.md frontmatter by gen-skill-manifest.mjs and CI-gated).
@@ -57,6 +58,20 @@
 //   The write path replaces only the headline substring, preserving the tail and all
 //   other JSON formatting byte-for-byte (a targeted value-literal swap, not a
 //   JSON re-serialization, so marketplace.json's compact single-line objects survive).
+//
+//   The marketplace RELEASE PIN (version + source.ref) is a fourth manifest-owned
+//   target (WS-6 item (b), issue #136, v2.32.0): .claude-plugin/marketplace.json's
+//   $.plugins[0].version must equal plugin.json's version, and $.plugins[0].source.ref
+//   must equal "v" + that version (the self-referential ref both tagged trees carry by
+//   design; v2.31.1 plan, G2.5 finding 1). release-please's jsonpath extra-files entry
+//   for marketplace.json is REMOVED (release-please-config.json): its JSON updater
+//   re-serializes the whole file (destroying the compact single-line objects) and
+//   cannot write the v-prefixed ref at all - the same failure class that moved the
+//   README version badge into this generator post-S1. The pin advances both fields
+//   with the identical targeted value-literal swap used for the headlines, so
+//   formatting survives byte-for-byte. .github/workflows/release-please-regen.yml
+//   (WS-6 item (a)) runs this generator on release-please's own Release PR branch, so
+//   the pin advances there without a hand-fix.
 //
 // PR2+PR3 (this stage, combined into one commit) extend this same generator with two
 // more emit targets - do NOT create a second one:
@@ -133,7 +148,10 @@
 //   the row describes. A release with no frontmatter `description` fails the run loudly
 //   rather than emitting a blank cell.
 //
-// Later stages still extend this same generator: the release-please --about string.
+// The release-please --about string (REQ-Z1.7) is implemented below (renderAboutString,
+// WS-6 addendum 2026-08-09): the post-tag About-sync step in release-please.yml PATCHes
+// the repo description with it on release_created, and runbook Section 10.5.1's manual
+// path uses the same string. --about prints ONLY the string; stdout is the interface.
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -328,6 +346,56 @@ export function evalManifest(id, currentValue, c) {
   const current = descriptionHeadline(currentValue);
   const stale = normalizeEol(current) !== normalizeEol(expected);
   return { stale, newValue: expected + descriptionTail(currentValue) };
+}
+
+// ---- marketplace release pin (WS-6 item (b), issue #136) -----------------------------
+
+/** Swap one exact value literal, refusing (loudly) unless it appears exactly once in the
+ *  text - the same posture as the description-headline write path in main(). Pure. */
+export function swapValueLiteralOnce(text, oldLit, newLit, file) {
+  const count = text.split(oldLit).length - 1;
+  if (count !== 1) fail(`${file}: expected exactly one occurrence of ${oldLit} (found ${count}); refusing to write`);
+  return text.replace(oldLit, newLit);
+}
+
+/** The stale/current verdict for the marketplace release pin: plugins[0].version must
+ *  equal plugin.json's version and plugins[0].source.ref must equal "v" + version (the
+ *  self-referential ref the tagged tree carries by design). newText preserves every
+ *  other byte of the file - a targeted value-literal swap, never a re-serialization,
+ *  which is exactly why this target lives here and not in a release-please jsonpath
+ *  extra-files entry (that updater reformats the file and cannot produce the v prefix).
+ *  Narration version tokens inside the description are safe: the swap literals carry
+ *  the full `"key": "value"` shape, which prose never does. Pure. */
+export function evalMarketplacePin(rawText, version) {
+  let obj;
+  try {
+    obj = JSON.parse(rawText);
+  } catch (e) {
+    fail(`.claude-plugin/marketplace.json: invalid JSON (${e.message})`);
+  }
+  const p = obj && Array.isArray(obj.plugins) && obj.plugins[0];
+  if (!p || typeof p.version !== 'string' || !p.version) fail('.claude-plugin/marketplace.json: plugins[0].version missing or not a string');
+  if (!p.source || typeof p.source.ref !== 'string' || !p.source.ref) fail('.claude-plugin/marketplace.json: plugins[0].source.ref missing or not a string');
+  const wantRef = `v${version}`;
+  if (p.version === version && p.source.ref === wantRef) return { stale: false, newText: rawText };
+  let next = rawText;
+  if (p.version !== version) next = swapValueLiteralOnce(next, `"version": "${p.version}"`, `"version": "${version}"`, '.claude-plugin/marketplace.json');
+  if (p.source.ref !== wantRef) next = swapValueLiteralOnce(next, `"ref": "${p.source.ref}"`, `"ref": "${wantRef}"`, '.claude-plugin/marketplace.json');
+  return { stale: true, newText: next };
+}
+
+// ---- GitHub About string (REQ-Z1.7; WS-6 addendum, issue #136) -----------------------
+
+/** The GitHub repo About description, derived from the catalog - the string the
+ *  post-tag About-sync step in release-please.yml PATCHes onto the repo on
+ *  release_created (REQ-Z1.7), superseding R-02's one-time manual fix. Reproduces the
+ *  live About wording verbatim with every count interpolated (the
+ *  renderManifestHeadline convention); the sample count and license are authored
+ *  literals, so changing them is a deliberate release edit here. Single line, no
+ *  banned dash characters, comfortably under the ~350-char display guidance the
+ *  runbook's Section 10.5.1 works to. Pure. */
+export function renderAboutString(c) {
+  return `${c.skills} plug-and-play, best-practice product management skills for AI agents: ${c.phase} Triple Diamond phase + ${c.foundation} foundation + ${c.utility} utility + ${c.tool} tool (Foundation Sprint + Design Sprint). Plus ${c.sub_agents} sub-agents, workflows, 200+ output samples, guides, and CI-enforced contracts. Apache 2.0.`;
 }
 
 // ---- shared quickstart fragment (QUICKSTART.md + the site quickstart) ----------------
@@ -688,6 +756,14 @@ function main() {
   if (!existsSync(manifestPath)) fail('skill-manifest.json not found; run: node scripts/gen-skill-manifest.mjs');
   const catalog = loadCatalog(readFileSync(manifestPath, 'utf8'));
 
+  // --about mode (REQ-Z1.7): print the derived About string and nothing else. stdout
+  // IS the interface (release-please.yml captures it into a repo PATCH), so none of
+  // the status logging below runs on this path.
+  if (process.argv.slice(2).includes('--about')) {
+    process.stdout.write(`${renderAboutString(catalog)}\n`);
+    return;
+  }
+
   // CHANGELOG.md is the one source for all three release-notes mirrors (PR4, WS-Z3).
   const changelogText = readFileSync(join(repo, 'CHANGELOG.md'), 'utf8');
   const topSections = topChangelogSections(changelogText, RECENT_RELEASES_COUNT);
@@ -792,6 +868,15 @@ function main() {
     writeFileSync(p, raw.replace(oldLit, newLit));
     console.log(`${spec.file} description headline rewritten.`);
   }
+
+  // Marketplace release pin (WS-6 item (b), issue #136): plugins[0].version and
+  // plugins[0].source.ref follow plugin.json's version. Read AFTER the description loop
+  // above so a same-run headline rewrite is not clobbered (both writers do targeted
+  // literal swaps against the file's current bytes).
+  const marketplacePath = join(repo, '.claude-plugin/marketplace.json');
+  const marketplaceRaw = readFileSync(marketplacePath, 'utf8');
+  const pin = evalMarketplacePin(marketplaceRaw, pluginVersion);
+  emit('.claude-plugin/marketplace.json release pin (version + source.ref)', marketplacePath, marketplaceRaw, pin.newText);
 
   // Site changelog.md top mirror (REQ-Z3.2): the single newest CHANGELOG.md section,
   // verbatim lead paragraph, replacing the hand-condensed rewrite. The surface renderer
