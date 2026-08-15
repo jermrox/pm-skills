@@ -1,45 +1,135 @@
-# v2.33.0 Release Plan: STUB
+# v2.33.0 Release Plan: DECISION STAGE (scope proposed 2026-08-15, not yet ruled)
 
-**Status:** STUB, seeded 2026-08-13 during v2.32.0 WS-8 prep. No scope is ruled. This document
-exists so carried work has a home rather than living in session logs, and so the v2.32.0 cut has
-somewhere to deposit its follow-ups at G4.
+**Status:** DECISION STAGE. Fourteen candidates researched and sized; decisions D1 through D5 below are **OPEN for maintainer ruling**. No scope is committed and nothing may be built from this document until D1 is ruled. History: STUB seeded 2026-08-13 during the v2.32.0 WS-8 prep; candidates accumulated through the v2.32.0 cut and its post-release audits; researched into this decision stage 2026-08-15.
 **Owner:** Maintainers.
-**Type:** Undetermined. The candidate list below is additive, so MINOR is the likely shape.
-**Previous:** v2.32.0, in flight at seeding time (branch `feat/v2320-memory-and-coverage`,
-[PR #257](https://github.com/product-on-purpose/pm-skills/pull/257); plan at
-`../v2.32.0/plan_v2.32.0.md`).
+**Type:** Expected MINOR. Every candidate in the recommended scope is additive or corrective; none changes the catalog count.
+**Proposed theme:** **The release users notice.** v2.32.0 was an infrastructure cycle that shipped one opt-in feature the front door never mentions, while three user-filed defects sat untracked for two weeks. This cycle proposes correcting that balance.
+**Previous:** v2.32.0 SHIPPED 2026-08-14 (tag `v2.32.0` at `e8a641c3`; plan at [`../v2.32.0/plan_v2.32.0.md`](../v2.32.0/plan_v2.32.0.md)).
+**Target:** PROPOSED 2026-09-05, about three weeks. v2.32.0 ran roughly two weeks from scope ruling to tag and consumed three adversarial review rounds at the gate. The target exists so the trip-wires have something to fire against, not as a commitment.
 
 ---
 
-## How to use this stub
+## Where we are
 
-At the v2.32.0 G4, move carried items into the table below with their evidence. At the decision
-stage, run the usual pass: research the candidates, size them, write the trip-wires, and rule scope
-before building. Do not build from this stub.
+v2.32.0 shipped project memory, closed trigger-eval coverage as an accounting, and hardened the release automation. It also generated most of this candidate list: the G1 adversarial rounds produced three issues, and the post-release site hygiene pass produced two more.
 
-## Candidates carried in
+That is the pattern worth naming before ruling scope. **Ten of the fourteen candidates below came from the repo inspecting itself** (audits, adversarial reviews, generators, validators). **One came from users.** That ratio is what a well-instrumented repo produces naturally, because self-inspection scales and user reports do not. It is not a defect, but it means user-reported work loses on equal footing every time, since a finding with a validator behind it always looks more actionable than a report with a person behind it.
 
-| # | Candidate | Source | Size | Notes |
+## Candidates
+
+Agent labels follow the assignment framework (claude / codex / human).
+
+| # | Candidate | Tracking | Research disposition | Effort | Agent |
+|---|---|---|---|---|---|
+| C-14 | **Field-reported skill defects** (3) | [#251](https://github.com/product-on-purpose/pm-skills/issues/251), [#252](https://github.com/product-on-purpose/pm-skills/issues/252), [#253](https://github.com/product-on-purpose/pm-skills/issues/253) | All three verified against the tree; two need a shape ruling (D2, D3) | S / S-M / S-to-L depending on D3 | claude, shapes human |
+| C-4 | Front door + a worked memory example | Raised in three session wraps, never ruled | Baseline re-measured: four surfaces, not two | S-M | claude |
+| C-1 | AI-product family Track 1: four increments | [v2.32.0 C-3 spec](../v2.32.0/spec_c3-ai-product-family.md) section 9 | Ready; no new skills, no count change | S-M | claude |
+| C-2 | Structure-over-prose weak-model re-test | v2.32.0 WS-1 ratification | Falls due the moment C-1 starts | S | claude |
+| C-11 | Runbook reconciliation + standing hygiene checklist | [#269](https://github.com/product-on-purpose/pm-skills/issues/269) | Splits cleanly into a process half and a cleanup half (D4) | S-M (checklist) / M (full) | claude |
+| C-3 | Decision D8: PR-title lint promotion | [cut pack](../v2.32.0/prep_cut-pack.md) section 6 | Evidence collected during the v2.32.0 cycle; ready to rule | Decision only | human |
+| C-8 | Memory artifact ledger disposition | [#223](https://github.com/product-on-purpose/pm-skills/issues/223) | Ready to rule; [#268](https://github.com/product-on-purpose/pm-skills/issues/268) is half-resolved | Decision only | human |
+| C-12 | Doc-stack migration leftovers | [#269](https://github.com/product-on-purpose/pm-skills/issues/269), and a 2026-06-06 audit never closed | Same root as C-11; mechanical once C-11 lands | S-M | claude |
+| C-13 | `contributing/ci-overview.md` is stale | 2026-08-14 site hygiene pass | Mechanical | S | claude |
+| C-9 | Promote output-eval asset presence to enforcing | `reference/evals.md` states the condition | **Blocked on design:** would fail CI for 56 skills as written | S-M after design | claude |
+| C-10 | Router-eval baseline refresh to the full roster | v2.32.0 G1 adversarial review | Pairs with C-9; real API cost | M | claude |
+| C-6 | S2 authoritative cutover ratification | [#136](https://github.com/product-on-purpose/pm-skills/issues/136) item 7 | **Blocked** by [#267](https://github.com/product-on-purpose/pm-skills/issues/267) | Decision + config | human only |
+| C-5 | Aggregated-roadmap decisions D-A, D-B, D-D, D-E, D-F | `_LOCAL/audit/2026-08-05_ai-skills_roadmap-aggregated.md` section 6 | Recommendations already written | Decisions only | human |
+| C-7 | Dual-shell validator ports | v2.30.0 audit standing cadence | 23 pairs remain; 1-2 per release | S per port | claude |
+
+### C-14 research: the three field reports
+
+Filed 2026-08-01 from an end-to-end run on a real product. All three arrive with reproduction steps and a suggested fix, which is unusually good evidence.
+
+**[#251](https://github.com/product-on-purpose/pm-skills/issues/251), `foundation-persona` example contradicts its own template. VERIFIED.** `TEMPLATE.md` mandates a `Persona Card` plus numbered sections 1 through 11; `EXAMPLE.md` ships a "Layer 1: Narrative Persona Dossier / Layer 2: Operational Appendix" with sections (`Opening scene`, `What they say vs what they mean`) that appear nowhere in the template. An agent loading both references gets two canonical formats and no signal which wins. The reporter's own run resolved it correctly by following SKILL.md's pointer, and they name the real risk plainly: a weaker model could ship the Layer 1/Layer 2 format and silently violate the contract downstream skills consume. Shape ruling is **D2**.
+
+**[#252](https://github.com/product-on-purpose/pm-skills/issues/252), `define-prioritization-framework` field friction.** Three concrete points from a real 8-item backlog in a solo context: a top-5/bottom-5 rule that degenerates below 10 items, a RICE effort unit that assumes a team, and an ambiguous Kano gate. The report is positive about the skill overall and singles out the convergence/divergence analysis as its most valuable output, which makes this calibration evidence rather than a complaint. No shape ruling needed; it is a content edit plus a version bump.
+
+**[#253](https://github.com/product-on-purpose/pm-skills/issues/253), partial-install dead pointers. VERIFIED, and the surface is larger than the issue states.** Measured across the catalog:
+
+| Measure | Count |
+|---|---|
+| Skills naming at least one sibling skill | 66 of 68 |
+| Total sibling-reference edges | 291 |
+| Skills whose references are **boundary pointers only** (inside `When NOT to Use`) | 31 |
+| **Skills naming a sibling OUTSIDE the boundary section** | **35** |
+
+The 31 boundary-only skills are harmless under partial install: "use X instead" degrades to the user simply not using X. The **35** are the real surface, because their references sit in output guidance and next-step routing, so the artifact ships with instructions the user cannot execute. No skill handles the missing-sibling case today; `README.md` does not mention partial install at all. Shape ruling is **D3**, and the options differ by an order of magnitude in cost.
+
+### C-4 research: the front door, re-measured
+
+Measured 2026-08-14 after the release, correcting an earlier claim drawn from a truncated grep:
+
+| Surface | Project-memory coverage |
+|---|---|
+| `QUICKSTART.md` | **Zero mentions** |
+| `site/src/content/docs/getting-started/quickstart.md` | **Zero mentions** |
+| `README.md` | Incidental only: a repo-tree comment, a parenthetical in a link description, and one generated release-history row that exists solely because the v2.32.0 CHANGELOG entry mirrors into it |
+| `site/src/content/docs/index.mdx` | Incidental only: a v2.25.0 release-history row |
+
+Four surfaces, and the release that shipped memory as its headline is invisible on all four. Folded in from the same audit: **no worked example of the memory loop exists** in `library/` or `docs/templates/`, so the central claim, that the PRD skill already knows your personas, has no artifact demonstrating it. That is why the example and the front-door text are one candidate: a sample built on one of the three canonical threads is the strongest version of what the front door is missing.
+
+### C-11 research: the split
+
+[#269](https://github.com/product-on-purpose/pm-skills/issues/269) contains two different kinds of work.
+
+**The cleanup half:** two runbooks disagree about which is authoritative, the internal one is pinned at a v2.5.0 baseline and carries a parallel `pm-skills-mcp` release track that has contradicted maintenance mode since 2026-05-04, and it references a retired `docs/index.mdx`. Real, mechanical, and not urgent.
+
+**The process half:** no release plan has ever carried a doc-update-and-hygiene checklist. Each cycle rebuilds one from the runbook and inherits whatever rot the runbook accumulated. That is precisely how a dead MCP publish track reached the maintainer as an open decision during the v2.32.0 cut. This half has compounding return: land it and C-12 and C-13 become mechanical next cycle instead of being rediscovered a fourth time. Ruling is **D4**.
+
+### Blocked or design-gated, recorded so they are not mistaken for ready
+
+- **C-6** cannot be ratified until [#267](https://github.com/product-on-purpose/pm-skills/issues/267) is fixed. The About-sync step would 403 *after* the tag and Release exist, leaving a partial release. Ratifying a cutover whose post-release step is known broken is not defensible.
+- **C-9** as written would fail CI for 56 skills: only 12 of 68 carry output-scenario assets. It needs the gate scoped to rostered-and-scenario-bearing skills before it can be promoted.
+- **C-10** is M-sized with real API cost and pairs naturally with C-9, since both concern how much of the roster is genuinely measured.
+
+## Scope decisions (all OPEN)
+
+Option letters are per-decision labels, not rankings. Each recommendation states the strongest argument against itself.
+
+| # | Decision | Options | Recommendation | Status |
 |---|---|---|---|---|
-| C-1 | AI-product family Track 1: the four increments | [v2.32.0 WS-5 spec](../v2.32.0/spec_c3-ai-product-family.md) section 9 | S-M | Two additive minors on `deliver-prd` (agent execution contract; behavior-and-eval linkage), a model-choice subsection on `develop-adr`, a privacy extension on `measure-instrumentation-spec`. No new trigger surface, no L floor, no catalog-count change. The cheapest useful item in the family |
-| C-2 | Structure-over-prose weak-model re-test | v2.32.0 WS-1 ratification | S | Parked decision D1 was ratified as drafted **with a weak-model re-test scheduled before the next content cycle**. C-1 is a content cycle, so this is due before or alongside it |
-| C-3 | Decision D8: PR-title lint promotion | Relocated from the v2.32.0 cut by [the cut pack](../v2.32.0/prep_cut-pack.md) section 6 | S | D8 = B (hold) stands; only the revisit moved here. Evidence to weigh is listed in that section, including `31f38ed4`, a human-authored non-conventional title pushed direct to main, which a PR-title lint structurally cannot see |
-| C-4 | Front-door discoverability + a worked memory example | Raised in three consecutive session wraps, never ruled; sharpened by the 2026-08-14 doc audit | S-M | Baseline restated after review (the first version of this row was wrong: it claimed README never mentions project memory, from a grep truncated by `head`). Accurate baseline, **four surfaces not two** (re-measured 2026-08-14 after the release): `QUICKSTART.md` has no entry point at all; the **site quickstart** (`getting-started/quickstart.md`) has zero mentions; `README.md` mentions them only incidentally (a repo-tree comment, a parenthetical inside a link description, and one generated release-history row that exists solely because the v2.32.0 CHANGELOG entry is mirrored into it); and the **site home page** (`index.mdx`) likewise has only a v2.25.0 release-history row. Success is therefore not "add a mention" but a runnable setup plus a worked synthesis-to-PRD handoff, on both the repo and site front doors. v2.32.0 ships memory as its headline, so the front door omits the release's main feature. Folded in from the same audit: **no worked example of the memory loop exists anywhere** in `library/` or `docs/templates/`, so the central claim ("run the PRD skill and it already knows your personas") has no artifact demonstrating it. A sample built on one of the three canonical threads is the strongest version of what the front door is missing, which is why these are one candidate rather than two |
-| C-9 | Promote output-eval asset presence to enforcing | `reference/evals.md` states the promotion condition; v2.32.0 WS-4 met it | S-M | The page says asset presence is advisory and "promotes to enforcing once the roster is pinned." WS-4 pinned the roster (53 + 15 = 68, asserted in test), so the stated condition now holds. Deliberately not ruled inside the v2.32.0 tag window. Cost to weigh: 12 of 68 skills currently carry output-scenario assets, so promoting today would fail CI for 56 skills unless the gate scopes to rostered-and-scenario-bearing skills only |
-| C-5 | Aggregated-roadmap decisions D-A, D-B, D-D, D-E, D-F | `_LOCAL/audit/2026-08-05_ai-skills_roadmap-aggregated.md` section 6 (maintainer-local) | Decisions only | Recommendations already written. D-C was ruled A on 2026-08-13 and is closed |
-| C-6 | S2 authoritative cutover ratification | [#136](https://github.com/product-on-purpose/pm-skills/issues/136) checklist item 7 | Decision + config | Criteria 1-6 were all observed green simultaneously at the v2.32.0 cut ([observation record](https://github.com/product-on-purpose/pm-skills/issues/136#issuecomment-5295208645)), so the evidence item 7 waited for now exists. **Named prerequisite before ratifying: [#267](https://github.com/product-on-purpose/pm-skills/issues/267)**, the About-sync step's token cannot update repository metadata and would 403 *after* the tag and Release already exist. That path only executes on an authoritative merge, so it has never run. Maintainer-only; no agent may self-promote |
-| C-7 | Dual-shell validator ports | Standing cadence from the v2.30.0 audit | S per port | 23 pairs remained after v2.31.0's two ports. Cadence is 1-2 per release until none remain |
-| C-8 | Memory artifact ledger disposition | [#223](https://github.com/product-on-purpose/pm-skills/issues/223) | Decision | v2.32.0 shipped B1 and B2 plus a ledger delta spec. Whether #223's added ledger semantics (orchestrator execution state, artifact hashes, provenance chains) are still wanted is an open call. **[#268](https://github.com/product-on-purpose/pm-skills/issues/268) is now half-resolved**: v2.32.0 added the Write discipline bullet (re-read, merge, re-propose) to all six writing contracts and a validator rule enforcing that a writing contract states it, after an adversarial review refused the argument that instructing "append" implies append semantics. What remains for the ledger build is the half a declaration cannot reach: validating an actual state file's shape rather than the contract prose, and a genuine interleaved-writer test |
-| C-10 | Router-eval baseline refresh to the full roster | v2.32.0 G1 adversarial review | M (an API run + a committed baseline) | The committed Haiku baseline covers **29 of the 53** rostered skills. `diffBaseline` in `scripts/run-router-evals.mjs` does `if (!b) continue`, so a skill with no baseline row is silently skipped and cannot report a regression. Until this is refreshed, "fixture-covered" and "drift-gated" are different sets and the published numbers say so. Two parts: run and commit a 53-skill baseline, and make a rostered skill with no baseline row a gate failure rather than a silent skip (fail closed, mirroring the existing `missingBaselineRows` guard which already covers the opposite direction) |
-| C-11 | Release-runbook reconciliation + a standing hygiene checklist | [#269](https://github.com/product-on-purpose/pm-skills/issues/269) | M | Two runbooks disagree about which is authoritative; the internal one is pinned at a v2.5.0 baseline, carries a parallel MCP release track contradicting maintenance mode since 2026-05-04, and references a retired `docs/index.mdx`. The canonical one omits this release's own additions and has a materially thin G4. **The durable half is the checklist**: no release plan has ever carried a doc-update-and-hygiene checklist, so each cycle rebuilds one from the runbook and inherits its rot. That is exactly how the MCP step reached a maintainer as an open decision |
-| C-12 | Doc-stack migration leftovers: retired `docs/` paths | 2026-08-14 site hygiene pass; **already found by the 2026-06-06 Codex audit and never closed** | S-M | Same root as C-11 and worth doing with it. The 2026-06-06 audit recorded "41 files / 128 matches of `docs/(reference\|guides\|concepts)`; every clickable relative form resolves to a non-existent root path", masked because `gen-site.mjs` rewrites link targets in the generated copy while `check-rendered-links` validates `site/dist` only. That audit noted the finding **"bit LIVE during the v2.25.1 release"** and tracked it as a follow-up that is still open. Concrete instances now known: `gen-derived-surfaces.mjs:653` hardcodes display text `` `docs/releases/Release_vX.Y.Z.md` `` in the changelog mirror (41 rendered occurrences; link target is correct, only the displayed path is a lie), and the internal runbook's Section 10.5/10.5.4 reference `docs/index.mdx`. **Method note:** measure this with a grep that excludes `site/src/content/docs/`, or the legitimate site path inflates the count roughly tenfold |
-| C-13 | `contributing/ci-overview.md` is stale | 2026-08-14 site hygiene pass | S | The contributor-facing CI doc is genuinely good (three layers, workflow table, validator catalog, local-trigger table, failure-triage table) and materially out of date. It claims **Astro 6.3.x / Starlight 0.39.x** while the repo runs **Astro 7.2.0 / Starlight 0.41.7**, a full major version. Four workflows are entirely absent from it: `release-please.yml`, `release-please-regen.yml`, `output-eval.yml`, `trigger-evals.yml`. This is the front door for anyone asking "what CI does the site have", so its staleness is the same class as C-11 and C-12: the execution document never heard about the change |
-| C-14 | **Field-reported skill defects** (3 issues, filed 2026-08-01) | [#251](https://github.com/product-on-purpose/pm-skills/issues/251), [#252](https://github.com/product-on-purpose/pm-skills/issues/252), [#253](https://github.com/product-on-purpose/pm-skills/issues/253) | S / S-M / M | **Found untracked 2026-08-14**: filed two weeks ago and named in no release plan, while v2.32.0 spent a full cycle on infrastructure. These are the only candidates here reported by someone actually using the skills. **#251** (S): `foundation-persona`'s `EXAMPLE.md` demonstrates a different output format than its own SKILL.md Output Contract and `TEMPLATE.md` mandate, so the shipped example contradicts the shipped instruction. Cheap to fix, poor to leave. **#252** (S-M): field feedback from a real 8-item backlog run of `define-prioritization-framework` in a solo context; three concrete friction points (a top-5/bottom-5 rule that breaks for n<10, a RICE effort unit that assumes a team, an ambiguous Kano gate). The report is positive overall, which makes it good evidence rather than a complaint. **#253** (M): cross-skill routing names sibling skills that may not be installed, and the `skills.sh --skill` flag makes partial install the easy default, so those pointers go dead and the agent improvises or silently drops the handoff. Arguably the most serious of the three, because it degrades the primary install path |
+| D1 | v2.33.0 composite scope | **A) User-facing cut:** C-14 + C-4 + C-1/C-2 + C-11's process half, plus a decisions block (C-3, C-8). **B) Debt-payoff cut:** C-11 whole + C-12 + C-13 + C-9/C-10, with C-14 only. **C) Full slate:** everything except C-6, mirroring the v2.32.0 D1-C ruling. | **A** | OPEN |
+| D2 | [#251](https://github.com/product-on-purpose/pm-skills/issues/251) persona example shape | **A) Regenerate `EXAMPLE.md`** as a filled-in instance of the current TEMPLATE, matching how every other skill's example works. **B) Keep it and mark it** an explicitly non-normative narrative rendering that does not supersede the contract. | **A** | OPEN |
+| D3 | [#253](https://github.com/product-on-purpose/pm-skills/issues/253) partial-install shape | **A) Front-door note only:** README and QUICKSTART state that the routing graph assumes a full install. **B) Convention in all 35** affected skills: if a routed skill is absent, say so and inline a minimal version of its output. **C) Document the convention once** where agents already read it, plus the front-door note, with no per-skill edits. | **C** | OPEN |
+| D4 | C-11 scope | **A) Process half only:** add a doc-update-and-hygiene checklist to the release-plan template and leave the runbook reconciliation to v2.34.0. **B) Whole thing** this cycle. | **A** | OPEN |
+| D5 | Does the decisions block ride this cycle? | **A) Yes:** rule C-3 (D8 PR-title lint) and C-8 ([#223](https://github.com/product-on-purpose/pm-skills/issues/223) ledger disposition) inside this cycle; they cost a session, not a workstream. **B) No:** hold both for v2.34.0. | **A** | OPEN |
+
+**Decision rationales, including the case against each recommendation:**
+
+- **D1-A** treats the imbalance named in "Where we are" as the thing worth correcting: the only user-reported work on the list waited two weeks while the repo shipped a feature its own front door does not mention. **The case against:** [#269](https://github.com/product-on-purpose/pm-skills/issues/269) contains an instance open since a 2026-06-06 audit that recorded it "bit LIVE during the v2.25.1 release", and debt that gets rediscovered is compounding. If the maintainer weighs that heavier, D1-B is the defensible counter, and D4-A is the hedge that keeps A honest by taking the one piece of debt with compounding return. D1-C is available and is what v2.32.0 chose, but that cycle ran two weeks and needed three review rounds at the gate; repeating it should be a deliberate choice, not a default.
+- **D2-A** makes the example consistent with every other skill in the catalog and removes the ambiguity at its source. **The case against:** the existing EXAMPLE is genuinely richer than a filled-in template, and regenerating it discards authored work. B preserves it at the cost of leaving two formats in the same directory, which is the condition the reporter flagged.
+- **D3-C** fixes the behavior without 35 version bumps, 35 HISTORY rows, and a regeneration pass, which is what B costs under this repo's own versioning rules. **The case against:** C depends on the convention actually being read under a partial install, and `skills.sh --skill` may not deliver whatever file carries it. **That assumption must be verified before C is ruled**, or C degrades to A in practice. If it cannot be verified, B is the honest answer and should be sized as L.
+- **D4-A** takes the half with compounding return and defers the cleanup. **The case against:** splitting an issue risks the remainder never landing, which is exactly what happened to the 2026-06-06 audit finding. Mitigated by C-12 and C-13 staying on the v2.34.0 list with the checklist as their entry criterion.
+- **D5-A** costs a session and unblocks later cycles. **The case against:** decisions made alongside a build tend to get the leftover attention, and D8 in particular was deliberately relocated out of the v2.32.0 tag window precisely so it could be read calmly.
+
+## Trip-wires and drop order (apply if D1-A is ruled)
+
+Dates assume the 2026-09-05 target; re-derive if the target moves.
+
+1. If [#251](https://github.com/product-on-purpose/pm-skills/issues/251) and [#252](https://github.com/product-on-purpose/pm-skills/issues/252) are not both closed by 2026-08-22, the cycle has failed its own theme; stop adding scope and finish C-14 before anything else.
+2. If D3 is not ruled by 2026-08-22, [#253](https://github.com/product-on-purpose/pm-skills/issues/253) drops to option A (front-door note only) and the fuller fix carries to v2.34.0.
+3. If C-4's worked memory example is not drafted by 2026-08-29, it drops and the front-door text ships alone.
+4. If C-1 has not started by 2026-08-29, C-1 and C-2 both drop to v2.34.0 together, since C-2 is only due because C-1 is a content cycle.
+5. **C-14 never drops.** If a user-reported defect falls out of the release scoped to address user-reported defects, the cycle has failed at its own theme and should be re-scoped rather than shipped.
+
+**Drop order, in order:** C-1 and C-2 first, then C-4's worked example (keeping the front-door text), then the D5 decisions block moves to v2.34.0. C-11's checklist and C-14 are the floor.
+
+## Execution workstreams (proposed, contingent on D1)
+
+| WS | What | Depends on | Agent | Exit criteria |
+|---|---|---|---|---|
+| WS-1 | [#251](https://github.com/product-on-purpose/pm-skills/issues/251) persona example, per D2 | D2 | claude | `EXAMPLE.md` and `TEMPLATE.md` agree; skill MINOR bump + HISTORY row; issue closed with the reporter credited |
+| WS-2 | [#252](https://github.com/product-on-purpose/pm-skills/issues/252) prioritization-framework calibration | - | claude | All three friction points addressed or explicitly declined with a reason; bump + HISTORY; issue closed |
+| WS-3 | [#253](https://github.com/product-on-purpose/pm-skills/issues/253) partial-install resilience, per D3 | D3, and for D3-C a verified answer to whether the carrier file ships under `--skill` | claude | The convention exists where a partially-installed agent will read it, or the front-door note ships and the fuller fix is carried with a stated reason |
+| WS-4 | Front door, four surfaces | - | claude | All four surfaces name project memory with a runnable setup, not merely a mention |
+| WS-5 | Worked memory example | WS-4 | claude | A sample on one of the three canonical threads demonstrating the synthesize-to-PRD handoff end to end |
+| WS-6 | Hygiene checklist in the release-plan template | - | claude | A doc-update-and-hygiene checklist lives in the release plan, carries the "name the artifact that would fail" gate from [#269](https://github.com/product-on-purpose/pm-skills/issues/269), and gates the tag |
+| WS-7 | AI-family Track 1 increments + weak-model re-test | D1 | claude | Four increments shipped as additive minors; re-test run and recorded |
+| WS-8 | Decisions block, per D5 | D5 | human | C-3 and C-8 ruled and recorded |
+| WS-9 | Release cut via the 6-gate runbook | WS-1..8 | claude runs, human gates | v2.33.0 tagged; the WS-6 checklist used for the first time and its gaps recorded |
 
 ## Not carried in
 
-- The AI-product family keystones (`measure-ai-eval-spec`, `deliver-ai-behavior-spec`) are staged for
-  v2.34.0 per the spec's build tracks, and each must pass the control-arm gate in that spec's
-  section 7 before any build begins.
+- The AI-product family keystones (`measure-ai-eval-spec`, `deliver-ai-behavior-spec`) stay staged for v2.34.0, and each must pass the control-arm gate in the [C-3 spec](../v2.32.0/spec_c3-ai-product-family.md) section 7 before any build begins.
 - The ten speculative bets at `../_unreleased/fable-innovations/` remain unscheduled.
 - Traction and marketing work is maintainer-local and does not appear in release plans.
