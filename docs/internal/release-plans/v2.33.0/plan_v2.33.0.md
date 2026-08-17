@@ -202,6 +202,16 @@ For every quantitative claim in release copy, name the artifact that would fail 
 
 - [ ] Copy the S2 criteria table from [#136](https://github.com/product-on-purpose/pm-skills/issues/136) and fill it during the cut, not afterward.
 
+**Observed 2026-08-16, before the cut, and it is a version divergence.** The shadow Release PR [#271](https://github.com/product-on-purpose/pm-skills/pull/271) proposes **2.32.1**, a PATCH. This release is planned as a MINOR.
+
+The shadow is not wrong; it is reading what it was given. Of the commits on `main` since the `v2.32.0` tag, 15 are `docs`, 2 are `fix`, 1 is `chore`, and **none is `feat`**. Yet this cycle bumped `define-prioritization-framework` from 1.2.0 to 1.3.0, a skill MINOR, in a commit typed `feat(define-prioritization-framework)`. That commit was squash-merged under PR [#270](https://github.com/product-on-purpose/pm-skills/pull/270)'s title, `fix(skills): two field-reported defects ...`, and **the squash title is what release-please reads**. The `feat` never reached `main` as a type.
+
+Three things follow, all of which belong in front of the maintainer rather than in a footnote:
+
+1. **This is the D8 evidence, arriving on its own.** Decision C-3 (the PR-title lint promotion) was relocated to this cycle to be decided calmly with a real sample. The sample is now concrete: a squash title mistyped relative to its contents produces a wrong version proposal, and no gate catches it because the lint checks conventional *form*, not whether the type matches the change.
+2. **Skill SemVer and repo SemVer are separate lines** (`docs/internal/skill-versioning.md` distinguishes a skill's contract from "a tagged collection of changes"), so a skill minor does not automatically force a repo minor. The divergence here is nonetheless real, because the release is *intended* as a MINOR and the shadow cannot know that.
+3. **At the cut, expect the shadow to propose 2.32.1 and record it as a criterion-1 miss** rather than a surprise. If the authoritative cutover had already happened, merging that PR would have shipped the wrong version.
+
 ## Not carried in
 
 - The AI-product family keystones (`measure-ai-eval-spec`, `deliver-ai-behavior-spec`) stay staged for v2.34.0, and each must pass the control-arm gate in the [C-3 spec](../v2.32.0/spec_c3-ai-product-family.md) section 7 before any build begins.
