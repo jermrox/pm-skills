@@ -4,6 +4,11 @@
 were ruled by the maintainer; the four residual questions in section 9 are adopted as
 **defaults of record**, overridable by the maintainer at any point before B1 lands. Nothing here is
 open in a way that blocks WS-2.
+**Shipped 2026-08-14 with v2.32.0; re-homed 2026-08-17** from `_unreleased/project-memory/` into this
+release folder per v2.33.0 decision D10 = A. This file remains the **standing interface of record**
+for the ledger; the enforcement residual (state-file shape validation, an interleaved-writer
+regression, and a ledger-grade concurrency guarantee once `derived_from` edges are load-bearing) is
+tracked at [#268 (write-discipline enforcement)](https://github.com/product-on-purpose/pm-skills/issues/268).
 **Revised 2026-08-07 after adversarial review** (Codex companion plus a 3-lens internal panel, which
 independently agreed on the largest finding). Three high findings were fixed before commit: the run
 schema conflated two orthogonal orchestrator enums and invented a value; the hash was timed after the
@@ -138,7 +143,7 @@ matching hash means "unchanged as of the last recorded check," never "unchanged 
 contract text.
 
 **Alignment, not dependency.** This is the field the parked innovation brief
-[`X-03 (artifact provenance and the upgrade loop)`](../fable-innovations/X-03-artifact-provenance-upgrade.md)
+[`X-03 (artifact provenance and the upgrade loop)`](../_unreleased/fable-innovations/X-03-artifact-provenance-upgrade.md)
 would consume: its `generated-by: <skill>@<version>` stamp says what made an artifact, and this hash
 says whether it still is what was made. X-03's own REQ-6 makes memory an enhancement rather than a
 prerequisite, so the dependency runs one way only and neither blocks the other.

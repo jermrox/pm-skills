@@ -303,7 +303,7 @@ Committed in principle; executed at follow-on tags behind the named trigger. Not
 
 ### WS-Z7 - Memory (R-22; F-48 project state)
 
-Revive the already-parked plan at [`../_unreleased/project-memory/plan_project-memory.md`](../_unreleased/project-memory/plan_project-memory.md) (and its `spec_project-memory.md`) as its own release; do NOT re-spec it here. This section carries ONLY the integration deltas that bind it to this program:
+Revive the already-parked plan at [`plan_project-memory.md`](../v2.32.0/plan_project-memory.md) (and its `spec_project-memory.md`; both then in `_unreleased/project-memory/`, shipped with v2.32.0 and re-homed there 2026-08-17) as its own release; do NOT re-spec it here. This section carries ONLY the integration deltas that bind it to this program:
 - **Artifact ledger.** The gitignored project-memory file (`.claude/pm-skills.local.md`) doubles as the orchestrator's artifact ledger, so memory + provenance + orchestrator threading are one mechanism, not three (audit sharpening of the declared bet).
 - **Provenance stamping alignment.** The memory write convention aligns with the maintainer-local innovation X-3 (skills stamp `generated-by: <skill>@<version>`), so the ledger rows and the artifact frontmatter share one schema.
 - **Promotion trigger:** v2.31.0 shipped + the orchestrator artifact-ledger interface agreed. **Target:** v2.32.0.

@@ -1,5 +1,11 @@
 # Spec: project memory + memory-aware cohort (B1/B2, v2.29.0) - DRAFT for review
 
+> **SHIPPED 2026-08-14 with v2.32.0; re-homed 2026-08-17** from `_unreleased/project-memory/` into
+> this release folder per v2.33.0 decision D10 = A. The DRAFT marker above is historical: the schema
+> and cohort below shipped, the user-facing contract surface is documented at
+> `site/src/content/docs/concepts/hooks.md`, and ledger semantics live in
+> [`spec_ledger-delta.md`](spec_ledger-delta.md), the standing interface of record.
+
 Companion to [`plan_project-memory.md`](plan_project-memory.md) (renamed from `plan_v2.29.0.md` when the train was parked; link corrected 2026-08-07). Defines the `.claude/pm-skills.local.md` state file (B1), the read/write contract mechanism and provenance model, the first cohort (B2), and the open design questions. DRAFT: everything here is proposed, not locked. (Renumbered from v2.28.0 on 2026-06-19; see the plan's renumber note.)
 
 ## B1 - the state file

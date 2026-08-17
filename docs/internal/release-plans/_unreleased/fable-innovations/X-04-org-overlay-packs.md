@@ -6,7 +6,7 @@
 **Provenance:** the 2026-07-04 deep audit (maintainer-local, gitignored), section 6b/6c, bet X-4 (org overlay packs, extend without forking)
 **Candidate formal ID:** to be assigned at promotion (F-5x/M-3x per the backlog ID rule)
 **Audit score (Bar / Moat / Effort-inverse):** 2 / 3 / 1 = 6 of 9. Audit's note: "the enterprise wedge; design doc first."
-**Companion docs:** [`docs/internal/release-plans/v2.31.0/plan_v2.31.0.md`](../../v2.31.0/plan_v2.31.0.md) (the Non-goals boundary that parks this bet, and WS-Z2's generator precedent this bet reuses) and [`docs/internal/release-plans/_unreleased/project-memory/plan_project-memory.md`](../project-memory/plan_project-memory.md) (F-48, confirmed no overlap)
+**Companion docs:** [`docs/internal/release-plans/v2.31.0/plan_v2.31.0.md`](../../v2.31.0/plan_v2.31.0.md) (the Non-goals boundary that parks this bet, and WS-Z2's generator precedent this bet reuses) and [`docs/internal/release-plans/v2.32.0/plan_project-memory.md`](../../v2.32.0/plan_project-memory.md) (F-48, confirmed no overlap; shipped with v2.32.0)
 
 ---
 
@@ -24,7 +24,7 @@ The load-bearing relationship is with the parallel [`v2.31.0` plan](../../v2.31.
 
 X-02 (artifact schemas) and X-03 (artifact provenance and the upgrade loop), the sibling documents in this same set, both touch this bet without duplicating it. X-02, if built, would let an overlay's extra checklist items be schema-validated instead of merely prose-checked, a later hardening, not required to ship v1 here. X-03's `generated-by: <skill>@<version>` artifact stamp is the natural home for recording which overlay pack, and version, contributed to a given artifact; X-04 extends that stamp format (REQ-9 below) rather than inventing a second provenance mechanism.
 
-The parked `docs/internal/release-plans/_unreleased/project-memory/` plan (F-48, project state) has no direct relationship: memory is per-project runtime state, overlays are per-organization authoring-time structure. v2.30.0 (trust repair) has no direct relationship either. M-28 (plugin number 2, the marketplace split) is worth naming explicitly because it is easy to conflate: M-28 splits capability at the PLUGIN level, a whole second installable plugin; X-04 extends INDIVIDUAL SKILLS at the content level inside a consumer's own private pack. Both could coexist.
+The project-memory plan (F-48, project state; shipped with v2.32.0, now at `docs/internal/release-plans/v2.32.0/plan_project-memory.md`) has no direct relationship: memory is per-project runtime state, overlays are per-organization authoring-time structure. v2.30.0 (trust repair) has no direct relationship either. M-28 (plugin number 2, the marketplace split) is worth naming explicitly because it is easy to conflate: M-28 splits capability at the PLUGIN level, a whole second installable plugin; X-04 extends INDIVIDUAL SKILLS at the content level inside a consumer's own private pack. Both could coexist.
 
 ## Spec
 

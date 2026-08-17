@@ -26,7 +26,7 @@ This bet is **largely absorbed**. Nothing below restates these; each is cited by
 | Generated README, quickstart, compat matrix, manifest descriptions | v2.31.0 WS-Z2 (generated surfaces, M-36) | `scripts/gen-derived-surfaces.mjs` |
 | Release-notes dedup | v2.31.0 WS-Z3 (release-notes dedup, M-36) | one generated latest-release pointer, a generated changelog mirror, a generated releases-index row |
 
-X-08's own scope starts only where that table ends. It has no relationship to X-07 (context-cost transparency, a different property) or the parked memory plan ([`plan_project-memory.md`](../project-memory/plan_project-memory.md), F-48 project state).
+X-08's own scope starts only where that table ends. It has no relationship to X-07 (context-cost transparency, a different property) or the memory plan ([`plan_project-memory.md`](../../v2.32.0/plan_project-memory.md), F-48 project state; shipped with v2.32.0).
 
 ## Spec
 

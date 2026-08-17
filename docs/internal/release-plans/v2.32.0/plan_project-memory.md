@@ -1,8 +1,15 @@
-# Remember: project memory + memory-aware cohort (PROMOTED to v2.32.0)
+# Remember: project memory + memory-aware cohort (SHIPPED in v2.32.0)
 
+> **SHIPPED 2026-08-14 with v2.32.0** (tag `e8a641c3`): B1 and B2 built in full per that cycle's D2
+> ruling. **Re-homed 2026-08-17** from `_unreleased/project-memory/` into this release folder per
+> v2.33.0 decision D10 = A, which closed [#223 (memory artifact ledger)](https://github.com/product-on-purpose/pm-skills/issues/223)
+> as shipped; the surviving residual is [#268 (write-discipline enforcement)](https://github.com/product-on-purpose/pm-skills/issues/268).
+> This document is now shipped history; [`spec_ledger-delta.md`](spec_ledger-delta.md) remains the
+> standing interface of record.
+>
 > **PROMOTED 2026-08-07 to the v2.32.0 cycle as candidate C-1 (memory artifact ledger, F-48).** Scope
 > was ruled D1 = C (full-slate composite) on 2026-08-02; see
-> [`../../v2.32.0/plan_v2.32.0.md`](../../v2.32.0/plan_v2.32.0.md), workstreams WS-1 (ratification packet),
+> [`plan_v2.32.0.md`](plan_v2.32.0.md), workstreams WS-1 (ratification packet),
 > WS-2 (B1 keystone build), WS-3 (B2 cohort). **This plan is annotated, not rewritten**, per the
 > standing v2.31.0 staging instruction: extend, never re-author. Everything below is the original
 > parked text and remains the design of record except where this block or the delta spec supersedes it.
@@ -60,12 +67,12 @@
 >
 > **Historical: PARKED 2026-06-22 - deferred from v2.29.0 to `_unreleased/project-memory/`.** The maintainer reprioritized the pre-build risk gate (`foundation-build-risk-review`, issue #149) into v2.29.0 ahead of this memory train. This plan is revivable as-is; its target version is unassigned until re-slotted. Internal "v2.29.0" references below are historical - the slot now belongs to the pre-build gate (`docs/internal/release-plans/v2.29.0/`).
 
-**Status:** PARKED in `_unreleased/project-memory/` (revivable). Prior status: PROPOSED (promoted from STUB 2026-06-17; renumbered v2.28.0 -> v2.29.0 on 2026-06-19 when v2.28.0 was reassigned to the `foundation-stakeholder-briefings` skill). Theme committed; scope rows are proposed, not locked; effort briefs + GitHub issues are the next execution-time step (not filed yet).
+**Status:** SHIPPED in v2.32.0 (2026-08-14); re-homed here 2026-08-17 from `_unreleased/project-memory/` per v2.33.0 decision D10 = A. Prior status: PARKED in `_unreleased/project-memory/` (revivable); before that PROPOSED (promoted from STUB 2026-06-17; renumbered v2.28.0 -> v2.29.0 on 2026-06-19 when v2.28.0 was reassigned to the `foundation-stakeholder-briefings` skill). Theme committed; scope rows are proposed, not locked; effort briefs + GitHub issues are the next execution-time step (not filed yet).
 **Owner:** Maintainers
 **Type:** MINOR (additive: a new project-state file + memory contracts on an existing skill cohort; no skill removed or renamed). Catalog stays at its post-v2.28.0 count (67) unless a new skill is added (none planned).
 **Theme:** **Remember.** Give the plugin durable project memory and make a first cohort of skills read and write it, so the catalog compounds across a session instead of starting cold each time.
 **Created:** 2026-06-15 (stub) | **Promoted:** 2026-06-17 | **Renumbered:** 2026-06-19 (was v2.28.0)
-**Previous:** v2.28.0 (`foundation-stakeholder-briefings`, the 1-to-N audience fan-out skill) - see [`../../v2.28.0/plan_v2.28.0.md`](../../v2.28.0/plan_v2.28.0.md).
+**Previous:** v2.28.0 (`foundation-stakeholder-briefings`, the 1-to-N audience fan-out skill) - see [`../v2.28.0/plan_v2.28.0.md`](../v2.28.0/plan_v2.28.0.md).
 
 ---
 

@@ -1,6 +1,6 @@
 # v2.29.0 Release Plan: the pre-build risk gate (F-56) + a key-free router probe (M-34)
 
-**Status:** PROPOSED - conditional GO. The skill's go/no-go is gated on the trigger-fixture disambiguation pass (Phase 1 below; the spec). Everything past the gate (W1-W4, the sample manifest, the surface sweep) is the **if-GO blueprint**. **Supersedes the prior v2.29.0 "Remember" (project-memory) plan, deferred to [`../_unreleased/project-memory/`](../_unreleased/project-memory/plan_project-memory.md) on 2026-06-22.**
+**Status:** PROPOSED - conditional GO. The skill's go/no-go is gated on the trigger-fixture disambiguation pass (Phase 1 below; the spec). Everything past the gate (W1-W4, the sample manifest, the surface sweep) is the **if-GO blueprint**. **Supersedes the prior v2.29.0 "Remember" (project-memory) plan, deferred to `_unreleased/project-memory/` on 2026-06-22; it shipped with v2.32.0 and its plan now lives at [`../v2.32.0/plan_project-memory.md`](../v2.32.0/plan_project-memory.md).**
 **Owner:** Maintainers
 **Type:** MINOR (additive: one new foundation skill + one new sub-agent + a key-free router engine; nothing removed or renamed). Catalog 67 -> 68 (foundation 10 -> 11); sub-agents 5 -> 6.
 **Theme:** **The pre-build risk gate.** Given an idea, a feature request, or a scope change, name the single assumption most likely to make it fail and return a verdict that routes into the rest of the library.
