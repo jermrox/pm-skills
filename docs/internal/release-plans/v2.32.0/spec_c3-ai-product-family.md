@@ -5,7 +5,9 @@ names, classifications, what is in and what is out, and the gates a build must p
 authorized to be built by this document.
 **Workstream:** WS-5 of [the v2.32.0 release plan](./plan_v2.32.0.md) (the full-slate cycle).
 **Tracking:** [#225](https://github.com/product-on-purpose/pm-skills/issues/225) (AI-product family
-coverage offense).
+coverage offense; **closed 2026-08-17** after Phase-0 completed and the first build slice, the four
+WS-7 increments, shipped in v2.33.0 at `b17f554b`). The remaining family builds get fresh tracking
+issues when scoped into a release; this spec stays the design of record.
 **Owner:** Maintainers.
 **Supersedes:** the five-name sketch in the maintainer-local comparison roadmap's C-3 row. That
 source is gitignored and therefore unreadable to anyone outside the maintainer's machine, which is
