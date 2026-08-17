@@ -147,8 +147,49 @@ Dates assume the 2026-09-05 target; re-derive if the target moves.
 | WS-5 | Worked memory example | WS-4 | claude | A sample on one of the three canonical threads demonstrating the synthesize-to-PRD handoff end to end |
 | WS-6 | **DONE 2026-08-16.** Standing source at [`../checklist_doc-update-and-hygiene.md`](../checklist_doc-update-and-hygiene.md), copied into this plan as a filled section above. **The gating question dissolved rather than being decided** (D6): the canonical runbook's G0 sub-check 6 already requires the plan marked READY TO TAG and blocks on any sub-check failure, so a checklist inside the plan gates the tag with zero runbook edits, satisfying both [#269](https://github.com/product-on-purpose/pm-skills/issues/269)'s "not in the runbook" and this row's "gates the tag". Carries the claim-verification rule with the two real v2.32.0 precedents, the external and cross-repo surfaces including the agent-plugins re-pin that no workstream row had ever carried, a measurement warning drawn from four wrong-on-first-pass counts, and five meta-rules including a three-cycle removal candidacy so it cannot silently become ceremony | - | claude | **MET.** Its first live instance was found before it existed: the release-plans index was stale two days after the v2.32.0 tag, fixed at `1cf6c6e4`, and is now a checklist row |
 | WS-7 | **DONE 2026-08-16.** Four increments across three skills, all additive minors, plus the C-2 re-test run and recorded. `deliver-prd` 2.3.0 gains two conditional sections (`AI Behavior and Evaluation`, pairing each behavior requirement with the evidence it holds and giving refusal and abstention their own `AB-n` rows; `Agent Execution Contract`, declaring authoritative sources, do-not-touch, an `FR-n` verification map and stop-and-escalate). `measure-instrumentation-spec` 2.3.0 gains a conditional `Model Trace Capture` subsection under the existing privacy heading. `develop-adr` 2.2.0 gains a conditional `Model Choice` subsection inside Consequences. **Every one is conditional and structure-bearing**, which is not decoration: unconditional sections would have redefined "complete" for existing artifacts, invalidated thread samples, and made these skill-majors under the versioning tie-breaker. **C-2 returned VOID (R3)** against a rule pre-registered and committed at `f4d50837` before the run; record at [`records/output-eval-weak-model-20260816.md`](./records/output-eval-weak-model-20260816.md). **`develop-adr` was deliberately held** until that record existed, because it is one of C-2's four eval pairs. `skill-manifest.json` regenerated, the CI-red omission the build spec carried | D1 | claude | **MET.** Four increments shipped as additive minors; re-test run and recorded |
-| WS-8 | Decisions block, per D5 | D5 | human | C-3 and C-8 ruled and recorded |
+| WS-8 | **BRIEF PREPARED 2026-08-17, awaiting the ruling.** Both items are maintainer-only, so this workstream stops at a decision-ready brief: see [WS-8 decision brief](#ws-8-decision-brief-prepared-2026-08-17-not-ruled) below, carrying D9 (C-3) and D10 (C-8) with context, options, a recommendation, the case against each recommendation, and a blank `Final decision` line. **C-3's shape changed on evidence collected after it was scoped:** the failure it was meant to prevent *passed* the existing lint, so promotion alone would not have caught it. **C-8's premise changed too:** [#223](https://github.com/product-on-purpose/pm-skills/issues/223)'s substance shipped in v2.32.0, making this a disposition rather than a build call | D5 | human | C-3 and C-8 ruled and recorded |
 | WS-9 | Release cut via the 6-gate runbook | WS-1..8 | claude runs, human gates | v2.33.0 tagged; the WS-6 checklist used for the first time and its gaps recorded |
+
+## WS-8 decision brief (prepared 2026-08-17, NOT ruled)
+
+Both items are maintainer-only per the agent-assignment framework. Prepared here with the evidence and a recommendation so each can be ruled in one pass. **Neither is ruled by this document**; the `Final decision` lines are deliberately blank.
+
+| # | Decision | Options | Recommendation | Status |
+|---|---|---|---|---|
+| D9 | C-3: what to do about the PR-title lint, given that the demonstrated failure passed it | **A)** Promote the existing lint to required. **B)** Keep advisory, add a type-versus-change check. **C)** Both. **D)** Neither; rely on the shadow-PR observation step | **C**, with B as the load-bearing half | **OPEN** |
+| D10 | C-8: disposition of [#223](https://github.com/product-on-purpose/pm-skills/issues/223), whose substance has shipped | **A)** Close as shipped. **B)** Keep open, rewrite the body to the residual. **C)** Keep open as-is and retarget | **A**, plus a cleanup the issue does not mention | **OPEN** |
+
+### D9: C-3, the PR-title lint
+
+**Context, and the one fact that reshapes the decision.** C-3 was framed as "promote `lint-pr-title` from advisory to required." The evidence this cycle collected says that framing is wrong. **PR [#270](https://github.com/product-on-purpose/pm-skills/pull/270)'s title was valid conventional form.** It read `fix(skills): two field-reported defects ...` and `lint-pr-title` passed it. Promotion to required would not have prevented the miss, because the lint was never going to object.
+
+What actually failed is type-versus-change: a `feat` commit squashed under a `fix` title, and release-please reads only the squash title. That mechanism is now **confirmed rather than inferred** (see section F): [#276](https://github.com/product-on-purpose/pm-skills/pull/276) merged under a `feat:` title and shadow PR [#271](https://github.com/product-on-purpose/pm-skills/pull/271) flipped from 2.32.1 to 2.33.0 in about forty seconds, with a falsification condition recorded in advance that did not fire.
+
+**The existing lint's own promotion criterion is met** ("a full shadow cycle shows clean titles land without a manual nudge": six PRs this cycle, all green, no nudges). It is just that meeting it turns out to prove less than it sounded like.
+
+**What a type-versus-change check would be, concretely.** The high-value case is machine-detectable without heuristics: compare `metadata.version` in every changed `skills/*/SKILL.md` against the base ref. If any skill MINOR or MAJOR bump is present and the PR title type is not `feat`, fail. That is a narrow rule over a deterministic signal, not a semantic judgement, so false positives should be near zero.
+
+**The case against C, recorded.** Neither option closes the gap that `31f38ed4` demonstrates: a human-authored, non-conventional title pushed **directly to `main`**, which no PR-title lint can structurally see. Anyone reading a promotion as "the version-typing problem is now handled" would be wrong. The honest claim is narrower: it closes the PR-merge path and leaves the direct-push path open.
+
+**Timing, which is the part most likely to be missed.** **C-3's value is conditional on C-6.** Today a wrong shadow proposal is observed and discarded, which is exactly what happened. After the authoritative cutover, merging that PR ships the wrong version. C-6 is blocked on [#267](https://github.com/product-on-purpose/pm-skills/issues/267), so there is runway, but **C-3 should land before C-6 is ratified**, not alongside it.
+
+**Recommendation: C, both**, sequenced so B ships first and A rides along. A alone is cheap and nearly worthless against the demonstrated failure; B is the fix; A is worth having anyway now that its criterion is met and the marginal cost is one line of workflow config.
+
+**Final decision:**
+
+### D10: C-8, the [#223](https://github.com/product-on-purpose/pm-skills/issues/223) ledger disposition
+
+**Context.** [#223](https://github.com/product-on-purpose/pm-skills/issues/223) asks to "revive the parked plan at `docs/internal/release-plans/_unreleased/project-memory/plan_project-memory.md` as its own release" and integrate an orchestrator artifact-ledger interface. **Its substance shipped in v2.32.0.** That plan's line 144 records the delivered surface as an `artifacts[]` ledger plus a `## Decisions` section under the four-tag provenance model, and D2 was ruled to build B1 and B2 in full that cycle rather than deferring.
+
+So the issue's body now misdescribes reality: it asks to revive a plan that already shipped. Leaving a stale body open is precisely the rot pattern [#269](https://github.com/product-on-purpose/pm-skills/issues/269) documents.
+
+**The residual is already tracked elsewhere.** [#268](https://github.com/product-on-purpose/pm-skills/issues/268), "optimistic-concurrency write discipline is specified but not shipped", is open and is the one substantive thing v2.32.0 declared rather than enforced. It does not need [#223](https://github.com/product-on-purpose/pm-skills/issues/223) to stay open alongside it.
+
+**A cleanup [#223](https://github.com/product-on-purpose/pm-skills/issues/223) does not mention, surfaced while checking its premise.** `docs/internal/release-plans/_unreleased/project-memory/` still holds three documents totalling about 38KB (`plan_project-memory.md`, `spec_project-memory.md`, `spec_ledger-delta.md`) describing work that shipped three days ago. A parked plan under `_unreleased/` for delivered work is live doc rot, and the next reader has no way to tell it is spent. Whatever is ruled on the issue, those three should move to the v2.32.0 folder as the historical record or be removed.
+
+**Recommendation: A, close as shipped**, with the cleanup above done in the same pass and [#268](https://github.com/product-on-purpose/pm-skills/issues/268) named in the closing comment as the surviving residual. **The case against:** closing loses the thread for anyone who follows [#223](https://github.com/product-on-purpose/pm-skills/issues/223) as the ledger's home, which is the argument for B. B is defensible; C is not, because it leaves a body that describes shipped work as pending.
+
+**Final decision:**
 
 ## Release hygiene checklist
 
@@ -215,6 +256,18 @@ Three things follow, all of which belong in front of the maintainer rather than 
 1. **This is the D8 evidence, arriving on its own.** Decision C-3 (the PR-title lint promotion) was relocated to this cycle to be decided calmly with a real sample. The sample is now concrete: a squash title mistyped relative to its contents produces a wrong version proposal, and no gate catches it because the lint checks conventional *form*, not whether the type matches the change.
 2. **Skill SemVer and repo SemVer are separate lines** (`docs/internal/skill-versioning.md` distinguishes a skill's contract from "a tagged collection of changes"), so a skill minor does not automatically force a repo minor. The divergence here is nonetheless real, because the release is *intended* as a MINOR and the shadow cannot know that.
 3. **At the cut, expect the shadow to propose 2.32.1 and record it as a criterion-1 miss** rather than a surprise. If the authoritative cutover had already happened, merging that PR would have shipped the wrong version.
+
+### CONFIRMED 2026-08-17: the prediction held, and D8's diagnosis is proven rather than inferred
+
+WS-7 merged as [#276](https://github.com/product-on-purpose/pm-skills/pull/276) at `b17f554b` under the squash title `feat(skills): four AI-family increments ...`. **Shadow PR [#271](https://github.com/product-on-purpose/pm-skills/pull/271) flipped from `chore(main): release 2.32.1` to `chore(main): release 2.33.0` within about forty seconds**, on the release-please run at 05:36:01Z.
+
+Nothing changed except the type on one squash title. That is the mechanism isolated:
+
+- **The squash title is the whole input.** The `feat` in `feat(define-prioritization-framework)` never reached `main` because PR [#270](https://github.com/product-on-purpose/pm-skills/pull/270) squashed under a `fix:` title. The identical situation resolved correctly the moment a squash title carried the right type.
+- **`lint-pr-title` passed on [#276](https://github.com/product-on-purpose/pm-skills/pull/276), and that tells us nothing.** It checks conventional *form*. `#276`'s title was both correct form and correct type, and `#270`'s was correct form with the wrong type. The check cannot distinguish them, which is precisely the gap C-3 proposes to close.
+- **The failure was silent and the correction was silent.** No gate fired in either direction. The only reason the original miss was caught is that a human read the shadow PR title during a hygiene sweep.
+
+This is the live sample D5-A relocated C-3 into this cycle to obtain. It is now collected, and the prediction was recorded at `89eccac6` **before** it could be checked, with an explicit failure condition stated ("if it does not flip, D8's diagnosis is wrong and C-3 should be re-argued"). That condition did not fire.
 
 **Prediction recorded 2026-08-16, before it can be checked.** The observation above was made when **no `feat` commit had reached `main`**. WS-7 changes that: its branch carries two, and its PR is titled `feat(skills):` deliberately, precisely so the squash title release-please reads matches the change. **So the shadow should flip from 2.32.1 to 2.33.0 within minutes of that merge.** Written down in advance for two reasons. First, so the next reader does not treat the flip as a surprise or keep waiting for a 2.32.1 that no longer arrives. Second, because it is the first observable test of the D8 hypothesis: if the shadow flips on a correctly-typed squash title, that confirms the squash title is the whole mechanism and a title lint that checks type-against-change would have caught the original miss. **If it does not flip, D8's diagnosis is wrong** and C-3 should be re-argued before any lint is promoted.
 
