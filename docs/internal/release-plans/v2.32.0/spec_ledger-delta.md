@@ -263,6 +263,9 @@ point before B1 lands; none would cause rework beyond a find-and-replace if over
 3. **Run retention. DEFAULT: keep the last 10 runs, documented rather than enforced.** The file is
    hand-editable and human-read; an unbounded run log would swamp the sections a human actually opens
    it for. Documented-not-enforced matches the parked spec's posture on `artifacts[]` ordering.
-4. **Auto-mode key name. DEFAULT: `memory.auto_append: true`.** Namespaced under `memory.` so it cannot
-   collide with the guardrail and router keys sharing this file. Confirm against the live key set when
-   B1 is built, since that is the first moment all three consumers exist together.
+4. **Auto-mode key name. CORRECTED 2026-08-18: the flat `memory_auto_append: true`,** matching the
+   WS-2 build correction recorded in section 2. This default originally named the nested
+   `memory.auto_append`, which the shipped reader (`hooks/lib/frontmatter.mjs`, flat scalars and
+   inline arrays only) cannot parse; the B1 build confirmed against the live key set and shipped
+   the flat form. The prefix still avoids collision with the guardrail and router keys sharing
+   this file.
