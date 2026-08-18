@@ -43,8 +43,9 @@ Release copy means the CHANGELOG entry, the release-notes page, the GitHub Relea
 
 - **"53 + 15 = 68, asserted in test so it cannot drift."** The suite asserted a hardcoded `ROSTER.length === 53`, the accounting lived in a code comment, `EXCLUDED` was exported but imported nowhere, and `skill-manifest.json` was never consulted. A 69th skill added to neither list would have left CI green while the published claim quietly became false.
 - **"53 skills measured."** Carrying a fixture pack means the pack's structure is enforced. The lane that actually scores routing is `workflow_dispatch` with `dry_run` defaulting true, and its committed baseline covers 29 of the 53, so nothing measures the other 24.
+- **"Six skill version bumps this cycle" (v2.33.0).** Both artifacts named against the claim (`validate-skill-history.sh`, `gen-skill-manifest.mjs --check`) verify per-skill consistency between a `SKILL.md` version and its HISTORY row, so both stay green at any total; re-deriving from `git diff <prev-tag>..HEAD -- 'skills/*/SKILL.md'` found eight. **A count claim needs a counting artifact; a per-item consistency check is not one.**
 
-Both were published before they were true. The rule is cheap: read each number and answer "which test, gate, or generated file goes red if this is wrong?"
+The v2.32.0 pair were published before they were true; the v2.33.0 count was caught by this checklist's first live fill. The rule is cheap: read each number and answer "which test, gate, or generated file goes red if this is wrong?"
 
 ## Section B. Gate-owned checks (pointer only, never restate)
 
