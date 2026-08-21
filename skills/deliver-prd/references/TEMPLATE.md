@@ -131,9 +131,21 @@ See [link to detailed user stories] for full acceptance criteria.
 
 ### Evaluation Set
 
+<!-- Size this set by risk, not by saturation. "Keep adding cases until the verdict stops
+     moving" is stopping on the outcome you are trying to measure: the answer depends on the
+     order cases happen to arrive in, and the verdict usually stabilizes BEFORE the rare and
+     harmful slices show up, because rare cases are rare. It reports a number with no coverage
+     target behind it and then presents that number as release evidence.
+
+     Name the slices first, set a floor per slice, then count. Do not state a fixed N here as
+     a house default; N is derived per feature from the slices below. -->
+
 - **Where the cases live:** [Path or system]
-- **How the set was sized:** [The smallest N where adding cases stops changing the verdict; state N and how you chose it]
-- **Slices scored separately:** [The user or input segments reported on their own, not only in the aggregate]
+- **Slices that must be covered:** [Derive them, do not guess. At minimum: every AB-n row above; every refusal and every abstention case; and the input classes where a failure costs the most - name the cost, not just the class]
+- **Floor per slice, and what it buys:** [The minimum cases you will not go below for each slice, and what that floor lets you claim. A floor is a coverage commitment, not a measurement]
+- **Held-out cases:** [The cases not used while tuning, kept back to check the thresholds still hold. If none are held out, say so and say why the thresholds are not overfit]
+- **Slices scored separately:** [The segments reported on their own, never only in the aggregate. An aggregate that passes while one slice fails is a failing evaluation]
+- **If a rate is claimed:** [State the precision the set supports. If the set cannot support a precision claim, report the raw count and call it a floor, not a measurement]
 
 ## Technical Considerations
 

@@ -2,18 +2,37 @@
 
 | Version | Date | Release | Effort | Type | Summary |
 |---------|------|---------|--------|------|---------|
-| 2.3.0 | 2026-08-16 | v2.33.0 | C-1 | minor | Two conditional sections: `AI Behavior and Evaluation` (behavior requirements linked to the evidence that they hold) and `Agent Execution Contract` (authoritative sources, do-not-touch, an FR-n verification map, stop-and-escalate). |
+| 3.0.0 | 2026-08-21 | v2.33.0 | C-1 | **major** | Two conditional sections: `AI Behavior and Evaluation` (behavior requirements linked to the evidence that they hold) and `Agent Execution Contract` (authoritative sources, do-not-touch, an FR-n verification map, stop-and-escalate). **Also replaces the evaluation-set sizing method**: saturation stopping ("smallest N where adding cases stops changing the verdict") is stopping on the observed outcome, so sizing is now risk-based with named slices, a floor per slice, and held-out cases. **Retyped from 2.3.0 minor before release** (G1 adversarial finding 1): when the condition applies, a section plus two checklist items are required for completeness, which is the tie-breaker rule's major case. 2.3.0 never shipped. |
 | 2.2.0 | 2026-08-08 | v2.32.0 | F-54 | minor | Project Memory Contract: reads prior interpretation artifacts, writes the PRD as a decision artifact. |
 | 2.1.0 | 2026-06-10 | v2.26.0 | F-12-batch-1 | minor | Quality convergence: When NOT to Use + output-contract enumeration (F-12 Batch 1) |
 | 2.0.0 | 2026-01-26 | - | - | baseline | Prior published version |
 
 
-## 2.3.0 (2026-08-16)
+## 3.0.0 (2026-08-21)
+
+**Why this is a MAJOR, and why it was first typed 2.3.0.** The content below shipped as a drafted
+`2.3.0` minor on 2026-08-16, on the reasoning that conditional sections cannot break existing usage.
+The v2.33.0 G1 adversarial review overturned that reasoning before the tag, and the ruling was to
+retype rather than defend it. `2.3.0` never shipped, so the published line runs 2.2.0 to 3.0.0.
+
+Conditionality narrows *who* is affected; it does not change *what happens to them*. For a PRD whose
+feature output comes from a model, `AI Behavior and Evaluation` is now required for completeness, and
+two new Quality Checklist items must pass. That is the tie-breaker rule in
+[`skill-versioning.md`](../../docs/internal/skill-versioning.md) verbatim: *"If a user must do
+something new to stay compliant with the skill's required contract, classify as major"*, plus its
+worked cases *"'You must now include section X' -> major"* and *"New required checklist item added ->
+major"*. The invalidation is concrete rather than theoretical: the published `orbit_ideal` and
+`orbit_reality` samples describe an AI-generated summary feature and carry no such section, so both
+were non-compliant with the skill that produced them the moment this content landed.
+
+Note that a skill MAJOR does not imply a repo MAJOR. `skill-versioning.md` states the repo versions
+independently, so this ships inside the v2.33.0 minor.
 
 AI-product family Track 1 (effort C-1), the two `deliver-prd` increments ruled in
 [the C-3 spec](../../docs/internal/release-plans/v2.32.0/spec_c3-ai-product-family.md) section 2.2.
-Both are **conditional sections**, not new required ones, so a PRD for an ordinary deterministic
-feature built by the team that wrote it is unchanged and still complete.
+Both sections are **conditional**: a PRD for an ordinary deterministic feature built by the team that
+wrote it is unchanged and still complete. What conditionality does *not* do is keep the change minor
+for the population the condition selects.
 
 **`AI Behavior and Evaluation`, when the output comes from a model.** A model's output varies run to
 run, so "it works" is a claim that needs evidence attached to it. The section pairs each behavior
@@ -22,6 +41,14 @@ Refusal and abstention get their own rows because a model has no dependable defa
 what the feature does when it should *not* answer is a requirement rather than an implementation
 detail. Components of a multi-step feature are scored separately, since an end-to-end pass rate
 hides which step failed. Case-set size is stated as a method, never as a borrowed number.
+
+**Evaluation-set sizing was replaced at 3.0.0 (G1 adversarial finding 3).** The drafted method was
+"the smallest N where adding cases stops changing the verdict", which is optional stopping on the
+observed outcome: the answer depends on the order cases arrive in, and a verdict typically
+stabilises *before* the rare and harmful slices appear, because rare cases are rare. Sizing is now
+risk-based: name the slices that must be covered, set a floor per slice and say what the floor buys,
+hold cases back from tuning, and if a rate is claimed, state the precision the set supports or report
+the count as a floor rather than a measurement. The no-borrowed-number rule is unchanged.
 
 **`Agent Execution Contract`, when an executor implements without the authoring context.** A coding
 agent, an outside contractor, or a team picking the work up cold cannot infer what the author
@@ -32,9 +59,16 @@ and the conditions where the executor stops and escalates rather than deciding. 
 ordinary software work, not a property of AI products: a human contractor benefits from the same
 declarations.
 
-Minor rather than major: both sections are additive and skippable, the existing `FR-n` scheme is
+~~Minor rather than major: both sections are additive and skippable, the existing `FR-n` scheme is
 reused rather than replaced, and no shipped section changed. A rewrite would have been a skill-major
-under the versioning tie-breaker and would have forced regenerating three thread samples.
+under the versioning tie-breaker and would have forced regenerating three thread samples.~~
+**Corrected 2026-08-21 (G1 adversarial finding 1).** "Skippable" was the load-bearing error. The
+sections are skippable only for features the condition does not select; for the features it does
+select they are required, and the tie-breaker asks whether existing usage breaks, not whether some
+users are unaffected. Reusing `FR-n` and leaving shipped sections unchanged are both true and both
+irrelevant to the test. The sample-regeneration cost the paragraph treats as an argument against
+major was in fact already incurred: `orbit_ideal` is retrofitted at this version and `orbit_reality`
+carries a contract-vintage note.
 
 ### Changes
 - Added the conditional `AI Behavior and Evaluation` section, with an `AB-n` behavior scheme
@@ -51,11 +85,12 @@ under the versioning tie-breaker and would have forced regenerating three thread
   template is exactly the defect [#251](https://github.com/product-on-purpose/pm-skills/issues/251)
   reported against `foundation-persona`.
 
-**Version note.** Two increments, one bump. The spec calls these "two additive minors", and both ship
-in the same release, so they fold into a single `2.3.0` rather than stepping through `2.4.0`. That
-follows this cycle's own precedent: `define-prioritization-framework` took two independently
-minor-worthy changes from WS-2 and WS-3 into one `1.3.0`, recorded in its HISTORY as "folded into
-this same unreleased version".
+**Version note.** Two increments, one bump. Both ship in the same release, so they fold into a single
+version rather than stepping through two. That follows this cycle's own precedent:
+`define-prioritization-framework` took two independently minor-worthy changes from WS-2 and WS-3
+into one `1.3.0`, recorded in its HISTORY as "folded into this same unreleased version". The
+single version is `3.0.0` rather than the drafted `2.3.0`; the spec's phrase "two additive minors"
+described the intent at scoping time and did not survive the G1 review.
 
 ## 2.2.0 (2026-08-08)
 

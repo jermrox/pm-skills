@@ -2,11 +2,11 @@
 
 | Version | Date | Release | Effort | Type | Summary |
 |---------|------|---------|--------|------|---------|
-| 2.2.0 | 2026-08-16 | v2.33.0 | C-1 | minor | Conditional `Model Choice` subsection inside Consequences: build vs buy vs prompt, what is coupled to the choice, operating cost accepted, reversal cost, and the observation that would reopen the ADR. The six Nygard headings are untouched. |
+| 3.0.0 | 2026-08-21 | v2.33.0 | C-1 | **major** | Conditional `Model Choice` subsection inside Consequences: build vs buy vs prompt, what is coupled to the choice, operating cost accepted, reversal cost, and the observation that would reopen the ADR. The six Nygard headings are untouched. **Retyped from 2.2.0 minor before release** (G1 adversarial finding 1): when the condition applies the subsection is required for completeness, which is the tie-breaker rule's major case. 2.2.0 never shipped. |
 | 2.1.0 | 2026-06-10 | v2.26.0 | F-12-batch-2 | minor | Quality convergence: When NOT to Use + output-contract enumeration (F-12 Batch 2) |
 | 2.0.0 | 2026-01-26 | - | - | baseline | Prior published version |
 
-## 2.2.0 (2026-08-16)
+## 3.0.0 (2026-08-21)
 
 AI-product family Track 1 (effort C-1), the `develop-adr` increment ruled in
 [the C-3 spec](../../docs/internal/release-plans/v2.32.0/spec_c3-ai-product-family.md) section 2.2.
@@ -33,8 +33,26 @@ have confounded the generation model with a body change, exactly as had already 
 increments must be structure-bearing rather than prose exhortation. This one is a five-row table a
 reader fills.
 
-Minor rather than patch: the subsection asks for decisions the skill did not previously request and
-adds an optional block to the artifact, which is additive behavior under the versioning tie-breaker.
+**Why this is a MAJOR, and why it was first typed 2.2.0.** The content below shipped as a drafted
+`2.2.0` minor on 2026-08-16, on the reasoning quoted in the struck sentence below: that a conditional
+block is additive and therefore cannot break existing usage. The v2.33.0 G1 adversarial review
+overturned that reasoning before the tag, and the ruling was to retype rather than defend it. `2.2.0`
+never shipped.
+
+Conditionality narrows *who* is affected; it does not change *what happens to them*. For an artifact
+whose condition applies, the subsection is now required for completeness and a Quality Checklist item
+must pass. That is the tie-breaker rule in [`skill-versioning.md`](../../docs/internal/skill-versioning.md)
+verbatim: *"If a user must do something new to stay compliant with the skill's required contract,
+classify as major"*, with the worked cases *"'You must now include section X' -> major"* and *"New
+required checklist item added -> major"*.
+
+A skill MAJOR does not imply a repo MAJOR; `skill-versioning.md` versions the repo independently, so
+this ships inside the v2.33.0 minor.
+
+~~Minor rather than patch: the subsection asks for decisions the skill did not previously request and
+adds an optional block to the artifact, which is additive behavior under the versioning tie-breaker.~~
+**Corrected 2026-08-21 (G1 adversarial finding 1):** the block is conditional, not optional, and a
+conditional requirement is still a requirement for the population it selects.
 
 ### Changes
 - Added the conditional `Model Choice` subsection under `Consequences`.

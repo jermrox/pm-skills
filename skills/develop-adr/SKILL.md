@@ -4,8 +4,8 @@ description: Creates an Architecture Decision Record following the Nygard format
 license: Apache-2.0
 metadata:
   phase: develop
-  version: "2.2.0"
-  updated: 2026-08-16
+  version: "3.0.0"
+  updated: 2026-08-21
   category: specification
   frameworks: [triple-diamond, lean-startup, design-thinking]
   author: product-on-purpose

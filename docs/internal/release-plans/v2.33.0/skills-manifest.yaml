@@ -1,0 +1,98 @@
+# Skills changed in this release
+#
+# Created 2026-08-21 in response to G1 adversarial finding 4, which observed that eight skill
+# bumps shipped with no artifact that turns red if one disappears or if the G2 CHANGELOG omits
+# one. docs/internal/skill-versioning.md has required this file for changed releases since it was
+# written; 8 of 44 release folders carry one, most recently v2.8.0, so the requirement had gone
+# unobserved for 36 folders. Issue #279 tracks the standing decision to restore the convention or
+# retire it from skill-versioning.md. This file does not settle that; it supplies the artifact
+# this release was missing.
+#
+# Every row below was re-derived on 2026-08-21 from
+#   git diff v2.32.0..HEAD -- 'skills/*/SKILL.md'
+# comparing each SKILL.md's metadata.version against the same file at the v2.32.0 tag, not copied
+# from the release plan's prose. change_type is read from each skill's own HISTORY.md row.
+#
+# NOTE ON THE THREE MAJORS. deliver-prd, develop-adr and measure-instrumentation-spec were drafted
+# as minors on 2026-08-16 and retyped to major on 2026-08-21 after the G1 adversarial review found
+# that a conditionally required section is still required for the population its condition selects,
+# which is the tie-breaker rule's major case in skill-versioning.md. The drafted 2.3.0 / 2.2.0
+# versions never shipped. A skill major does not imply a repo major: skill-versioning.md versions
+# the repo independently, so v2.33.0 remains a MINOR release.
+
+release: v2.33.0
+date: 2026-08-21
+repo_release_type: minor  # unaffected by the three skill majors; see note above
+
+summary:
+  skills_changed: 8
+  major: 3
+  minor: 4
+  patch: 1
+
+skills:
+  - name: deliver-prd
+    version: 3.0.0
+    previous_version: 2.2.0
+    change_type: major
+    effort: C-1
+    note: >-
+      Conditional AI Behavior and Evaluation and Agent Execution Contract sections, plus a
+      replacement evaluation-set sizing method (risk-based rather than saturation stopping).
+      Retyped from a drafted 2.3.0 minor; 2.3.0 never shipped.
+
+  - name: develop-adr
+    version: 3.0.0
+    previous_version: 2.1.0
+    change_type: major
+    effort: C-1
+    note: >-
+      Conditional Model Choice subsection inside Consequences. Retyped from a drafted 2.2.0
+      minor; 2.2.0 never shipped.
+
+  - name: measure-instrumentation-spec
+    version: 3.0.0
+    previous_version: 2.2.0
+    change_type: major
+    effort: C-1
+    note: >-
+      Conditional Model Trace Capture subsection under PII and Privacy, with the trigger
+      broadened from user input only to any captured model input, output, retrieval context or
+      tool call, and a data-classes decision added. Retyped from a drafted 2.3.0 minor; 2.3.0
+      never shipped.
+
+  - name: define-prioritization-framework
+    version: 1.3.0
+    previous_version: 1.2.0
+    change_type: minor
+    effort: C-14
+    issue: 252
+    note: >-
+      Field-report calibration. One bump crediting two workstreams; counted once here, which is
+      why this cycle has eight changed skills across nine bump events.
+
+  - name: discover-journey-map
+    version: 1.3.0
+    previous_version: 1.2.0
+    change_type: minor
+    effort: C-14
+
+  - name: foundation-build-risk-review
+    version: 1.1.0
+    previous_version: 1.0.1
+    change_type: minor
+    effort: C-14
+
+  - name: measure-survey-analysis
+    version: 1.3.0
+    previous_version: 1.2.0
+    change_type: minor
+    effort: C-14
+
+  - name: foundation-persona
+    version: 2.6.1
+    previous_version: 2.6.0
+    change_type: patch
+    effort: C-14
+    issue: 251
+    note: Example contradicted its own template; prose fix, no contract change.

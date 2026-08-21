@@ -2,12 +2,12 @@
 
 | Version | Date | Release | Effort | Type | Summary |
 |---------|------|---------|--------|------|---------|
-| 2.3.0 | 2026-08-16 | v2.33.0 | C-1 | minor | Privacy section extended with a conditional `Model Trace Capture` subsection: what is captured, redaction before storage, retention, sampling, who can read a trace, and user opt-out. Event Inventory untouched. |
+| 3.0.0 | 2026-08-21 | v2.33.0 | C-1 | **major** | Privacy section extended with a conditional `Model Trace Capture` subsection: what is captured, redaction before storage, retention, sampling, who can read a trace, and user opt-out. Event Inventory untouched. **Also broadens the trigger** from user input only to any captured model input, output, retrieval context, or tool call, and adds a data-classes decision, because a feature with no direct user input can still write tenant documents into a trace store. **Retyped from 2.3.0 minor before release** (G1 adversarial findings 1 and 2). 2.3.0 never shipped. |
 | 2.2.0 | 2026-07-04 | v2.30.0 | M-35 | minor | Rewrote the frontmatter description: added the product-engineering contract framing and the sibling deflection to `measure-dashboard-requirements`, its collision-pair companion in this release's Batch 5. |
 | 2.1.0 | 2026-06-10 | v2.26.0 | F-12-batch-4 | minor | Quality convergence: When NOT to Use + output-contract enumeration (F-12 Batch 4) |
 | 2.0.0 | 2026-01-26 | - | - | baseline | Prior published version |
 
-## 2.3.0 (2026-08-16)
+## 3.0.0 (2026-08-21)
 
 AI-product family Track 1 (effort C-1), the `measure-instrumentation-spec` increment ruled in
 [the C-3 spec](../../docs/internal/release-plans/v2.32.0/spec_c3-ai-product-family.md) section 2.2.
@@ -28,8 +28,26 @@ it, the sampling fraction and how the sample is chosen, and whether users can de
 records that a uniform sample is the wrong instrument for finding rare failures, so traces kept for
 diagnosing bad output should oversample the cases a check already flagged.
 
-Minor rather than patch: the subsection asks for decisions the skill previously did not request, and
-adds an optional block to the artifact, which is additive behavior under the versioning tie-breaker.
+**Why this is a MAJOR, and why it was first typed 2.3.0.** The content below shipped as a drafted
+`2.3.0` minor on 2026-08-16, on the reasoning quoted in the struck sentence below: that a conditional
+block is additive and therefore cannot break existing usage. The v2.33.0 G1 adversarial review
+overturned that reasoning before the tag, and the ruling was to retype rather than defend it. `2.3.0`
+never shipped.
+
+Conditionality narrows *who* is affected; it does not change *what happens to them*. For an artifact
+whose condition applies, the subsection is now required for completeness and a Quality Checklist item
+must pass. That is the tie-breaker rule in [`skill-versioning.md`](../../docs/internal/skill-versioning.md)
+verbatim: *"If a user must do something new to stay compliant with the skill's required contract,
+classify as major"*, with the worked cases *"'You must now include section X' -> major"* and *"New
+required checklist item added -> major"*.
+
+A skill MAJOR does not imply a repo MAJOR; `skill-versioning.md` versions the repo independently, so
+this ships inside the v2.33.0 minor.
+
+~~Minor rather than patch: the subsection asks for decisions the skill previously did not request, and
+adds an optional block to the artifact, which is additive behavior under the versioning tie-breaker.~~
+**Corrected 2026-08-21 (G1 adversarial finding 1):** the block is conditional, not optional, and a
+conditional requirement is still a requirement for the population it selects.
 
 ### Changes
 - Added the conditional `Model Trace Capture` subsection under `PII & Privacy Considerations`.

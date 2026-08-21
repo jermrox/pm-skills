@@ -4,7 +4,7 @@ description: "Brainshelf consumer PKM app - embedding model decision for the Res
 artifact: adr
 version: "1.0"
 repo_version: "2.33.0"
-skill_version: "2.2.0"
+skill_version: "3.0.0"
 created: 2026-08-18
 status: sample
 thread: brainshelf
@@ -44,7 +44,7 @@ options:
 - self-host all-MiniLM-L6-v2 on our own box: free per call but
   someone has to babysit it, and retrieval was noticeably worse on
   the long-form stuff people actually save
-- cohere embed-v3: slightly better on our set than openai, roughly
+- cohere embed-english-v3.0: slightly better on our set than openai, roughly
   3x the price, and a second vendor to onboard
 
 the thing marco keeps raising is what happens when we want to switch.
@@ -102,7 +102,7 @@ The truncation is deliberate. On the evaluation set, 512 dimensions cost 1.2 per
 
 | Consequence | This decision |
 |-------------|---------------|
-| **Build, buy, or prompt** | Buy: call OpenAI's embedding API. Self-hosting `all-MiniLM-L6-v2` was ruled out on retrieval quality for long-form content (0.74 top-10 recall against 0.81 [fictional]) and on having no one to operate it. Cohere `embed-v3` scored marginally higher (0.83 [fictional]) but at roughly 3x cost and a second vendor relationship, which did not clear the bar for 2 points of recall |
+| **Build, buy, or prompt** | Buy: call OpenAI's embedding API. Self-hosting `all-MiniLM-L6-v2` was ruled out on retrieval quality for long-form content (0.74 top-10 recall against 0.81 [fictional]) and on having no one to operate it. Cohere `embed-english-v3.0` (1024 dimensions, `input_type=search_document`) scored marginally higher (0.83 [fictional]) but at roughly 3x cost and a second vendor relationship, which did not clear the bar for 2 points of recall |
 | **What is now coupled to it** | The pgvector index is built at 512 dimensions, so the schema is tied to this choice. Also coupled: the 0.62 similarity threshold that decides digest inclusion, tuned against this model's score distribution, and the 200-pair evaluation set, which is comparable only across models scored the same way. The `EmbeddingProvider` interface abstracts the call, not the index |
 | **Operating cost accepted** | About $38 for the initial backfill and $6 per month ongoing at 95K new saves per week [fictional]. This stops being negligible if archive growth outpaces MAU growth . at roughly 10x current save volume the monthly line reaches a point where the self-hosted option is worth re-costing |
 | **Reversal cost** | Re-embedding 7.5M items and rebuilding the pgvector index: approximately 6 engineer-days plus one maintenance window [fictional], during which Resurface digests degrade to the previous day's selections. The similarity threshold must also be re-tuned, which means re-running the labelled evaluation. The interface makes the code change trivial; the data migration is the cost |
@@ -114,7 +114,7 @@ The truncation is deliberate. On the evaluation set, 512 dimensions cost 1.2 per
 
 Free per call and keeps saved content on our own infrastructure, which is the stronger privacy position. Rejected on two grounds: top-10 recall of 0.74 against 0.81 [fictional] on the evaluation set, with the gap concentrated in exactly the long-form articles that dominate real archives; and no one on a two-engineer backend team to own inference uptime before Sprint 9. Worth revisiting if save volume grows enough to make the cost line material, since the privacy argument survives the quality argument.
 
-### Cohere embed-v3
+### Cohere embed-english-v3.0
 
 Best retrieval score of the three at 0.83 top-10 recall [fictional]. Rejected because 2 percentage points of recall did not justify roughly 3x the per-token cost and onboarding a second vendor, including a new data-processing agreement. The margin is small enough to sit inside the noise of a 200-pair evaluation set, so the quality advantage is not firmly established.
 

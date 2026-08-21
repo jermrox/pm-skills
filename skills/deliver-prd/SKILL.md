@@ -4,8 +4,8 @@ description: Creates a comprehensive Product Requirements Document that aligns s
 license: Apache-2.0
 metadata:
   phase: deliver
-  version: "2.3.0"
-  updated: 2026-08-16
+  version: "3.0.0"
+  updated: 2026-08-21
   category: specification
   frameworks: [triple-diamond, lean-startup, design-thinking]
   author: product-on-purpose
