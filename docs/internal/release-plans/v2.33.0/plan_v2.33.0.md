@@ -202,9 +202,11 @@ So the issue's body now misdescribes reality: it asks to revive a plan that alre
 
 ## Release hygiene checklist
 
-Copied from the standing source at [`../checklist_doc-update-and-hygiene.md`](../checklist_doc-update-and-hygiene.md) and filled as this cycle runs. **This plan may not be marked READY TO TAG while any GATE row is unchecked**, which is how it gates via the canonical runbook's G0 sub-check 6 without any runbook edit.
+Copied from the standing source at [`../checklist_doc-update-and-hygiene.md`](../checklist_doc-update-and-hygiene.md) and filled as this cycle runs. **This plan may not be marked READY TO TAG while any GATE row due at or before G0 is unchecked**, which is how it gates via the canonical runbook's G0 sub-check 6 without any runbook edit. **GATE rows due at G2 or G4 do not block the mark**; they block the cycle closing and are checked as their own gate runs.
 
-### A. Quantitative claim verification (GATE)
+**The due-stage qualifier was added 2026-08-19, on this checklist's first live use, because the rule as written was circular.** Section C is G4 post-tag work by definition (a Release body cannot be checked before a release exists; the `agent-plugins` re-pin points at a tag that does not yet exist) and section A's CHANGELOG row is marked "to fill at G2", so a G0 requirement depended on rows only G2 and G4 could fill and the tag was unreachable. Corrected in the standing source at [`../checklist_doc-update-and-hygiene.md`](../checklist_doc-update-and-hygiene.md) so the next cycle inherits the fix, and logged in section D below. This is WS-9's "checklist used for the first time and its gaps recorded" criterion producing its first result.
+
+### A. Quantitative claim verification (GATE; rows due G0 except where a row says G2)
 
 For every quantitative claim in release copy, name the artifact that would fail if it were false.
 
@@ -213,13 +215,13 @@ For every quantitative claim in release copy, name the artifact that would fail 
 | "212 samples across 63 skills" | `scripts/check-sample-counts.mjs`, enforcing in CI | [x] Green at 212/63 |
 | ~~Six~~ **Eight skill version bumps this cycle** (nine bump *events*) | **Neither named artifact can verify this claim.** `scripts/validate-skill-history.sh` and `gen-skill-manifest.mjs --check` are both enforcing, but they verify *per-skill* consistency between a `SKILL.md` version and its HISTORY row. Neither computes a total, so both stay green at any count | [x] **Re-derived 2026-08-16** from `git diff v2.32.0..HEAD -- 'skills/*/SKILL.md'`: eight skills bumped (`define-prioritization-framework`, `deliver-prd`, `develop-adr`, `discover-journey-map`, `foundation-build-risk-review`, `foundation-persona`, `measure-instrumentation-spec`, `measure-survey-analysis`). "Six" was wrong before WS-7 touched anything: five skills had bumped, across six bump events, because `define-prioritization-framework` was bumped once and credited to both WS-2 and WS-3 |
 | "the PRD prompt is 11 lines against 32" (WS-5 sample copy) | Nothing. Prose in a sample, not gated. **Counted by hand against both files** and the first count was off by one before `sed` corrected it | [x] Verified manually |
-| Remaining CHANGELOG figures | To fill at G2 | [ ] |
+| Remaining CHANGELOG figures | To fill at G2 | [ ] **(due: G2, does not block READY TO TAG)** |
 
 ### B. Gate-owned checks (pointer only)
 
-- [ ] G0 through G4 per `site/src/content/docs/contributing/release-runbook.md`. Not restated here.
+- [ ] G0 through G4 per `site/src/content/docs/contributing/release-runbook.md`. Not restated here. READY TO TAG requires only the GATE rows due at or before G0.
 
-### C. External and cross-repo surfaces (GATE)
+### C. External and cross-repo surfaces (GATE; due G4, post-tag - these do not block READY TO TAG)
 
 | Surface | Condition | Done |
 |---|---|---|
@@ -239,6 +241,7 @@ For every quantitative claim in release copy, name the artifact that would fail 
 | **The C-2 design can be voided by construction** under the condition it tests, because the primary outcome was filtered by the freehand discrimination gate and a weak generator moves that gate | Recorded as a lesson for the *next* pre-registration: when the manipulated variable plausibly moves a validity gate, that gate cannot also filter the primary outcome. Deliberately **not** used to reinterpret this run | v2.34.0 if anyone re-runs it |
 | The section A bump-count claim was verified against artifacts that cannot verify it | Corrected in section A with a re-derived count. A count claim needs a counting artifact, not a per-item consistency check | Checklist rule candidate |
 | **`skills-manifest.yaml` is required by documentation and absent in practice.** [`docs/internal/skill-versioning.md`](../../skill-versioning.md) says "every release governance folder should include a `skills-manifest.yaml`" and lists it in its release checklist. Measured: **8 of 44 release folders have one, most recently v2.15.0**, so the requirement has gone unobserved for 29 folders including every release that shipped new skills since | Not resolved here. WS-7 deliberately did not create one: reviving a convention dead for 29 folders inside a build workstream is a governance decision wearing a build disguise, and no validator enforces its existence (`validate-skills-manifest.sh` only checks manifests that exist). Either restore it or retire it from `skill-versioning.md`; leaving a documented requirement that nothing observes is the worse third option. **Surfaced by consuming the WS-7 research synthesis**, which recommended creating one because it read the documented rule rather than the practice | v2.34.0; tracked since 2026-08-18 at [#279](https://github.com/product-on-purpose/pm-skills/issues/279) |
+| **The checklist's own gating rule was circular on first use.** "May not be marked READY TO TAG while any GATE row is unchecked" made a G0 requirement depend on section C, which is G4 post-tag work by definition, and on section A's CHANGELOG row marked "to fill at G2". The tag was unreachable by construction | Corrected in the standing source at [`../checklist_doc-update-and-hygiene.md`](../checklist_doc-update-and-hygiene.md) and in this copy: the rule now reads "any GATE row **due at or before G0**", every GATE row carries a due stage, and rows with no stage default to G0. Found by running G0 against this plan on 2026-08-19 | Closed. **This is WS-9's "checklist used for the first time and its gaps recorded" criterion producing its first result** |
 | D6: the [#269](https://github.com/product-on-purpose/pm-skills/issues/269) placement conflict | Dissolved on G0 sub-check 6; no runbook edit needed | Closed |
 | D7, D8-a, D8-b: WS-5 build shape | Ruled in this plan | Closed |
 | Sample filename sort hazard (`-` before `.` displaces the canonical sample) | Documented in `THREAD_PROFILES.md` | Closed |

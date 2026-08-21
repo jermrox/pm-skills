@@ -1,7 +1,7 @@
 # Release hygiene checklist (standing source)
 
 **Status:** Active. Created 2026-08-16 (v2.33.0 WS-6, [#269](https://github.com/product-on-purpose/pm-skills/issues/269)).
-**Last exercised:** not yet. Stamp this line at the end of every cut with the version and what the run changed.
+**Last exercised:** v2.33.0, in progress (2026-08-19). Its first live use found the gating rule circular and produced the due-stage qualifier below. Stamp this line at the end of every cut with the version and what the run changed.
 **How to use it:** copy the sections below into the release plan as `## Release hygiene checklist` at scope-ruling time, then fill it in as the cycle runs. Do not link to this file from the plan and leave the plan empty; the point is that each release carries its own filled copy.
 
 ---
@@ -23,13 +23,21 @@ It gates through existing plan-status semantics; **no runbook edit is required o
 
 The canonical runbook's G0 sub-check 6 requires the master plan to exist and be "marked READY TO TAG (or equivalent status)", and "any sub-check failure pauses G0". So:
 
-> **The release plan may not be marked READY TO TAG while any row below marked GATE is unchecked.**
+> **The release plan may not be marked READY TO TAG while any GATE row *due at or before G0* is unchecked.**
+>
+> **GATE rows due at G2 or G4 do not block the mark.** They are still mandatory: they block the *cycle closing*, checked as their own gate runs, and an unchecked one at G4 means the release is not finished.
 
 That satisfies both constraints in play: [#269](https://github.com/product-on-purpose/pm-skills/issues/269) says the checklist belongs in the plan "not in the runbook, so it is re-derived per release rather than inherited", and the v2.33.0 plan's WS-6 exit criteria says it gates the tag. Both hold at once.
 
+**Why the rule carries a due-stage qualifier (corrected 2026-08-19, on first live use).** As originally written the rule read "while any row below marked GATE is unchecked", with no stage qualifier, and that is circular. Section C's rows are G4 post-tag work by definition: the GitHub Release body cannot be checked before a release exists, and the `agent-plugins` re-pin points at a tag that does not yet exist. Section A's CHANGELOG figures are marked "to fill at G2". So the unqualified rule made a **G0** requirement depend on rows only **G2 and G4** can fill, and the tag was unreachable by construction.
+
+Found during the v2.33.0 cut, which is the first cycle to use this checklist, and is exactly what that plan's WS-9 exit criterion ("the WS-6 checklist used for the first time and its gaps recorded") asked for. Recorded here rather than only in that plan, so the next cycle inherits the corrected rule.
+
+**Every GATE row must therefore carry a due stage.** Use `(due: G0)`, `(due: G2)` or `(due: G4)` in the section heading where a whole section shares one stage, or per row where a section mixes them. A GATE row with no due stage defaults to G0, which is the strict reading.
+
 ---
 
-## Section A. Quantitative claim verification (GATE)
+## Section A. Quantitative claim verification (GATE; rows due G0 except where a row says G2)
 
 **The rule.** For every quantitative claim in release copy, name the artifact that would fail if the claim were false. If the answer is "none", either build the artifact or soften the claim to what is actually enforced.
 
@@ -51,9 +59,9 @@ The v2.32.0 pair were published before they were true; the v2.33.0 count was cau
 
 The 6 gates and their sub-checks are owned by `site/src/content/docs/contributing/release-runbook.md`. **Do not copy them here.** Restating them creates a second authority that drifts from the first, which is the failure this file exists to prevent.
 
-- [ ] G0 through G4 run per the canonical runbook, with the plan marked READY TO TAG only after every GATE row here is checked.
+- [ ] G0 through G4 run per the canonical runbook, with the plan marked READY TO TAG only after every GATE row **due at or before G0** is checked.
 
-## Section C. External and cross-repo surfaces (GATE)
+## Section C. External and cross-repo surfaces (GATE; due G4, post-tag - these do not block READY TO TAG)
 
 These live outside the repo or outside CI, so nothing fails when they are missed.
 
