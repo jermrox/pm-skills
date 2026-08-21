@@ -1,6 +1,6 @@
 ---
 title: Using Sub-Agents
-description: User-facing overview for invoking pm-skills sub-agents (pm-critic, pm-skill-auditor, pm-changelog-curator, pm-release-conductor). Covers Claude Code native invocation, dispatch skill invocation on non-Claude clients (Codex, Cursor, Windsurf, Copilot, Gemini), and maintainer operations.
+description: How to invoke pm-skills sub-agents (pm-critic, pm-skill-auditor, pm-changelog-curator, pm-release-conductor, pm-workflow-orchestrator). Covers native Claude Code invocation, dispatch skills on non-Claude clients (Codex, Cursor, Windsurf, Copilot, Gemini), and maintainer operations.
 ---
 
 ## Table of Contents
@@ -21,8 +21,9 @@ description: User-facing overview for invoking pm-skills sub-agents (pm-critic, 
 | `pm-skill-auditor` | `/pm-skills:utility-pm-skill-auditor [--scope] [--severity-floor]` | Pre-release governance audit or repo-health check |
 | `pm-changelog-curator` | `/pm-skills:utility-pm-changelog-curator [--since-tag] [--target-version]` | Release prep: draft CHANGELOG from git log |
 | `pm-release-conductor` | `/pm-skills:utility-pm-release-conductor v{X.Y.Z} [--dry-run]` | Walk the full 6-gate release runbook |
+| `pm-workflow-orchestrator` | `/pm-skills:utility-pm-workflow-orchestrator [--dry-run]` | Run an ordered sequence of skills against one input, pausing at each step for go/no-go |
 
-All four are documented in [`docs/reference/runtime-components.md`](../reference/runtime-components.md) catalog with full metadata.
+All five are documented in the [`runtime-components.md`](../reference/runtime-components.md) catalog with full metadata. A sixth sub-agent, `pm-skill-router`, ships from v2.29.0 but is an internal tooling instrument rather than a user-facing PM sub-agent: it has no dispatch skill and is not invoked directly, so it does not appear in the invocation patterns below.
 
 ## 4 Native Invocation Patterns (Claude Code)
 
@@ -40,7 +41,7 @@ Claude: [produces PRD draft]
 
 The proactive trigger fires after: deliver-prd, foundation-meeting-recap, foundation-okr-writer, foundation-persona, foundation-lean-canvas, discover-interview-synthesis, define-problem-statement, define-hypothesis, deliver-edge-cases, deliver-user-stories, deliver-acceptance-criteria, iterate-retrospective, iterate-lessons-log, and other Triple Diamond phase skills.
 
-### Pattern 2: Explicit slash command (all 4 sub-agents)
+### Pattern 2: Explicit slash command (all 5 user-facing sub-agents)
 
 Each sub-agent has a dispatch skill, invoked as a slash command:
 
@@ -53,9 +54,11 @@ Each sub-agent has a dispatch skill, invoked as a slash command:
 /pm-skills:utility-pm-changelog-curator --since-tag v2.15.0 --target-version v2.16.0
 /pm-skills:utility-pm-release-conductor v2.16.0 --dry-run         # Rehearse the release flow
 /pm-skills:utility-pm-release-conductor v2.16.0                   # Live release
+/pm-skills:utility-pm-workflow-orchestrator --dry-run              # Rehearse an ordered skill chain
+/pm-skills:utility-pm-workflow-orchestrator                        # Run it, pausing at each step
 ```
 
-### Pattern 3: @-mention (all 4 sub-agents)
+### Pattern 3: @-mention (all 5 user-facing sub-agents)
 
 @-mention guarantees invocation:
 
@@ -64,9 +67,10 @@ Each sub-agent has a dispatch skill, invoked as a slash command:
 @agent-pm-skills:pm-skill-auditor audit since v2.15.0
 @agent-pm-skills:pm-changelog-curator draft since v2.15.0
 @agent-pm-skills:pm-release-conductor v2.16.0 --dry-run
+@agent-pm-skills:pm-workflow-orchestrator --dry-run
 ```
 
-All four sub-agents are @-mentionable. The conductor is not proactive (it never self-triggers); its safety comes from the 6-gate runbook, which pauses for confirmation regardless of how it was invoked, not from restricting the invocation path.
+All five user-facing sub-agents are @-mentionable. Neither the conductor nor the orchestrator is proactive; the orchestrator's safety comes from its per-step go/no-go checkpoints. The conductor is not proactive (it never self-triggers); its safety comes from the 6-gate runbook, which pauses for confirmation regardless of how it was invoked, not from restricting the invocation path.
 
 ### Pattern 4: Sub-agent chain (conductor -> auditor + curator)
 

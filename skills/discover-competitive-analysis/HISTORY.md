@@ -7,6 +7,17 @@
 | 2.1.0 | 2026-06-10 | v2.26.0 | F-12-batch-3 | minor | Quality convergence: When NOT to Use + output-contract enumeration (F-12 Batch 3) |
 | 2.0.0 | 2026-01-26 | - | - | baseline | Prior published version |
 
+## 2.2.1 (2026-07-31)
+
+Released in [v2.32.0](../../site/src/content/docs/releases/Release_v2.32.0.md). Effort: issue-248 (external report).
+
+An external reader reported three fused sentence boundaries in the Instructions, where a missing space or terminator ran two sentences together. Prose defect only; the guidance itself was already correct.
+
+### Changes
+- Repaired the fused boundaries at `competitors.direct`, `competitors.respect`, and `reliability.be` in the Instructions section.
+
+No change to the frontmatter description, Output Format, Quality Checklist, template, or example. No behavior change, which is why this is a patch rather than a minor.
+
 ## 2.2.0 (2026-07-04)
 
 Released in [v2.30.0](../../site/src/content/docs/releases/Release_v2.30.0.md). Effort: M-35 (trust repair sweep).

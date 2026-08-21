@@ -1122,7 +1122,7 @@ Fork the repository and modify the `SKILL.md`, `TEMPLATE.md`, or `EXAMPLE.md` fi
 
 **Sub-agents** are separate agent instances that Claude Code spawns as sub-tasks. When you invoke a sub-agent, a new agent context is launched for that specific job, runs against the skills catalog, returns its output to your session, and exits. This separation is useful for tasks that benefit from a clean context - like adversarial review, where the same session that wrote the artifact might not be the best critic.
 
-Sub-agents are currently Claude Code-only. For other platforms, the same four capabilities ship as paired utility skills you invoke like any other skill.
+Sub-agents are currently Claude Code-only. For other platforms, the same five capabilities ship as paired utility skills you invoke like any other skill. (`pm-skill-router`, the sixth sub-agent, is internal tooling with no dispatch skill.)
 
 </details>
 
