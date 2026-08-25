@@ -45,7 +45,9 @@ options:
   someone has to babysit it, and retrieval was noticeably worse on
   the long-form stuff people actually save
 - cohere embed-english-v3.0: slightly better on our set than openai, roughly
-  3x the price, and a second vendor to onboard
+  3x the price, and a second vendor to onboard. note cohere wants you to
+  tag queries and documents differently when you embed them, so make sure
+  we scored it that way before quoting the number
 
 the thing marco keeps raising is what happens when we want to switch.
 the vector index is built at whatever dimension we pick.
@@ -102,8 +104,8 @@ The truncation is deliberate. On the evaluation set, 512 dimensions cost 1.2 per
 
 | Consequence | This decision |
 |-------------|---------------|
-| **Build, buy, or prompt** | Buy: call OpenAI's embedding API. Self-hosting `all-MiniLM-L6-v2` was ruled out on retrieval quality for long-form content (0.74 top-10 recall against 0.81 [fictional]) and on having no one to operate it. Cohere `embed-english-v3.0` (1024 dimensions, `input_type=search_document`) scored marginally higher (0.83 [fictional]) but at roughly 3x cost and a second vendor relationship, which did not clear the bar for 2 points of recall |
-| **What is now coupled to it** | The pgvector index is built at 512 dimensions, so the schema is tied to this choice. Also coupled: the 0.62 similarity threshold that decides digest inclusion, tuned against this model's score distribution, and the 200-pair evaluation set, which is comparable only across models scored the same way. The `EmbeddingProvider` interface abstracts the call, not the index |
+| **Build, buy, or prompt** | Buy: call OpenAI's embedding API. Self-hosting `all-MiniLM-L6-v2` was ruled out on retrieval quality for long-form content (0.74 top-10 recall against 0.81 [fictional]) and on having no one to operate it. Cohere `embed-english-v3.0` (1024 dimensions, scored with `input_type=search_query` on the recent-reading side and `input_type=search_document` on archive items, which Cohere v3 requires for retrieval) scored marginally higher (0.83 [fictional]) but at roughly 3x cost and a second vendor relationship, which did not clear the bar for 2 points of recall |
+| **What is now coupled to it** | The pgvector index is built at 512 dimensions, so the schema is tied to this choice. Also coupled: the 0.62 similarity threshold that decides digest inclusion, tuned against this model's score distribution, and the 200-pair evaluation set, which is comparable only across models scored the same way, including each vendor's own query-versus-document input settings. The `EmbeddingProvider` interface abstracts the call, not the index |
 | **Operating cost accepted** | About $38 for the initial backfill and $6 per month ongoing at 95K new saves per week [fictional]. This stops being negligible if archive growth outpaces MAU growth . at roughly 10x current save volume the monthly line reaches a point where the self-hosted option is worth re-costing |
 | **Reversal cost** | Re-embedding 7.5M items and rebuilding the pgvector index: approximately 6 engineer-days plus one maintenance window [fictional], during which Resurface digests degrade to the previous day's selections. The similarity threshold must also be re-tuned, which means re-running the labelled evaluation. The interface makes the code change trivial; the data migration is the cost |
 | **What would reopen this** | Two observations. Digest relevance ratings dropping below 3.5 of 5 [fictional] while prompt and threshold tuning are exhausted, which would mean the model is the ceiling. Or OpenAI deprecating `text-embedding-3-small`, which forces the re-embed regardless and makes it the moment to reconsider the other two |
@@ -116,7 +118,7 @@ Free per call and keeps saved content on our own infrastructure, which is the st
 
 ### Cohere embed-english-v3.0
 
-Best retrieval score of the three at 0.83 top-10 recall [fictional]. Rejected because 2 percentage points of recall did not justify roughly 3x the per-token cost and onboarding a second vendor, including a new data-processing agreement. The margin is small enough to sit inside the noise of a 200-pair evaluation set, so the quality advantage is not firmly established.
+Best retrieval score of the three at 0.83 top-10 recall [fictional]. Rejected because 2 percentage points of recall did not justify roughly 3x the per-token cost and onboarding a second vendor, including a new data-processing agreement. The margin is small enough to sit inside the noise of a 200-pair evaluation set, so the quality advantage is not firmly established. Reproducing this number requires the asymmetric `input_type` setting Cohere v3 expects, `search_query` for the query side and `search_document` for stored items; scoring both sides as documents changes retrieval and would not reproduce the 0.83.
 
 ## References
 

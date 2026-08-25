@@ -138,11 +138,28 @@ See [link to detailed user stories] for full acceptance criteria.
      target behind it and then presents that number as release evidence.
 
      Name the slices first, set a floor per slice, then count. Do not state a fixed N here as
-     a house default; N is derived per feature from the slices below. -->
+     a house default; N is derived per feature from the slices below.
+
+     A floor still has to come from somewhere, or "risk-based" is just a nicer word for a number
+     you liked. Derive it by asking what the smallest failure rate is that you would need to
+     notice in this slice, then work backwards. If a slice returns zero failures across n cases,
+     the true rate could still be as high as roughly 3/n. That is the whole derivation.
+
+     Worked example. Refusal behavior on a support-reply feature: a wrong refusal is visible to
+     the customer, so the team decides a refusal-failure rate above 5% is unacceptable and must
+     be caught. 3/n = 0.05 gives n = 60, so the floor for that slice is 60 cases, and a clean
+     run licenses exactly one claim: "if refusals were failing more than about 5% of the time,
+     we would most likely have seen it". A lower-stakes slice such as tone consistency, where
+     the team is willing to miss anything under 20%, gives 3/n = 0.20 and a floor of 15.
+
+     Two things this does not do. It does not turn a floor into a measurement: a clean run bounds
+     the rate, it does not estimate it. And it does not apply to slices you are scoring
+     qualitatively rather than pass/fail; for those, say how many cases it takes to see the
+     failure mode more than once and why, and label it a coverage judgment. -->
 
 - **Where the cases live:** [Path or system]
 - **Slices that must be covered:** [Derive them, do not guess. At minimum: every AB-n row above; every refusal and every abstention case; and the input classes where a failure costs the most - name the cost, not just the class]
-- **Floor per slice, and what it buys:** [The minimum cases you will not go below for each slice, and what that floor lets you claim. A floor is a coverage commitment, not a measurement]
+- **Floor per slice, and how it was derived:** [For each slice: the minimum cases you will not go below, AND the reasoning that produced that number. State the smallest failure rate you need to catch in this slice and why that threshold, then the floor it implies. A floor with no derivation is a number someone liked. A floor is a coverage commitment, not a measurement]
 - **Held-out cases:** [The cases not used while tuning, kept back to check the thresholds still hold. If none are held out, say so and say why the thresholds are not overfit]
 - **Slices scored separately:** [The segments reported on their own, never only in the aggregate. An aggregate that passes while one slice fails is a failing evaluation]
 - **If a rate is claimed:** [State the precision the set supports. If the set cannot support a precision claim, report the raw count and call it a floor, not a measurement]

@@ -159,6 +159,9 @@ Both items are maintainer-only per the agent-assignment framework. Prepared here
 | D9 | C-3: what to do about the PR-title lint, given that the demonstrated failure passed it | **A)** Promote the existing lint to required. **B)** Keep advisory, add a type-versus-change check. **C)** Both. **D)** Neither; rely on the shadow-PR observation step | **C**, with B as the load-bearing half | **RULED C 2026-08-19** (build targets v2.34.0) |
 | D10 | C-8: disposition of [#223](https://github.com/product-on-purpose/pm-skills/issues/223), whose substance has shipped | **A)** Close as shipped. **B)** Keep open, rewrite the body to the residual. **C)** Keep open as-is and retarget | **A**, plus a cleanup the issue does not mention | **RULED A 2026-08-17** |
 | D11 | G1 finding 1: the four conditional sections were typed as skill-MINORs; the adversarial review says the repo's own tie-breaker makes them MAJORs | **A)** Retype to MAJOR and fix the invalidated samples. **B)** Reword so the sections do not determine completeness. **C)** Keep MINOR with a documented exception | **A** | **RULED A 2026-08-21** |
+| D12 | G1 round 2, F2 (evaluation-set sizing): the risk-based floor that replaced saturation stopping carries no derivation rule, so two competent PMs given the same feature do not arrive at the same N | **A)** Require a preregistered sizing calculation from acceptable failure rate plus confidence. **B)** Keep the coverage-floor framing, add a worked derivation and grade the reasoning in the checklist. **C)** Accept as-is, record the limitation, defer to v2.34.0 | **B** | **RULED B 2026-08-25** |
+| D13 | G1 round 2, F3 (release manifest scope): the reviewer's recommended fix would pre-empt open issue 279 (skills-manifest: restore the convention or retire it), which is scheduled for v2.34.0 scoping | **A)** Minimal correction of the header's false claims; enforcement rides with the 279 ruling. **B)** Build the enforcing reconciliation now and treat that as ruling 279 = restore. **C)** Drop the manifest from this release | **A** | **RULED A 2026-08-25** |
+| D14 | G1 round 2, F5 (sample provenance): the retyped orbit samples encode an impossible `repo_version` / `skill_version` / `created` tuple, and correcting it is a library-wide schema choice affecting all 213 samples | **A)** Revert `skill_version` to its authored value and let the body note carry the maintenance story. **B)** Add a `maintained_against` field to the 8-field contract. **C)** Redefine both fields to mean the current contract | **A** | **RULED A 2026-08-25** |
 
 ### D9: C-3, the PR-title lint
 
@@ -247,6 +250,45 @@ contract.
 drafted 2.3.0 / 2.2.0 versions retyped in place because v2.33.0 had not shipped and they were never
 published. Both `orbit` samples retrofitted, `skill-manifest.json` regenerated, and the four remaining
 G1 findings resolved in the same pass.
+
+## G1 adversarial review: round 2 (2026-08-24) and the round-3 requirement
+
+**Full record:** [`review/g1-round2-20260824.md`](./review/g1-round2-20260824.md), which is also the
+runbook's G1 sub-check 3 artifact.
+
+**Round 2 returned needs-attention / no-ship: 2 high, 4 medium.** The protocol re-runs until
+findings fall below IMPORTANT, so the gate did not clear and WS-9 stayed blocked. The substantive
+result was not the count. It was that the reviewer judged **round-1 findings 2, 3, 4 and 5
+materially incomplete rather than resolved**, and that **two findings were new damage introduced by
+the round-1 fix pass itself** (the orbit provenance tuple at F5, the half-updated sample arithmetic
+at F6). Every checkable claim was verified against the tree before anything was recorded or fixed,
+which is the same result round 1 produced.
+
+**A note on why the round-2 result arrived three days late.** A round-2 pass was launched on
+2026-08-21 and the session ended before it returned. The Codex companion's job store is
+session-scoped, so that run was lost rather than pending: `codex-companion.mjs status --all`
+reported no jobs recorded for this repository. The gate sat open for three days for no reason other
+than a discarded job record. Either finish an adversarial round in-session or expect to re-run it.
+
+**Dispositions.** Three findings were mechanical and were fixed on the reviewer's recommendation
+(F1 trace-privacy boundaries, F4 Cohere retrieval configuration, F6 sample arithmetic). Three
+required maintainer rulings because each decided something beyond the defect in front of it, and
+were ruled 2026-08-25 as D12 (evaluation-set sizing derivation) = B, D13 (release-manifest scope) =
+A, and D14 (sample-provenance schema) = A. D13 in particular exists because the reviewer's
+recommended fix would have silently ruled open issue 279.
+
+**One root cause ran deeper than reported.** F3 flagged the manifest header naming v2.8.0 as the
+most recent prior manifest. The correct answer is v2.15.0, and the wrong one is reproducible: plain
+`sort` orders `v2.8.0` after `v2.15.0` character by character, silently skipping five folders. The
+header now records the trap so the next re-derivation uses `sort -V`.
+
+**The fix window was free because the gate was closed.** All three retyped skills sat at 3.0.0
+unreleased, so hardening their templates cost no further version bump. The same repairs after the
+tag would have cost a patch or minor across three skills plus a sample sweep.
+
+**Round 3 is required** and must converge before the maintainer can attest G1. The reviewing agent
+does not attest its own review; per the runbook, "the conductor cannot auto-detect Phase 0 review
+status; this is a maintainer attestation gate."
 
 ## Release hygiene checklist
 

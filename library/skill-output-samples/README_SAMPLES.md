@@ -21,7 +21,7 @@
 
 ## What Is This?
 
-This folder contains 213 sample outputs (126 pre-v2.15.0 + 45 v2.15.0 Sprint Skills additions + 12 v2.18.0 content-skill additions + 3 v2.23.0 foundation addition + 18 v2.28.0 foundation addition + 3 v2.29.0 foundation addition + 2 v2.33.0 project-memory pair + 1 v2.33.0 Model Choice sample):
+This folder contains 213 sample outputs. 210 of them decompose by release cohort as follows (126 pre-v2.15.0 + 45 v2.15.0 Sprint Skills additions + 12 v2.18.0 content-skill additions + 3 v2.23.0 foundation addition + 18 v2.28.0 foundation addition + 3 v2.29.0 foundation addition + 2 v2.33.0 project-memory pair + 1 v2.33.0 Model Choice sample). The remaining 3 predate this itemized breakdown:
 
 **Pre-v2.15.0 (126 samples):**
 
@@ -55,7 +55,7 @@ This folder contains 213 sample outputs (126 pre-v2.15.0 + 45 v2.15.0 Sprint Ski
 
 - **3 foundation-build-risk-review samples** - 1 per thread (storevine bulk price-update feature request, brainshelf AI auto-tagging idea, workbench enterprise knowledge-base bet); each a Build Risk Review with a single biggest risk, a graded evidence ledger, a verdict, and a no-code validation step
 
-75 + 11 + 12 + 3 + 7 + 15 + 3 + 21 + 21 + 3 + 12 + 3 + 18 + 3 + 2 = 209 itemized; the on-disk corpus is 213 (a few older samples predate this itemized breakdown).
+75 + 11 + 12 + 3 + 7 + 15 + 3 + 21 + 21 + 3 + 12 + 3 + 18 + 3 + 2 + 1 = 210 itemized; the on-disk corpus is 213, so exactly 3 samples predate this itemized breakdown. If you add a sample, update the headline total, its release cohort, and this line together: `check-sample-counts.mjs` validates the headline against disk but does not read this decomposition, so it will stay green while these three numbers disagree.
 
 The samples serve two purposes:
 

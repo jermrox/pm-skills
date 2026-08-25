@@ -2,7 +2,7 @@
 
 | Version | Date | Release | Effort | Type | Summary |
 |---------|------|---------|--------|------|---------|
-| 3.0.0 | 2026-08-21 | v2.33.0 | C-1 | **major** | Privacy section extended with a conditional `Model Trace Capture` subsection: what is captured, redaction before storage, retention, sampling, who can read a trace, and user opt-out. Event Inventory untouched. **Also broadens the trigger** from user input only to any captured model input, output, retrieval context, or tool call, and adds a data-classes decision, because a feature with no direct user input can still write tenant documents into a trace store. **Retyped from 2.3.0 minor before release** (G1 adversarial findings 1 and 2). 2.3.0 never shipped. |
+| 3.0.0 | 2026-08-21 | v2.33.0 | C-1 | **major** | Privacy section extended with a conditional `Model Trace Capture` subsection: what is captured, data classes, minimization decided separately at the egress and storage boundaries with a stated failure behavior, retention, sampling, who can read a trace, and user opt-out. Event Inventory untouched. **Also broadens the trigger** from user input only to any captured model input, output, retrieval context, or tool call, and adds a data-classes decision, because a feature with no direct user input can still write tenant documents into a trace store. **Retyped from 2.3.0 minor before release** (G1 adversarial findings 1 and 2). 2.3.0 never shipped. |
 | 2.2.0 | 2026-07-04 | v2.30.0 | M-35 | minor | Rewrote the frontmatter description: added the product-engineering contract framing and the sibling deflection to `measure-dashboard-requirements`, its collision-pair companion in this release's Batch 5. |
 | 2.1.0 | 2026-06-10 | v2.26.0 | F-12-batch-4 | minor | Quality convergence: When NOT to Use + output-contract enumeration (F-12 Batch 4) |
 | 2.0.0 | 2026-01-26 | - | - | baseline | Prior published version |
@@ -13,6 +13,15 @@ AI-product family Track 1 (effort C-1), the `measure-instrumentation-spec` incre
 [the C-3 spec](../../docs/internal/release-plans/v2.32.0/spec_c3-ai-product-family.md) section 2.2.
 Extends the existing `PII & Privacy Considerations` section with a conditional `Model Trace Capture`
 subsection. No new top-level section, so the Output Format enumeration is unchanged.
+
+**Hardened at G1 round 2 (2026-08-25), before release.** The round-1 template offered a single
+`Redaction before storage` row that folded the egress question in as a rider, so a PM could complete
+it while raw tenant content still crossed into an external collector ahead of redaction. That
+contradicted this skill's own Quality Checklist, which already required minimization to be decided
+at both boundaries. The template now carries separate pre-egress and pre-storage decisions plus an
+explicit failure-behavior row, and the Testing Checklist gained a conditional `Trace Capture
+Validation` block of negative tests that pass by proving raw traces do not cross either boundary
+when minimization fails.
 
 **Why privacy and not observability.** A trace is not an event. An event carries properties chosen
 in advance; a trace carries what the user typed and what the model wrote back, which is free text

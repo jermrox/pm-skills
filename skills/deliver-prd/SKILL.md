@@ -98,6 +98,7 @@ Before finalizing, verify:
 - [ ] Dependencies and risks are documented with owners
 - [ ] Document is readable in under 15 minutes
 - [ ] If the output comes from a model: every behavior requirement has an evaluation and a threshold, and refusal and abstention are among them
+- [ ] If an evaluation set is sized: each slice's floor shows the reasoning that produced it, naming the smallest failure rate that slice must catch. A bare number is not a derivation, and a clean run is reported as a bound, not as a measurement
 - [ ] If an executor will implement this without the authoring context: every FR-n has a verification and a verifier, and every escalation condition names an owner
 
 ## Examples

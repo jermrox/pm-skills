@@ -27,7 +27,7 @@ Scanning workspace for stamped artifacts...
 Found 3 stamped artifacts: 1 up to date, 2 stale.
 
 1. 2026-04-02_growth-onboarding_prd.md
-   Stamped: deliver-prd@2.1.0   Current: deliver-prd@2.3.0
+   Stamped: deliver-prd@2.1.0   Current: deliver-prd@3.0.0
    What changed (from HISTORY.md): 2.2.0 added a Rollout Plan section
    (additive); 2.3.0 was a wording pass on Success Metrics (no
    structural change).
@@ -85,7 +85,7 @@ generated_by:
   generated_at: 2026-07-03T14:00:00Z
 ```
 
-Stamp format for non-frontmatter artifacts, a plain report: a trailing HTML comment, `<!-- generated-by: deliver-prd@2.3.0 generated-at: 2026-07-03T14:00:00Z -->`, so no skill is forced to adopt frontmatter solely to support stamping. `utility-pm-artifact-upgrade` is invoked as a skill, not a script, on a trigger such as "check my saved PRDs for upgrades," and produces a short per-file report before asking which disposition to apply.
+Stamp format for non-frontmatter artifacts, a plain report: a trailing HTML comment, `<!-- generated-by: deliver-prd@3.0.0 generated-at: 2026-07-03T14:00:00Z -->`, so no skill is forced to adopt frontmatter solely to support stamping. `utility-pm-artifact-upgrade` is invoked as a skill, not a script, on a trigger such as "check my saved PRDs for upgrades," and produces a short per-file report before asking which disposition to apply.
 
 ### Durable CI block
 

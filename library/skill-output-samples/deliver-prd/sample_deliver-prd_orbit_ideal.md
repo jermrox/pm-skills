@@ -1,7 +1,7 @@
 ---
 artifact: prd
 repo_version: "2.5.0"
-skill_version: "3.0.0"
+skill_version: "2.0"
 created: 2026-02-20
 status: sample
 thread: orbit
@@ -18,10 +18,18 @@ context: Orbit async workspace . Orbit Digest PRD
 Orbit is a B2B async workspace platform at Series B, scaling from SMB to mid-market enterprise. After a discovery sprint interviewing eight enterprise trial non-converters, the PM team found that fewer than 20% [fictional] of async video updates are watched by teammates within 48 hours of posting, starving pilots of the shared context needed to justify a paid seat. A follow-up hypothesis test with six enterprise pilot teams showed that surfacing a short AI-generated text summary before the video player loads increased update open rate from 17% to 23% [fictional]. This PRD formalizes Orbit Digest for engineering handoff ahead of the May 2026 enterprise summit.
 
 **Maintained against the current contract.** These two orbit files are calibration samples, and
-the rule for them is that they always model the skill's *current* output contract rather than the
-contract in force when they were written. `deliver-prd` 3.0.0 makes `AI Behavior and Evaluation`
-required for a feature whose output comes from a model, and Orbit Digest is one, so the section was
-added to both files on 2026-08-21. The ideal and reality outputs remain byte-identical, which is the
+the rule for them is that their *content* always models the skill's *current* output contract
+rather than the contract in force when they were written. `deliver-prd` 3.0.0 makes
+`AI Behavior and Evaluation` required for a feature whose output comes from a model, and Orbit
+Digest is one, so the section was added to both files on 2026-08-21, and the evaluation-set sizing
+was given an explicit derivation on 2026-08-25.
+
+**The frontmatter is not maintained the same way, deliberately.** `repo_version` and
+`skill_version` record the versions this sample was *authored* against, which is what
+`SAMPLE_CREATION.md` defines them to mean, so they stay at their original values. Content vintage
+lives in this note; authoring vintage lives in the frontmatter. Bumping `skill_version` to track
+maintenance produced an impossible tuple (repo 2.5.0 with skill 3.0.0, created February) and was
+reverted on 2026-08-25. The ideal and reality outputs remain byte-identical, which is the
 invariant this pair exists to demonstrate: the prompt differs, the output does not.
 
 ### Source Notes
@@ -308,9 +316,14 @@ withhold, so abstention is not rewarded as faithfulness.
   updates announcing a decision or a commitment, where a fabricated claim propagates into other
   people's work, and updates from enterprise pilot accounts, where a visible failure costs a
   contract rather than a click
-- **Floor per slice, and what it buys:** 40 [fictional] cases per slice, 80 [fictional] for the
-  decision-and-commitment slice. The floor is a coverage commitment: it says every named failure
-  mode was looked for deliberately, not that its rate is measured precisely
+- **Floor per slice, and how it was derived:** 40 [fictional] cases per slice, 80 [fictional] for
+  the decision-and-commitment slice. Derivation: a slice returning zero failures across n cases
+  still admits a true rate near 3/n, so 40 cases license the claim "if this slice were failing more
+  than about 7.5% of the time we would most likely have seen it". The team set 7.5% as the
+  tolerable miss for general updates. Decision-and-commitment updates carry contract risk rather
+  than a lost click, so the tolerable miss there is halved to about 3.75%, which is 3/n at n = 80.
+  The floor is a coverage commitment: it says every named failure mode was looked for deliberately,
+  not that its rate is measured precisely
 - **Held-out cases:** 25% [fictional] of each slice is withheld while thresholds are tuned and
   scored once at the end. If a threshold only holds on the tuning half, it is not a threshold
 - **Slices scored separately:** every slice above reports on its own. An aggregate that passes while
