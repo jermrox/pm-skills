@@ -141,6 +141,19 @@ git clone https://github.com/product-on-purpose/pm-skills.git
 
 [![Download Latest Release](https://img.shields.io/badge/Download-Latest_Release-brightgreen?style=for-the-badge)](https://github.com/product-on-purpose/pm-skills/releases/latest)
 
+**Local dashboard (cloned repo):**
+
+Browse the skill catalog, click-apply skills to agents, build new agents on the
+sub-agent framework, and generate FigJam boards, all from a local web UI:
+
+```bash
+npm run dashboard
+```
+
+Then open http://127.0.0.1:4680. Zero dependencies, Node 18+. See
+[dashboard/README.md](dashboard/README.md) and the
+[FigJam guide](dashboard/FIGJAM.md).
+
 **More resources:**
 
 - [Getting Started Guide](https://product-on-purpose.github.io/pm-skills/getting-started/) - Detailed walkthrough for new users covering clone, sync helper, and first skill run. The path to take if any of the quick start steps above leave gaps.
