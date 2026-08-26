@@ -150,7 +150,11 @@ sub-agent framework, and generate FigJam boards, all from a local web UI:
 npm run dashboard
 ```
 
-Then open http://127.0.0.1:4680. Zero dependencies, Node 18+. See
+Then open http://127.0.0.1:4680. Zero dependencies, Node 18+.
+
+Prefer no server at all? Open `dashboard/public/console.html` directly in a
+browser: it is a single self-contained file with the catalog baked in, and it
+still composes agents and FigJam prompts for you. See
 [dashboard/README.md](dashboard/README.md) and the
 [FigJam guide](dashboard/FIGJAM.md).
 

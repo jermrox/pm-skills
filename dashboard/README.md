@@ -17,6 +17,30 @@ the dashboard always reflects the current checkout.
 
 The server binds to 127.0.0.1 only and never talks to the network.
 
+## Two ways to run it
+
+**Server mode** (`npm run dashboard`) reads the repo live and can write agent
+files to disk. This is the full platform.
+
+**Static console** (`dashboard/public/console.html`) is a single self-contained
+file with the catalog baked in. Open it by double-clicking, with no Node and no
+server, or publish it as a shareable page. It does everything the server version
+does except write to disk: you pick skills, compose the agent, and it hands you
+the markdown plus a one-line shell command that writes the file for you.
+
+Rebuild it after adding skills, agents, or workflows so the snapshot stays current:
+
+```bash
+npm run dashboard:build
+```
+
+That regenerates two files from `dashboard/template/console.body.html`:
+`console.html` (standalone document) and `console.body.html` (body-only, for
+publishing). A test fails if either one drifts from the live catalog.
+
+The server also serves the static console at
+http://127.0.0.1:4680/console.html if you want both in one place.
+
 ## What it does
 
 ### Skills tab
