@@ -592,6 +592,12 @@
           <pre class="out" id="fj-prompt"></pre>
           <div class="actions"><button class="btn ghost tiny" data-copy="fj-prompt">Copy prompt</button></div>
         </section>
+        <section id="fj-script-wrap">
+          <h3>Executable Plugin API script</h3>
+          <p class="lede" id="fj-script-note">Generated from the source file. Hand this to the Figma MCP <span class="mono">use_figma</span> tool with your file key and it builds the board directly.</p>
+          <pre class="out" id="fj-script"></pre>
+          <div class="actions"><button class="btn ghost tiny" data-copy="fj-script">Copy script</button></div>
+        </section>
         <section>
           <h3>Mermaid board skeleton</h3>
           <pre class="out" id="fj-mermaid"></pre>
@@ -1123,6 +1129,24 @@ $("#fj-go").addEventListener("click", () => {
   if (!item) return;
   $("#fj-prompt").textContent = fjPrompt(type, item, $("#fj-style").value);
   $("#fj-mermaid").textContent = fjMermaid(type, item);
+
+  // The generator covers skills and workflows; an agent board has no single
+  // source file to parse, so that case says so rather than showing stale code.
+  const bank = DATA.boardScripts || { workflow: {}, skill: {} };
+  const entry = type === "workflow" ? bank.workflow[key] : type === "skill" ? bank.skill[key] : null;
+  const wrap = $("#fj-script-wrap");
+  if (!entry) {
+    wrap.hidden = false;
+    $("#fj-script").textContent =
+      "No generated script for an agent board: there is no single source file to lay out.\n" +
+      "Build from the agent's applied skills one at a time, or use the prompt above.";
+  } else if (entry.refused) {
+    wrap.hidden = false;
+    $("#fj-script").textContent = "Not generated.\n\n" + entry.refused;
+  } else {
+    wrap.hidden = false;
+    $("#fj-script").textContent = entry.script;
+  }
   $("#fj-out").hidden = false;
 });
 for (const b of document.querySelectorAll("[data-copy]")) {

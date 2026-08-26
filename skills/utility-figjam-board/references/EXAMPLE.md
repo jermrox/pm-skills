@@ -13,7 +13,7 @@
 
 ## Section Inventory
 
-| # | Section title | Maps to | Seeded from | Working area |
+| # | Section title | Maps to | Prompted from | Working area |
 |---|---------------|---------|-------------|--------------|
 | 1 | Research questions | Step 1, interview planning | Workflow step text | yes |
 | 2 | Participant criteria | Step 1, screening | Workflow step text | yes |
@@ -37,15 +37,15 @@
 
 | Mark | Meaning |
 |------|---------|
-| Grey sticky | Seed placed by the builder |
-| Yellow sticky | Participant contribution |
+| Text node | Prompt placed by the builder |
+| Sticky note | Participant contribution |
 | Diamond | Go/no-go gate |
 | Blue dot | Vote |
 
 ## Not Created
 
 - The workflow's "Estimated Duration" and "Prerequisite Inputs" metadata rows. They describe the workflow, not work the team does on the board, so they went into the legend area as a single note rather than a section.
-- Section 3 was left unseeded. The customer-discovery workflow has no example interview notes, and inventing plausible ones would have put fabricated research on a board people would later treat as real.
+- Section 3 was left without prompts. The customer-discovery workflow has no example interview notes, and inventing plausible ones would have put fabricated research on a board people would later treat as real.
 
 ## Result
 

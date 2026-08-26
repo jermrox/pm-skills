@@ -31,8 +31,8 @@ Gates carry the decision question they ask, not just the word "gate".
 
 | Mark | Meaning |
 |------|---------|
-| [color] sticky | Seed placed by the builder |
-| [color] sticky | Participant contribution |
+| Text node | Prompt placed by the builder |
+| Sticky note | Participant contribution |
 | [shape] | Go/no-go gate |
 | [color] dot | Vote |
 

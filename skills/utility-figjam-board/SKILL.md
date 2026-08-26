@@ -48,13 +48,23 @@ Every board this skill builds uses the same five elements, so a team that has wo
 
 | Element | Purpose | Rule |
 |---------|---------|------|
-| **Section** | One unit of work: a workflow step, an output field, a phase | Titled with the noun the team will produce, never a verb like "Discuss" |
-| **Seed sticky** | An example or prompt, placed by the builder | Visually distinct from participant stickies (one consistent color, marked `seed`) |
-| **Working area** | Empty space inside a section for participants | Always present, always larger than the seeds |
+| **Section** | One unit of work: a workflow step, an output field, a phase | Short navigational name; the visible title is a separate text node inside it |
+| **Prompt text** | The header and the guidance the builder places | A TEXT node, never a sticky (see below) |
+| **Working area** | Empty space inside a section for participants | Always present, always larger than the prompts |
 | **Connector** | Order, dependency, or flow between sections | Labeled when the relationship is not obvious from position |
-| **Legend** | What the colors, marks, and sections mean | Bottom-left, one per board, always included |
+| **Legend** | What the node types, colors, and sections mean | One per board, always included |
 
 The legend is not optional. A board without one is a board only its author can read.
+
+**Prompts are text nodes, not stickies.** A sticky means "a participant put this
+here". Headers, instructions, guiding questions, and examples are board
+structure, so they are text nodes. Seeding a section with sticky-shaped prompts
+makes the builder look like a participant and makes an empty section look
+worked. This is FigJam's own convention, not a house style.
+
+Sections that will be worked on are participatory zones: size them to the
+activity you expect, and do not shrink them to hug the prompts you placed. A
+section that hugs its content tells the team there is no room to add anything.
 
 ## Layout by Source Type
 
@@ -64,13 +74,34 @@ The legend is not optional. A board without one is a board only its author can r
 
 **From an artifact.** One section per top-level heading of the artifact, holding the actual content as read-only stickies, plus a parallel "challenge" lane where the team places disagreements and gaps. The point is to make the artifact contestable, so the challenge lane gets equal visual weight.
 
+## Generating the Board
+
+This skill has a working generator, so the board is not hand-assembled:
+
+```bash
+node scripts/figjam-board.mjs --workflow customer-discovery            # the plan
+node scripts/figjam-board.mjs --workflow customer-discovery --script   # the Plugin API code
+node scripts/figjam-board.mjs --skill foundation-lean-canvas --script
+```
+
+The `--script` output is executable Figma Plugin API JavaScript. Hand it to the
+Figma MCP `use_figma` tool with the target file key. It encodes the API rules
+that are easy to get wrong: `appendChild` before positioning (x/y become
+section-local), `hex/255` color notation (rounded decimals read as "custom"),
+explicit `text.fontName` on new connectors (theirs is invalid by default), one
+font load rather than one per node, and no `figma.createPage` (unavailable in
+FigJam).
+
+A workflow with no `### Step N:` headings is refused with a pointer to build
+from a member skill instead, rather than guessed at.
+
 ## Instructions
 
 1. Confirm the three prerequisites. Stop if the Figma MCP server is unreachable.
 2. Read the source file completely. Extract the section list before touching Figma.
 3. Choose the layout from the table above based on source type, and state your section list to the user before building.
 4. Create the board with `use_figma`, working section by section rather than in one giant call, so a failure leaves a partial board you can resume rather than an unusable one.
-5. Seed each section from real source content. Never seed with invented examples; if the source has no example, leave the section empty and say so.
+5. Seed each section from real source content, as text nodes. Never seed with invented examples; if the source has no example, leave the section empty and say so.
 6. Add connectors, then the legend.
 7. Return the FigJam file link plus the section list, so the user can verify coverage without opening the board.
 
@@ -80,16 +111,16 @@ Report back with all four:
 
 - **Board link.** The FigJam file URL.
 - **Section inventory.** Every section created, in board order, mapped to the source element it came from.
-- **Seeding note.** Which sections carry seed stickies and where those seeds came from. Name any section left empty for lack of source material.
+- **Seeding note.** Which sections carry prompts and where those prompts came from. Name any section left empty for lack of source material.
 - **Not created.** Anything in the source you deliberately did not put on the board, and why.
 
 ## Quality Checklist
 
 - [ ] The source file was read, not inferred from its name
 - [ ] Every section maps to a real element of the source
-- [ ] Seed stickies quote or paraphrase real source content, never invented examples
-- [ ] Seeds are visually distinct from the empty working areas
-- [ ] Every section has a working area larger than its seeds
+- [ ] Prompts quote or paraphrase real source content, never invented examples
+- [ ] Prompts are text nodes; no sticky was placed by the builder
+- [ ] Sections are sized to expected activity, not hugged to the placed prompts
 - [ ] Gates and decision points are marked and labeled with the question they ask
 - [ ] A legend exists and explains every color and mark used
 - [ ] The board link and section inventory were returned to the user

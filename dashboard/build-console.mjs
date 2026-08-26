@@ -12,6 +12,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { REPO_ROOT, loadSkills, loadAgents, loadWorkflows } from './lib/catalog.mjs';
+import { planFromWorkflow, planFromSkill } from './lib/figjam-plan.mjs';
+import { renderPluginScript } from './lib/figjam-script.mjs';
 
 const TEMPLATE = path.join(REPO_ROOT, 'dashboard', 'template', 'console.body.html');
 const OUT_DIR = path.join(REPO_ROOT, 'dashboard', 'public');
@@ -28,7 +30,32 @@ export function buildCatalog() {
     workflows: loadWorkflows().map((w) => ({
       slug: w.slug, title: w.title, summary: w.summary, skillsNote: w.skillsNote, file: w.file,
     })),
+    // Pre-generated Plugin API scripts, so the static console hands over real
+    // executable code rather than only a prompt describing a board.
+    boardScripts: buildBoardScripts(skills, loadWorkflows()),
   };
+}
+
+/** One entry per source that can produce a board. Sources that cannot (a
+ *  workflow with no step sequence) record the refusal reason instead, so the UI
+ *  can say why rather than silently omitting them. */
+export function buildBoardScripts(skills, workflows) {
+  const out = { workflow: {}, skill: {} };
+  for (const w of workflows) {
+    try {
+      out.workflow[w.slug] = { script: renderPluginScript(planFromWorkflow(w.slug)) };
+    } catch (e) {
+      out.workflow[w.slug] = { refused: e.message };
+    }
+  }
+  for (const s of skills) {
+    try {
+      out.skill[s.name] = { script: renderPluginScript(planFromSkill(s.name)) };
+    } catch (e) {
+      out.skill[s.name] = { refused: e.message };
+    }
+  }
+  return out;
 }
 
 export function renderBody(template, data) {
