@@ -10,25 +10,41 @@
       "id": "pm-critic",
       "label": "pm-critic",
       "dispatch": "utility-pm-critic",
-      "cells": ["PRODUCTION", "PRODUCTION", "EXPERIMENTAL"]
+      "cells": [
+        "PRODUCTION",
+        "PRODUCTION",
+        "EXPERIMENTAL"
+      ]
     },
     {
       "id": "pm-skill-auditor",
       "label": "pm-skill-auditor",
       "dispatch": "utility-pm-skill-auditor",
-      "cells": ["PRODUCTION", "PRODUCTION", "EXPERIMENTAL"]
+      "cells": [
+        "PRODUCTION",
+        "PRODUCTION",
+        "EXPERIMENTAL"
+      ]
     },
     {
       "id": "pm-changelog-curator",
       "label": "pm-changelog-curator",
       "dispatch": "utility-pm-changelog-curator",
-      "cells": ["PRODUCTION", "PRODUCTION", "EXPERIMENTAL"]
+      "cells": [
+        "PRODUCTION",
+        "PRODUCTION",
+        "EXPERIMENTAL"
+      ]
     },
     {
       "id": "pm-release-conductor",
       "label": "pm-release-conductor",
       "dispatch": "utility-pm-release-conductor",
-      "cells": ["PRODUCTION", "DRY-RUN VALIDATED (live UNTESTED)", "EXPERIMENTAL"]
+      "cells": [
+        "PRODUCTION",
+        "DRY-RUN VALIDATED (live UNTESTED)",
+        "EXPERIMENTAL"
+      ]
     },
     {
       "id": "pm-workflow-orchestrator",
@@ -48,6 +64,16 @@
         "PRODUCTION for its maintainer-tooling role (key-free `Agent`-tool dispatch, Haiku-pinned by default)",
         "N/A - no dispatch skill; not a cross-client user path",
         "N/A - no dispatch skill; not a cross-client user path"
+      ]
+    },
+    {
+      "id": "pm-figjam-facilitator",
+      "label": "pm-figjam-facilitator (added unreleased)",
+      "dispatch": "None (invoke by name; the three FigJam skills are invoked directly)",
+      "cells": [
+        "UNVERIFIED - not yet smoke-tested. Declares the `Skill` tool to delegate to the FigJam skills, so it depends on the same native `Skill`-from-sub-agent path pm-workflow-orchestrator exercises. Board authoring additionally requires a connected Figma MCP server",
+        "UNVERIFIED - requires a connected Figma MCP server",
+        "UNVERIFIED - requires a connected Figma MCP server"
       ]
     }
   ]

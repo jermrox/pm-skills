@@ -5,6 +5,24 @@ collaborative sessions in FigJam. The dashboard's **FigJam Studio** tab
 generates everything described here; this document explains the setup and the
 recommended patterns.
 
+## The three FigJam skills
+
+FigJam is a first-class part of the catalog, not just something the dashboard
+writes prompts about. Three utility skills own the loop:
+
+| Skill | Direction | What it produces |
+|-------|-----------|------------------|
+| `utility-figjam-board` | Written material into a board | Sections, seed stickies, connectors, legend |
+| `utility-figjam-workshop` | Live session on a board | Timeboxed run sheet, roles, decisions with a Decider |
+| `utility-figjam-harvest` | Board back into written material | Transcribed content, vote counts, gaps, evidence map |
+
+`pm-figjam-facilitator` is the sub-agent that owns all three and picks the right
+step from where your board already is. Invoke it by name, or invoke any skill
+directly.
+
+The dashboard's FigJam Studio tab generates prompts that drive these skills. The
+patterns below explain the setup and how the three fit together.
+
 ## Setup
 
 You need two things connected to your Claude Code (or Claude) session:
@@ -28,6 +46,8 @@ blocks), so the patterns below still work.
 
 ## Pattern 1: Skill working session
 
+Owned by `utility-figjam-board`, then `utility-figjam-harvest` to close the loop.
+
 Best for: running one skill (persona, lean canvas, opportunity tree, retro)
 with a team instead of solo.
 
@@ -49,6 +69,8 @@ facilitation rules ARE a FigJam exercise: silent stickies then dot voting).
 
 ## Pattern 2: Workflow board
 
+Owned by `utility-figjam-board`, run with `utility-figjam-workshop`.
+
 Best for: kicking off a multi-week effort with a shared visual plan.
 
 1. Pick **Workflow board** and a workflow (e.g. Triple Diamond, Design Sprint,
@@ -66,6 +88,8 @@ note-and-vote, and magic-lenses steps.
 
 ## Pattern 3: Agent kickoff board
 
+Owned by `utility-figjam-board`.
+
 Best for: aligning a team on what an agent (and its applied skills) will and
 will not do before you rely on it.
 
@@ -77,6 +101,10 @@ will not do before you rely on it.
    Agents tab to put it to work.
 
 ## Round-tripping: FigJam back into skills
+
+This is `utility-figjam-harvest`'s whole job, and its evidence rule is the reason
+to use it rather than eyeballing the board: verbatim quotes, vote counts reported
+as counts rather than as consensus, and gaps named instead of smoothed over.
 
 The flow is bidirectional. Useful closing moves after any session:
 

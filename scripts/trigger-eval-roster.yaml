@@ -97,6 +97,13 @@ roster:
   - utility-slideshow-creator
   - utility-update-pm-skills
 
+  # FigJam loop (unreleased). Three skills that collide hard with each other by
+  # design: same medium, three different steps. Each fixture carries near-miss
+  # negatives aimed at its two siblings, which is where the routing actually fails.
+  - utility-figjam-board
+  - utility-figjam-harvest
+  - utility-figjam-workshop
+
 # Skills deliberately OUT of the trigger-eval program (v2.32.0, decision D6 ruled C).
 #
 # The 15 tool-* skills are sequential STAGES inside two registered sprint families
@@ -138,6 +145,11 @@ excluded:
 # already carries a near-miss at its new declared partner, so no existing fixture
 # needed to change.
 collision_pairs:
+  # FigJam loop: build -> run -> harvest. All three answer "do something with a
+  # board", so the boundary is which STEP, not which medium.
+  - [utility-figjam-board, utility-figjam-workshop]
+  - [utility-figjam-workshop, utility-figjam-harvest]
+  - [utility-figjam-board, utility-figjam-harvest]
   - [deliver-user-stories, deliver-acceptance-criteria]
   - [deliver-acceptance-criteria, deliver-edge-cases]
   - [define-hypothesis, measure-experiment-design]

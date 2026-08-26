@@ -244,6 +244,21 @@ Facilitates and documents a team retrospective capturing what went well, what to
 
 ### Utility Skills
 
+#### figjam-board
+**Path:** `skills/utility-figjam-board/SKILL.md`
+
+Builds a structured FigJam board from a pm-skills skill, workflow, or finished artifact using the Figma MCP server, laying out sections, seeded sticky notes, connectors, and a legend so a team can work the material visually. Use when preparing a workshop canvas, turning a written artifact into something a group can annotate, or staging a workflow as a shared plan. For running the session on the board, use utility-figjam-workshop.
+
+#### figjam-harvest
+**Path:** `skills/utility-figjam-harvest/SKILL.md`
+
+Reads a worked FigJam board and converts its stickies, clusters, votes, and decisions into a structured written artifact with every claim traced to a specific sticky. Use after a workshop when board content must become a durable document, or when handing board output to a downstream pm-skill. Refuses to invent content for illegible or empty regions. For building or running the board, use utility-figjam-board or utility-figjam-workshop.
+
+#### figjam-workshop
+**Path:** `skills/utility-figjam-workshop/SKILL.md`
+
+Runs a facilitated working session on a FigJam board, producing a timeboxed run sheet with roles, a silent-first contribution sequence, voting mechanics, and a decision record. Use when a group needs to work a board together and you want the session to produce durable decisions rather than a wall of unsorted stickies. For building the board beforehand, use utility-figjam-board. For turning the finished board into an artifact, use utility-figjam-harvest.
+
 #### mermaid-diagrams
 **Path:** `skills/utility-mermaid-diagrams/SKILL.md`
 
@@ -454,6 +469,10 @@ v2.24.0 adds a fifth sub-agent:
 v2.29.0 adds a sixth sub-agent:
 
 - `pm-skill-router` - an internal tooling instrument (NOT a user-facing PM sub-agent): given the catalog and a single query, it returns the one skill that would fire, judging by `description:` match only. It is the key-free engine behind the new-skill collision gate and the trigger router-eval (dispatched on the subscription, Haiku-pinned by default). It has no dispatch skill and is not invoked directly by users.
+
+This release adds a seventh sub-agent:
+
+- `pm-figjam-facilitator` - owns the FigJam loop (build a board, run a session on it, harvest it back into a written artifact) and routes to the right step based on where the board already is. Declares the `Skill` tool to delegate to `utility-figjam-board`, `utility-figjam-workshop`, and `utility-figjam-harvest`; it adds no chain-permission entry and spawns no sub-agents. Board authoring requires a connected Figma MCP server, and the agent reports plainly when one is unreachable rather than claiming a board exists. Ships UNVERIFIED pending a cross-client smoke test.
 
 The canonical sub-agents catalog with full audience, trigger, lifetime, tool surface, and composition data lives at the [runtime components reference](https://product-on-purpose.github.io/pm-skills/reference/runtime-components/). Sub-agent definition files live at `agents/{name}.md`, the fixed path Claude Code's plugin runtime auto-discovers (renamed from `subagents/` in v2.17.0 W2).
 

@@ -1,9 +1,9 @@
 ---
 title: Skills
-description: Browse all 68 PM skills organized by the Triple Diamond framework plus foundation, utility, and tool classifications.
+description: Browse all 71 PM skills organized by the Triple Diamond framework plus foundation, utility, and tool classifications.
 ---
 
-PM Skills ships 68 production-ready skills organized by the Triple Diamond framework plus foundation, utility, and tool classifications.
+PM Skills ships 71 production-ready skills organized by the Triple Diamond framework plus foundation, utility, and tool classifications.
 
 | Phase | Skills | Focus |
 |-------|--------|-------|

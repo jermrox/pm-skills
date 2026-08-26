@@ -1,6 +1,6 @@
 ---
 title: Samples
-description: Browse 213 PM artifact samples spanning 63 of the catalog's 68 skills and three product threads (Storevine, Brainshelf, Workbench).
+description: Browse 213 PM artifact samples spanning 63 of the catalog's 71 skills and three product threads (Storevine, Brainshelf, Workbench).
 sidebar:
   order: 1
 ---

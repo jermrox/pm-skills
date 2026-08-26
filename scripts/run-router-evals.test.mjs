@@ -133,7 +133,7 @@ test('the eval scope is the trigger-eval roster data file (WS-T10)', () => {
   // The v2.32.0 WS-4 wave-2 backfill adds the 10 remaining utility-* skills -> 53,
   // which with the 15 tool-* skills excluded by design (decision D6 = C) covers the
   // full 68-skill catalog with nothing unaccounted for.
-  assert.equal(ROSTER.length, 53);
-  assert.equal(new Set(ROSTER).size, 53);
+  assert.equal(ROSTER.length, 56);
+  assert.equal(new Set(ROSTER).size, 56);
   assert.ok(ROSTER.every((s) => typeof s === 'string' && /^[a-z0-9-]+$/.test(s)));
 });

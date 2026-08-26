@@ -82,7 +82,7 @@ Cross-cutting capabilities that apply across multiple phases (persona, OKR write
 - **Frontmatter**: `classification: foundation` (required), no `phase` field
 - **Use when**: the skill applies to multiple phases equally
 
-### Utility Skills (12)
+### Utility Skills (15)
 
 Meta-skills that operate on the repository, workflow, or other skills (skill lifecycle, diagrams, slideshows, library updates, changelog curation, critique, release conduction, workflow orchestration and building).
 
