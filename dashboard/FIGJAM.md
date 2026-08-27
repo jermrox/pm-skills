@@ -12,7 +12,7 @@ writes prompts about. Three utility skills own the loop:
 
 | Skill | Direction | What it produces |
 |-------|-----------|------------------|
-| `utility-figjam-board` | Written material into a board | Sections, seed stickies, connectors, legend |
+| `utility-figjam-board` | Written material into a board | Sections, prompt text, connectors, legend |
 | `utility-figjam-workshop` | Live session on a board | Timeboxed run sheet, roles, decisions with a Decider |
 | `utility-figjam-harvest` | Board back into written material | Transcribed content, vote counts, gaps, evidence map |
 
@@ -20,8 +20,28 @@ writes prompts about. Three utility skills own the loop:
 step from where your board already is. Invoke it by name, or invoke any skill
 directly.
 
-The dashboard's FigJam Studio tab generates prompts that drive these skills. The
-patterns below explain the setup and how the three fit together.
+Prompts, headers, and examples on a generated board are TEXT nodes, never
+stickies. A sticky means a participant put it there, so seeding with
+sticky-shaped prompts makes an empty section look worked. That is FigJam's own
+convention, not a house style.
+
+**The builder is a real generator, not a prompt.** `scripts/figjam-board.mjs`
+turns a source into a board plan, or with `--script` into executable Figma
+Plugin API JavaScript:
+
+```bash
+node scripts/figjam-board.mjs --workflow customer-discovery           # the plan
+node scripts/figjam-board.mjs --workflow customer-discovery --script  # the code
+node scripts/figjam-board.mjs --skill foundation-lean-canvas --script
+```
+
+Hand the `--script` output to the Figma MCP `use_figma` tool with your file key.
+The dashboard's FigJam Studio shows the same generated script next to the
+prompt. 9 of the 12 workflows build a board; `triple-diamond`, `lean-startup`,
+and `foundation-to-design` are organized by phase rather than steps, so they are
+refused with a pointer to build from a member skill instead of being guessed at.
+
+The patterns below explain the setup and how the three skills fit together.
 
 ## Setup
 
@@ -44,6 +64,9 @@ No Figma access? Every FigJam Studio output also includes a mermaid skeleton
 you can paste into FigJam manually (FigJam supports diagram import and code
 blocks), so the patterns below still work.
 
+Note that creating or editing a Figma file needs a Full or Dev seat. A View
+seat can read boards but cannot build one, and `create_new_file` is rejected.
+
 ## Pattern 1: Skill working session
 
 Owned by `utility-figjam-board`, then `utility-figjam-harvest` to close the loop.
@@ -52,9 +75,10 @@ Best for: running one skill (persona, lean canvas, opportunity tree, retro)
 with a team instead of solo.
 
 1. In FigJam Studio, pick **Skill working session** and a board style.
-2. Paste the generated prompt into Claude Code. Claude reads the skill's
-   SKILL.md, then builds a board with one section per element of the skill's
-   output contract, seeded with example stickies.
+2. Take the generated script (or the prompt) into Claude Code. The board gets
+   one section per element of the skill's output contract, with prompts drawn
+   from the skill's own text. A skill with no parsable output contract is
+   reported as such rather than given an invented structure.
 3. Run the session in FigJam: the team fills stickies under each section.
 4. Afterward, paste the board link back to Claude (it can read the board via
    `get_figjam` or `get_screenshot`) and ask it to run the skill using the
