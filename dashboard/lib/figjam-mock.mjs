@@ -23,6 +23,13 @@ class MockNode {
   get x() { return this._x; }
   set y(v) { this._y = v; }
   get y() { return this._y; }
+  remove() {
+    this._removed = true;
+    const i = this._api.nodes.indexOf(this);
+    if (i !== -1) this._api.nodes.splice(i, 1);
+    const j = this._api.shapes.indexOf(this);
+    if (j !== -1) this._api.shapes.splice(j, 1);
+  }
 }
 
 class MockText extends MockNode {
@@ -113,6 +120,42 @@ class MockConnector extends MockNode {
   }
 }
 
+
+class MockShapeWithText extends MockNode {
+  constructor(api) {
+    super('SHAPE_WITH_TEXT', api);
+    this._shapeType = 'ELLIPSE';
+    this.width = 200;
+    this.height = 120;
+    const self = this;
+    this.text = {
+      // Real default is Inter Medium, not Regular. Code that hardcodes Regular
+      // and loads only that font must still fail here.
+      _font: { family: 'Inter', style: 'Medium' },
+      _chars: '',
+      _fills: null,
+      get fontName() { return self.text._font; },
+      set fontName(f) { self.text._font = f; },
+      get characters() { return self.text._chars; },
+      set characters(v) {
+        if (!api._loadedFonts.has(fontKey(self.text._font))) {
+          throw new Error(`Cannot write to shape text with unloaded font "${fontKey(self.text._font)}"`);
+        }
+        self.text._chars = v;
+      },
+      get fills() { return self.text._fills; },
+      set fills(v) { self.text._fills = v; },
+    };
+  }
+  get shapeType() { return this._shapeType; }
+  set shapeType(v) { this._shapeType = v; }
+  resize(w, h) {
+    if (w < 0.01 || h < 0.01) throw new Error('shape resize must be >= 0.01');
+    this.width = w;
+    this.height = h;
+  }
+}
+
 const fontKey = (f) => `${f.family} ${f.style}`;
 
 export function createMockFigma() {
@@ -123,6 +166,7 @@ export function createMockFigma() {
     _closed: 0,
     nodes: [],
     connectors: [],
+    shapes: [],
     async loadFontAsync(f) {
       if (!f || !f.family || !f.style) throw new Error('loadFontAsync needs {family, style}');
       api._loadedFonts.add(fontKey(f));
@@ -148,6 +192,12 @@ export function createMockFigma() {
     createConnector() {
       const n = new MockConnector(api);
       api.connectors.push(n);
+      return n;
+    },
+    createShapeWithText() {
+      const n = new MockShapeWithText(api);
+      api.nodes.push(n);
+      api.shapes.push(n);
       return n;
     },
     closePlugin() { api._closed += 1; },

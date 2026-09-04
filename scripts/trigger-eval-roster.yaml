@@ -103,6 +103,7 @@ roster:
   - utility-figjam-board
   - utility-figjam-harvest
   - utility-figjam-workshop
+  - utility-pm-figjam-facilitator
 
 # Skills deliberately OUT of the trigger-eval program (v2.32.0, decision D6 ruled C).
 #
@@ -150,6 +151,11 @@ collision_pairs:
   - [utility-figjam-board, utility-figjam-workshop]
   - [utility-figjam-workshop, utility-figjam-harvest]
   - [utility-figjam-board, utility-figjam-harvest]
+  # The dispatch wrapper answers the same "do something with a board" request as
+  # the three skills it routes to, so it must discriminate against them.
+  - [utility-pm-figjam-facilitator, utility-figjam-board]
+  - [utility-pm-figjam-facilitator, utility-figjam-workshop]
+  - [utility-pm-figjam-facilitator, utility-figjam-harvest]
   - [deliver-user-stories, deliver-acceptance-criteria]
   - [deliver-acceptance-criteria, deliver-edge-cases]
   - [define-hypothesis, measure-experiment-design]

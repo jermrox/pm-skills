@@ -10,6 +10,10 @@
 //     to seeded content, but grown if content would overflow
 //   - a new connector's text.fontName is invalid, so it is set explicitly
 //   - prompts and headers are TEXT nodes; stickies are reserved for participants
+//   - gate shapes are never hardcoded in size: fitShapeToText measures with a
+//     temporary TextNode, and the measurer is removed afterwards
+//   - a shape's fill, stroke and text colour are set together, or the preset
+//     renders with mismatched parts
 //   - figma.createPage() is unavailable in FigJam
 //   - console.log is not returned to the caller, so IDs come back via `return`
 
@@ -102,23 +106,114 @@ export function renderPluginScript(plan) {
     created.push({ key: spec.key, id: section.id, name: section.name });
   }
 
+  // Gate sizing utility, per the create-shape-with-text reference. Shape
+  // dimensions are never hardcoded: a temporary TextNode measures the label and
+  // the shape scales until the text fits.
+  const NON_RECT_TYPES = new Set(['DIAMOND', 'TRIANGLE_UP', 'TRIANGLE_DOWN', 'ELLIPSE', 'HEXAGON', 'OCTAGON', 'STAR', 'PENTAGON']);
+  const BASE_W = 200;
+  const BASE_H = 120;
+  const MAX_SCALE = 3;
+  const SHAPE_PADDING = 32;
+  let measurer = null;
+
+  function textAreaForShape(shapeType, w, hh) {
+    if (NON_RECT_TYPES.has(shapeType)) return { w: w / 2 - SHAPE_PADDING, h: hh / 2 - SHAPE_PADDING };
+    return { w: w - SHAPE_PADDING * 2, h: hh - SHAPE_PADDING * 2 };
+  }
+
+  function fitShapeToText(label, shapeType) {
+    let w = BASE_W;
+    let hh = BASE_H;
+    if (NON_RECT_TYPES.has(shapeType)) {
+      w = Math.round(BASE_W * 1.6);
+      hh = Math.round(BASE_H * 1.6);
+    }
+    const origW = w;
+    const origH = hh;
+    let scale = 1;
+    while (scale < MAX_SCALE) {
+      const area = textAreaForShape(shapeType, w, hh);
+      measurer.resize(Math.max(area.w, 1), measurer.height);
+      measurer.characters = label;
+      if (measurer.height <= area.h) break;
+      scale += 0.1;
+      w = Math.round(origW * scale);
+      hh = Math.round(origH * scale);
+    }
+    return { w, h: hh };
+  }
+
+  // Decision preset: fill, stroke and text set together, or the shape renders
+  // with mismatched parts.
+  const GATE_PRESET = {
+    fill: h(0xff, 0xec, 0xbd),
+    stroke: h(0xff, 0xc9, 0x43),
+    text: h(0x1e, 0x1e, 0x1e),
+  };
+
   const CONNECTORS = ${j(plan.connectors)};
-  for (const c of CONNECTORS) {
-    const startId = made[c.from];
-    const endId = made[c.to];
-    if (!startId || !endId) continue;
+  const hasGate = CONNECTORS.some((c) => c.gate);
+  if (hasGate) {
+    measurer = figma.createText();
+    measurer.fontName = FONT;
+    measurer.textAutoResize = 'HEIGHT';
+  }
+
+  const link = (startId, endId, label) => {
     const conn = figma.createConnector();
     conn.connectorStart = { endpointNodeId: startId, magnet: 'AUTO' };
     conn.connectorEnd = { endpointNodeId: endId, magnet: 'AUTO' };
     conn.connectorStartStrokeCap = 'NONE';
     conn.connectorEndStrokeCap = 'ARROW_LINES';
     conn.strokes = [{ type: 'SOLID', color: h(0x75, 0x75, 0x75) }];
-    if (c.label) {
+    if (label) {
       // A new connector's text.fontName is invalid until set explicitly.
       conn.text.fontName = FONT;
-      conn.text.characters = c.label;
+      conn.text.characters = label;
     }
+    return conn;
+  };
+
+  const SECTION_SPAN = ${LAYOUT.sectionWidth + LAYOUT.gapX};
+  let gateIndex = 0;
+  for (const c of CONNECTORS) {
+    const startId = made[c.from];
+    const endId = made[c.to];
+    if (!startId || !endId) continue;
+
+    if (!c.gate) {
+      link(startId, endId, c.label);
+      continue;
+    }
+
+    // A gated transition becomes section -> gate -> section, so the decision
+    // reads as a step in the flow rather than as a label on a line.
+    const gate = figma.createShapeWithText();
+    gate.shapeType = 'DIAMOND';
+    // Load the shape's own font rather than assuming one.
+    await figma.loadFontAsync(gate.text.fontName);
+    const label = [c.gate.question, ...c.gate.criteria.map((x) => '- ' + x)].join('\\n');
+    gate.text.characters = label;
+    const size = fitShapeToText(label, 'DIAMOND');
+    gate.resize(size.w, size.h);
+    gate.fills = [{ type: 'SOLID', color: GATE_PRESET.fill }];
+    gate.strokes = [{ type: 'SOLID', color: GATE_PRESET.stroke }];
+    gate.text.fills = [{ type: 'SOLID', color: GATE_PRESET.text }];
+    // Below the section row, at the boundary it governs, so a wide gate never
+    // collides with the sections it sits between.
+    const fromIdx = SECTIONS.findIndex((s) => s.key === c.from);
+    const toIdx = SECTIONS.findIndex((s) => s.key === c.to);
+    const mid = ((fromIdx < 0 ? toIdx : fromIdx) + (toIdx < 0 ? fromIdx : toIdx)) / 2;
+    gate.x = Math.round(mid * SECTION_SPAN + (${LAYOUT.sectionWidth} - size.w) / 2);
+    gate.y = ${LAYOUT.sectionHeight} + 200;
+    created.push({ key: 'gate-' + gateIndex, id: gate.id, name: 'Gate: ' + c.gate.question });
+    gateIndex += 1;
+
+    link(startId, gate.id, '');
+    link(gate.id, endId, '');
   }
+
+  if (measurer) measurer.remove();
 
   // Legend, placed below the row. Every board gets one; a board without a
   // legend is a board only its author can read.
@@ -126,13 +221,14 @@ export function renderPluginScript(plan) {
   legend.name = 'Legend';
   legend.resize(${LAYOUT.sectionWidth}, 360);
   legend.x = 0;
-  legend.y = ${LAYOUT.sectionHeight} + 200;
+  legend.y = ${LAYOUT.sectionHeight} + 900;
   legend.fills = [{ type: 'SOLID', color: h(0xf9, 0xf9, 0xf9) }];
 
   const legendLines = [
     'Text like this is a prompt placed when the board was built.',
     'Sticky notes are participant contributions. Add yours anywhere inside a section.',
     'Arrows run in workflow order and are labeled with the handoff between steps.',
+    'Yellow diamonds are go/no-go gates, carrying the transition criteria the workflow declares.',
     'Built from ${plan.sourceFile} by pm-skills utility-figjam-board.',
   ];
   let ly = PAD;

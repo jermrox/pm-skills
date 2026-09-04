@@ -1,5 +1,5 @@
 {
-  "intro_tail": "sub-agents (5 user-facing PM sub-agents plus the internal tooling instrument `pm-skill-router`, added v2.29.0). The \"as of\" stamp tracks the latest inventory refresh; per-row status claims stay pinned to whatever date or version they were last independently verified, exactly as recorded in the prose below the table.",
+  "intro_tail": "sub-agents (6 user-facing PM sub-agents plus the internal tooling instrument `pm-skill-router`, added v2.29.0). The \"as of\" stamp tracks the latest inventory refresh; per-row status claims stay pinned to whatever date or version they were last independently verified, exactly as recorded in the prose below the table.",
   "clients": [
     "Claude Code (native)",
     "Codex CLI",
@@ -69,11 +69,11 @@
     {
       "id": "pm-figjam-facilitator",
       "label": "pm-figjam-facilitator (added unreleased)",
-      "dispatch": "None (invoke by name; the three FigJam skills are invoked directly)",
+      "dispatch": "utility-pm-figjam-facilitator",
       "cells": [
-        "UNVERIFIED - not yet smoke-tested. Declares the `Skill` tool to delegate to the FigJam skills, so it depends on the same native `Skill`-from-sub-agent path pm-workflow-orchestrator exercises. Board authoring additionally requires a connected Figma MCP server",
-        "UNVERIFIED - requires a connected Figma MCP server",
-        "UNVERIFIED - requires a connected Figma MCP server"
+        "UNVERIFIED - not yet smoke-tested. Dispatches natively to the sub-agent, which declares the `Skill` tool to reach the three FigJam skills. Board authoring additionally requires a connected Figma MCP server and a seat that can edit",
+        "UNVERIFIED - dispatch skill executes the agent definition inline; requires a connected Figma MCP server",
+        "UNVERIFIED - dispatch skill executes the agent definition inline; requires a connected Figma MCP server"
       ]
     }
   ]

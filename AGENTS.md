@@ -274,6 +274,11 @@ Draft CHANGELOG entries from git log via the pm-changelog-curator sub-agent, app
 
 Run adversarial review on a PM artifact via the pm-critic sub-agent. Returns findings graded P0/P1/P2/P3 with a concrete fix suggestion per finding and a machine-readable status block. Use after producing a PRD, meeting recap, OKR set, persona, or any PM artifact you want stress-tested before it ships.
 
+#### pm-figjam-facilitator
+**Path:** `skills/utility-pm-figjam-facilitator/SKILL.md`
+
+Runs the FigJam board loop through the pm-figjam-facilitator sub-agent, routing to build, run, or harvest depending on where the board already is. Use on any AI client to work a board without depending on native plugin sub-agent support. Dispatches natively on Claude Code and executes the agent definition inline elsewhere. Requires a connected Figma MCP server for board authoring and says so plainly when one is unreachable.
+
 #### pm-release-conductor
 **Path:** `skills/utility-pm-release-conductor/SKILL.md`
 
@@ -472,7 +477,7 @@ v2.29.0 adds a sixth sub-agent:
 
 This release adds a seventh sub-agent:
 
-- `pm-figjam-facilitator` - owns the FigJam loop (build a board, run a session on it, harvest it back into a written artifact) and routes to the right step based on where the board already is. Declares the `Skill` tool to delegate to `utility-figjam-board`, `utility-figjam-workshop`, and `utility-figjam-harvest`; it adds no chain-permission entry and spawns no sub-agents. Board authoring requires a connected Figma MCP server, and the agent reports plainly when one is unreachable rather than claiming a board exists. Ships UNVERIFIED pending a cross-client smoke test.
+- `pm-figjam-facilitator` - owns the FigJam loop (build a board, run a session on it, harvest it back into a written artifact) and routes to the right step based on where the board already is. Declares the `Skill` tool to delegate to `utility-figjam-board`, `utility-figjam-workshop`, and `utility-figjam-harvest`; it adds no chain-permission entry and spawns no sub-agents. Board authoring requires a connected Figma MCP server, and the agent reports plainly when one is unreachable rather than claiming a board exists. Reachable on non-Claude clients through its dispatch skill at `skills/utility-pm-figjam-facilitator/`. Ships UNVERIFIED pending a cross-client smoke test.
 
 The canonical sub-agents catalog with full audience, trigger, lifetime, tool surface, and composition data lives at the [runtime components reference](https://product-on-purpose.github.io/pm-skills/reference/runtime-components/). Sub-agent definition files live at `agents/{name}.md`, the fixed path Claude Code's plugin runtime auto-discovers (renamed from `subagents/` in v2.17.0 W2).
 
@@ -480,7 +485,7 @@ The canonical sub-agents catalog with full audience, trigger, lifetime, tool sur
 
 Sub-agents are a Claude Code plugin feature. Non-Claude clients (Codex CLI, Cursor, Windsurf, Copilot, Gemini CLI) access sub-agent intent via dispatch skills at `skills/utility-pm-{role}/`. Dispatch skills detect runtime and dispatch appropriately: native sub-agent on Claude Code, or "read agent definition and execute inline" on other clients. codex-rescue is an optional shortcut for users with both Claude Code and Codex CLI; it is NOT a baseline requirement.
 
-All 4 dispatch skills shipped in v2.16.0 with Codex CLI VALIDATED 2026-05-17 (GATE B + C PASS). Cursor / Windsurf / Copilot CLI / Gemini CLI status is EXPERIMENTAL pending v2.17 cross-client expansion. See the canonical [Sub-Agent Compatibility Matrix](https://product-on-purpose.github.io/pm-skills/reference/sub-agent-compatibility/) for per-sub-agent + per-client status, safe-usage guidance, and how-to-validate-a-new-client maintainer guide. Mechanism details at [runtime components: cross-client compatibility](https://product-on-purpose.github.io/pm-skills/reference/runtime-components/#cross-client-compatibility).
+Six dispatch skills now exist, one per user-facing sub-agent. The original 4 shipped in v2.16.0 with Codex CLI VALIDATED 2026-05-17 (GATE B + C PASS); `utility-pm-workflow-orchestrator` (v2.24.0) and `utility-pm-figjam-facilitator` are UNVERIFIED on every client pending a smoke test. Cursor / Windsurf / Copilot CLI / Gemini CLI status is EXPERIMENTAL pending v2.17 cross-client expansion. See the canonical [Sub-Agent Compatibility Matrix](https://product-on-purpose.github.io/pm-skills/reference/sub-agent-compatibility/) for per-sub-agent + per-client status, safe-usage guidance, and how-to-validate-a-new-client maintainer guide. Mechanism details at [runtime components: cross-client compatibility](https://product-on-purpose.github.io/pm-skills/reference/runtime-components/#cross-client-compatibility).
 
 ---
 

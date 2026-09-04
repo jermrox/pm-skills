@@ -144,7 +144,7 @@ test('every catalog skill is either rostered or excluded, exactly once', () => {
 test('roster and pairs are internally consistent', () => {
   // Drift tripwire on the current numbers. The completeness guarantee lives in the
   // set-equality test above; these two lines only catch an unintended change in size.
-  assert.equal(ROSTER.length, 56);
+  assert.equal(ROSTER.length, 57);
   assert.equal(EXCLUDED.length, 15);
   for (const [a, b] of COLLISION_PAIRS) {
     assert.ok(ROSTER.includes(a), `${a} in roster`);

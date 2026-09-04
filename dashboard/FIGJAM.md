@@ -18,7 +18,9 @@ writes prompts about. Three utility skills own the loop:
 
 `pm-figjam-facilitator` is the sub-agent that owns all three and picks the right
 step from where your board already is. Invoke it by name, or invoke any skill
-directly.
+directly. On clients without native sub-agent support (Codex CLI, Cursor,
+Windsurf, Copilot, Gemini CLI), reach it through its dispatch skill,
+`utility-pm-figjam-facilitator`.
 
 Prompts, headers, and examples on a generated board are TEXT nodes, never
 stickies. A sticky means a participant put it there, so seeding with
@@ -37,9 +39,11 @@ node scripts/figjam-board.mjs --skill foundation-lean-canvas --script
 
 Hand the `--script` output to the Figma MCP `use_figma` tool with your file key.
 The dashboard's FigJam Studio shows the same generated script next to the
-prompt. 9 of the 12 workflows build a board; `triple-diamond`, `lean-startup`,
-and `foundation-to-design` are organized by phase rather than steps, so they are
-refused with a pointer to build from a member skill instead of being guessed at.
+prompt. All 12 workflows build: step-organized ones lay out one section per
+step, and phase-organized ones (Triple Diamond, Lean Startup, Foundation to
+Design) lay out one section per phase and draw the go/no-go gates those
+workflows declare, as diamonds carrying the source's own transition criteria.
+A gate is drawn only where the source states one.
 
 The patterns below explain the setup and how the three skills fit together.
 

@@ -61,7 +61,7 @@ export const BATCHES = {
   // FigJam loop (unreleased): one batch, because all three of its collision pairs
   // are internal to the trio. Splitting them would measure each against skills it
   // does not actually collide with.
-  'collision-figjam': ['utility-figjam-board', 'utility-figjam-workshop', 'utility-figjam-harvest'],
+  'collision-figjam': ['utility-figjam-board', 'utility-figjam-workshop', 'utility-figjam-harvest', 'utility-pm-figjam-facilitator'],
 };
 
 /** Parse headless output (stream-json lines or a single JSON document) into events. */

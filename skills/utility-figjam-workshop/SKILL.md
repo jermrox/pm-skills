@@ -33,6 +33,7 @@ Turn a prepared board into a session that ends with decisions. This skill produc
 - You need the attendee-facing agenda document rather than a facilitator run sheet. Use `foundation-meeting-agenda`; that artifact is shared, this one is operational.
 - You need the post-session summary for attendees. Use `foundation-meeting-recap`.
 - The decision belongs to one person who simply needs to make it. A workshop adds ceremony without adding information.
+- You are not sure which step of the loop you are at, or you want the router rather than a named step -> use `utility-pm-figjam-facilitator`, which picks build, run, or harvest from where the board already is.
 
 ## Roles
 

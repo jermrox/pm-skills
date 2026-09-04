@@ -31,6 +31,7 @@ Boards decay. People clear vote dots, drag stickies, and archive files, and six 
 - You have interview transcripts rather than a board. Use `discover-interview-synthesis`.
 - You want the attendee-facing meeting summary rather than a board-to-artifact conversion. Use `foundation-meeting-recap`.
 - The board is one person's scratch thinking. Harvesting it lends solo notes the authority of group output.
+- You are not sure which step of the loop you are at, or you want the router rather than a named step -> use `utility-pm-figjam-facilitator`, which picks build, run, or harvest from where the board already is.
 
 ## The Evidence Rule
 

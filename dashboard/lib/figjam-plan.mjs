@@ -49,17 +49,65 @@ export function planFromWorkflow(slug) {
     return m ? clean(m[1]) : '';
   };
 
-  const steps = [];
-  // Two heading shapes in the catalog: "### Step 1: Title" and the sprint
-  // workflows' "### Step 1 (Monday, 90 min): Title". Workflows organised some
-  // other way (lean-startup, triple-diamond) have no step headings at all and
-  // are refused below rather than guessed at.
+  // Two shapes exist in the catalog. Step-shaped workflows walk a numbered
+  // sequence; phase-shaped ones (triple-diamond, lean-startup,
+  // foundation-to-design) group work under phases and carry explicit
+  // transition criteria, which are real go/no-go gates. Try steps first,
+  // because a workflow with steps is the more specific case.
+  let built = buildFromSteps(body, row);
+  if (!built) built = buildFromPhases(body, row);
+  if (!built) {
+    throw new Error(
+      `${slug}.md has neither "### Step N:" nor "## Phase N:" headings, so it declares ` +
+      'no sequence to lay out. Build a board from one of its member skills instead, with --skill.');
+  }
+
+  return {
+    title: `${data.title || slug}: workflow board`,
+    sourceType: 'workflow',
+    sourceFile: path.join('_workflows', `${slug}.md`),
+    finalOutput: row('Final Output'),
+    sections: withLayout(built.sections),
+    connectors: built.connectors,
+  };
+}
+
+/** The Inputs section, shared by both workflow shapes. */
+function inputsSection(row, firstLabel) {
+  const inputs = row('Prerequisite Inputs');
+  return {
+    key: 'inputs',
+    name: 'Inputs',
+    header: 'Inputs',
+    // Guidance text, not participant content, so these become TEXT nodes.
+    body: inputs
+      ? [`What this workflow needs before ${firstLabel}: ${inputs}`, 'Add what you already have below.']
+      : ['This workflow declares no prerequisite inputs. Add what you are starting from below.'],
+    sourced: Boolean(inputs),
+    from: 'Workflow metadata, Prerequisite Inputs',
+  };
+}
+
+const openQuestionsSection = () => ({
+  key: 'open-questions',
+  name: 'Open questions',
+  header: 'Open questions',
+  body: ['Anything unresolved. Carried to the next session rather than quietly dropped.'],
+  sourced: false,
+  from: 'Appended by utility-figjam-board',
+});
+
+/** Step-shaped workflows: "### Step 1: Title" and the sprint variant
+ *  "### Step 1 (Monday, 90 min): Title". Returns null when none are found.
+ *  These sources declare no gates, so none are invented here. */
+export function buildFromSteps(body, row) {
   const stepRe = /^### Step (\d+)(?:\s*\(([^)]*)\))?:\s*(.+)$/gm;
   const marks = [...body.matchAll(stepRe)];
+  if (!marks.length) return null;
+
+  const steps = [];
   for (let i = 0; i < marks.length; i++) {
-    const start = marks[i].index;
-    const end = i + 1 < marks.length ? marks[i + 1].index : body.length;
-    const chunk = body.slice(start, end);
+    const chunk = body.slice(marks[i].index, i + 1 < marks.length ? marks[i + 1].index : body.length);
     const skill = /\*\*Skill:\*\*\s*(.+)/.exec(chunk);
     const output = /\*\*Output:\*\*\s*([\s\S]*?)(?:\n\n|\n\*\*)/.exec(chunk);
     const handoff = /\*\*Handoff to next step:\*\*\s*([\s\S]*?)(?:\n\n|\n---|$)/.exec(chunk);
@@ -72,25 +120,8 @@ export function planFromWorkflow(slug) {
       handoff: handoff ? clean(handoff[1]) : '',
     });
   }
-  if (!steps.length) {
-    throw new Error(
-      `${slug}.md has no "### Step N:" headings, so it declares no step sequence to lay out. ` +
-      'Build a board from one of its member skills instead, with --skill.');
-  }
 
-  const sections = [];
-  const inputs = row('Prerequisite Inputs');
-  sections.push({
-    key: 'inputs',
-    name: 'Inputs',
-    header: 'Inputs',
-    // Guidance text, not participant content, so these become TEXT nodes.
-    body: inputs
-      ? [`What this workflow needs before Step 1: ${inputs}`, 'Add what you already have below.']
-      : ['This workflow declares no prerequisite inputs. Add what you are starting from below.'],
-    sourced: Boolean(inputs),
-    from: 'Workflow metadata, Prerequisite Inputs',
-  });
+  const sections = [inputsSection(row, 'Step 1')];
   for (const s of steps) {
     sections.push({
       key: `step-${s.n}`,
@@ -106,20 +137,12 @@ export function planFromWorkflow(slug) {
       from: `Workflow Step ${s.n}`,
     });
   }
-  sections.push({
-    key: 'open-questions',
-    name: 'Open questions',
-    header: 'Open questions',
-    body: ['Anything unresolved. Carried to the next session rather than quietly dropped.'],
-    sourced: false,
-    from: 'Appended by utility-figjam-board',
-  });
+  sections.push(openQuestionsSection());
 
   const connectors = [];
   for (let i = 0; i < steps.length; i++) {
-    const from = i === 0 ? 'inputs' : `step-${steps[i - 1].n}`;
     connectors.push({
-      from,
+      from: i === 0 ? 'inputs' : `step-${steps[i - 1].n}`,
       to: `step-${steps[i].n}`,
       label: i === 0 ? 'start' : truncate(steps[i - 1].handoff || 'next', 60),
     });
@@ -129,15 +152,142 @@ export function planFromWorkflow(slug) {
     to: 'open-questions',
     label: 'unresolved',
   });
+  return { sections, connectors };
+}
 
-  return {
-    title: `${data.title || slug}: workflow board`,
-    sourceType: 'workflow',
-    sourceFile: path.join('_workflows', `${slug}.md`),
-    finalOutput: row('Final Output'),
-    sections: withLayout(sections),
-    connectors,
-  };
+/** Phase-shaped workflows: "## Phase 1: Discover" or "## Part 1: ...", each
+ *  carrying a Goal, one or more Skills tables, Key Outputs, and transition
+ *  criteria. The transition criteria become gates on the connector out of the
+ *  phase; they are the workflow author's own go/no-go wording. Returns null
+ *  when no phase headings are found. */
+export function buildFromPhases(body, row) {
+  const phaseRe = /^## (?:Phase|Part) (\d+):\s*(.+)$/gm;
+  const marks = [...body.matchAll(phaseRe)];
+  if (!marks.length) return null;
+
+  const phases = [];
+  for (let i = 0; i < marks.length; i++) {
+    const chunk = body.slice(marks[i].index, i + 1 < marks.length ? marks[i + 1].index : body.length);
+    phases.push({
+      n: marks[i][1],
+      title: clean(marks[i][2]),
+      goal: matchLabel(chunk, 'Goal'),
+      skills: skillsFromTables(chunk),
+      outputs: bulletsUnder(chunk, /^### Key Outputs\s*$/m).slice(0, 4),
+      gate: gateFrom(chunk),
+    });
+  }
+
+  // marks[i][0] is the whole heading line, so it starts with "## ".
+  const label = /^##\s+Phase\b/.test(marks[0][0]) ? 'Phase' : 'Part';
+  const sections = [inputsSection(row, `${label} ${phases[0].n}`)];
+  for (const p of phases) {
+    sections.push({
+      key: `phase-${p.n}`,
+      name: `${label} ${p.n}`,
+      header: `${label} ${p.n}: ${p.title}`,
+      body: [
+        p.goal ? `Goal: ${p.goal}` : null,
+        p.skills.length ? `Skills: ${p.skills.join(', ')}` : 'Skills: (none named in the source)',
+        ...p.outputs.map((o) => `Produces: ${o}`),
+        'Work below. Add the artifact link when the phase is done.',
+      ].filter(Boolean),
+      sourced: Boolean(p.goal || p.skills.length || p.outputs.length),
+      from: `Workflow ${label} ${p.n}`,
+    });
+  }
+  sections.push(openQuestionsSection());
+
+  const connectors = [];
+  for (let i = 0; i < phases.length; i++) {
+    const c = {
+      from: i === 0 ? 'inputs' : `phase-${phases[i - 1].n}`,
+      to: `phase-${phases[i].n}`,
+      label: i === 0 ? 'start' : '',
+    };
+    // The gate belongs to the phase being LEFT, so it sits on the connector
+    // out of it.
+    const leaving = i === 0 ? null : phases[i - 1];
+    if (leaving && leaving.gate) c.gate = leaving.gate;
+    if (c.gate) c.label = '';
+    connectors.push(c);
+  }
+  const last = phases[phases.length - 1];
+  const tail = { from: `phase-${last.n}`, to: 'open-questions', label: 'unresolved' };
+  if (last.gate) { tail.gate = last.gate; tail.label = ''; }
+  connectors.push(tail);
+  return { sections, connectors };
+}
+
+/** A `**Label:** value` line. */
+function matchLabel(chunk, label) {
+  const m = new RegExp(`\\*\\*${label}:\\*\\*\\s*(.+)`).exec(chunk);
+  return m ? clean(m[1]) : '';
+}
+
+/** Skill names out of every markdown table in a phase block. Rows look like
+ *  `| [\`define-hypothesis\`](../skills/define-hypothesis/SKILL.md) | ... |`,
+ *  so the link target is the reliable source, not the display text. */
+function skillsFromTables(chunk) {
+  const names = [];
+  for (const m of chunk.matchAll(/\]\(\.\.\/skills\/([a-z0-9-]+)\/SKILL\.md\)/g)) {
+    if (!names.includes(m[1])) names.push(m[1]);
+  }
+  return names;
+}
+
+/** Bullet lines in the block that follows a heading, stopping at the next
+ *  heading of any level. */
+function bulletsUnder(chunk, headingRe) {
+  const lines = chunk.split(/\r?\n/);
+  const start = lines.findIndex((l) => headingRe.test(l));
+  if (start === -1) return [];
+  const out = [];
+  for (let i = start + 1; i < lines.length; i++) {
+    if (/^#{2,4}\s/.test(lines[i])) break;
+    const b = /^\s*[-*]\s+(?:\[[ xX]\]\s*)?(.+)$/.exec(lines[i]);
+    if (b) out.push(clean(b[1]));
+  }
+  return out;
+}
+
+/** The phase's go/no-go gate, taken verbatim from the source. Two headings
+ *  carry it: "### Transition Criteria" in triple-diamond and lean-startup, and
+ *  "### Go / no-go checkpoint..." in foundation-to-design. Returns null when
+ *  the phase declares none, so no gate is invented. */
+function gateFrom(chunk) {
+  // Three headings carry the same thing under different names:
+  // "Transition Criteria" (triple-diamond), "Go / no-go checkpoint"
+  // (foundation-to-design), and "<Name> Phase Checklist" (lean-startup), which
+  // is a checkbox list of what must hold before leaving the phase.
+  const headings = [
+    /^### Transition Criteria\s*$/m,
+    /^### Go \/ no-go checkpoint.*$/m,
+    /^### .*Phase Checklist\s*$/m,
+  ];
+  for (const h of headings) {
+    const lines = chunk.split(/\r?\n/);
+    const start = lines.findIndex((l) => h.test(l));
+    if (start === -1) continue;
+    // The question is the first non-bullet prose line, e.g. "Move to Define
+    // when:". A checklist has none, so the author's own heading stands in
+    // rather than a generic label this skill made up.
+    let question = '';
+    for (let i = start + 1; i < lines.length && i < start + 6; i++) {
+      if (/^#{2,4}\s/.test(lines[i])) break;
+      const s = lines[i].trim();
+      if (!s || /^[-*]/.test(s)) continue;
+      question = clean(s);
+      break;
+    }
+    const criteria = bulletsUnder(chunk, h);
+    if (!question && !criteria.length) continue;
+    return {
+      question: question || clean(lines[start].replace(/^#+\s*/, '')),
+      criteria: criteria.slice(0, 5),
+    };
+  }
+  return null;
 }
 
 /** Board plan from a `skills/<name>/SKILL.md`: one section per element of the

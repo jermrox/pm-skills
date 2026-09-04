@@ -33,6 +33,7 @@ Turn written PM material into a board a team can actually work on. This skill co
 - You need a diagram inside a document rather than a collaborative canvas. Use `utility-mermaid-diagrams`.
 - You need polished UI or design-system work in Figma Design rather than a FigJam whiteboard. That is Figma Design territory and outside this skill.
 - No Figma MCP server is connected and nobody will build the board by hand. Produce the plan anyway, but say plainly that it has not been created.
+- You are not sure which step of the loop you are at, or you want the router rather than a named step -> use `utility-pm-figjam-facilitator`, which picks build, run, or harvest from where the board already is.
 
 ## Prerequisites
 
@@ -52,6 +53,7 @@ Every board this skill builds uses the same five elements, so a team that has wo
 | **Prompt text** | The header and the guidance the builder places | A TEXT node, never a sticky (see below) |
 | **Working area** | Empty space inside a section for participants | Always present, always larger than the prompts |
 | **Connector** | Order, dependency, or flow between sections | Labeled when the relationship is not obvious from position |
+| **Gate** | A go/no-go decision between two sections | A diamond carrying the source's own transition criteria; the flow routes section, gate, section. Drawn only where the source declares one |
 | **Legend** | What the node types, colors, and sections mean | One per board, always included |
 
 The legend is not optional. A board without one is a board only its author can read.
@@ -70,7 +72,9 @@ section that hugs its content tells the team there is no room to add anything.
 
 **From a skill.** One section per major element of the skill's output contract, in the contract's own order. Prepend a section for the inputs the skill requires and append one for open questions. Seed each output section with two or three stickies drawn from the skill's `references/EXAMPLE.md` when it has one.
 
-**From a workflow.** One section per step, in sequence, each labeled with the pm-skill that runs there. Connect steps in order. Mark every go/no-go gate with a distinct shape and label it with the decision the gate asks. Leave a slot beside each step for the artifact link the step produces.
+**From a step-organized workflow.** One section per step, in sequence, each labeled with the pm-skill that runs there. Connect steps in order, labeling each connector with the source's own handoff wording. Leave a slot beside each step for the artifact link the step produces. Step-shaped workflows declare no gates, so none are drawn; a gate that is not in the source is not a gate.
+
+**From a phase-organized workflow.** Some workflows group work under phases rather than numbered steps (Triple Diamond, Lean Startup, Foundation to Design). One section per phase, carrying the phase's stated goal, the skills its tables link to, and its key outputs. These workflows declare their gates explicitly, under `Transition Criteria`, `Go / no-go checkpoint`, or a phase checklist, so the gate carries the author's own wording rather than a summary of it.
 
 **From an artifact.** One section per top-level heading of the artifact, holding the actual content as read-only stickies, plus a parallel "challenge" lane where the team places disagreements and gaps. The point is to make the artifact contestable, so the challenge lane gets equal visual weight.
 
@@ -92,8 +96,9 @@ explicit `text.fontName` on new connectors (theirs is invalid by default), one
 font load rather than one per node, and no `figma.createPage` (unavailable in
 FigJam).
 
-A workflow with no `### Step N:` headings is refused with a pointer to build
-from a member skill instead, rather than guessed at.
+All 12 catalog workflows build. Step-shaped and phase-shaped sources are both
+handled; a workflow with neither shape is refused with a pointer to build from a
+member skill instead, rather than guessed at.
 
 ## Instructions
 
@@ -121,7 +126,7 @@ Report back with all four:
 - [ ] Prompts quote or paraphrase real source content, never invented examples
 - [ ] Prompts are text nodes; no sticky was placed by the builder
 - [ ] Sections are sized to expected activity, not hugged to the placed prompts
-- [ ] Gates and decision points are marked and labeled with the question they ask
+- [ ] Gates are drawn only where the source declares transition criteria, and carry its wording verbatim
 - [ ] A legend exists and explains every color and mark used
 - [ ] The board link and section inventory were returned to the user
 
