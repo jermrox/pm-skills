@@ -206,11 +206,23 @@ function deriveCommandName(dirname) {
   }
   return dirname;
 }
-// Source SKILL.md uses "](../../docs/X" which resolves from skills/<dir>/; once
-// copied into docs/skills/<group>/ the docs/ segment must drop so the link
-// resolves inside the docs tree.
-function rewriteInternalPaths(text) {
-  return text.replace(/\]\(\.\.\/\.\.\/docs\//g, '](../../');
+// Source files link the published docs by their real on-disk path,
+// "](../../site/src/content/docs/X", so the link also resolves for a GitHub
+// reader and for an agent resolving from disk. Everything inlined here lands in
+// docs/skills/<group>/<name>.md, two levels below the docs root, so the prefix
+// collapses to "](../../" whatever depth the source used.
+//
+// Two depths reach this function. SKILL.md sits at skills/<dir>/ and uses
+// "../../"; references/TEMPLATE.md and references/EXAMPLE.md sit one level
+// deeper and use "../../../", but their content is INLINED into the same skill
+// page, so both normalise to the page's depth rather than their own. The old
+// two-level-only rule silently left the deeper form unrewritten, which shipped
+// three broken links on the live site (adversarial-review once,
+// release-runbook twice).
+export function rewriteInternalPaths(text) {
+  return text
+    .replace(/\]\(\.\.\/\.\.\/\.\.\/site\/src\/content\/docs\//g, '](../../')
+    .replace(/\]\(\.\.\/\.\.\/site\/src\/content\/docs\//g, '](../../');
 }
 
 // --- sample parsing (ported from the Python generators) ---------------------
@@ -530,13 +542,13 @@ function extractPhase(skillDir) {
   }
   return skillDir.split('-')[0];
 }
-function rewriteWorkflowLinks(content) {
+export function rewriteWorkflowLinks(content) {
   content = content.replace(
     /(\]\()\.\.\/skills\/([a-z][a-z0-9-]+)\/SKILL\.md(\))/g,
     (_, pre, skillDir, post) => `${pre}../skills/${extractPhase(skillDir)}/${skillDir}.md${post}`,
   );
   content = content.replaceAll('](../README.md)', `](${GITHUB_BASE}/README.md)`);
-  content = content.replace(/(\]\()\.\.\/docs\//g, '$1../');
+  content = content.replace(/(\]\()\.\.\/site\/src\/content\/docs\//g, '$1../');
   return content;
 }
 function injectGeneratedMarker(content, srcName) {
