@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "skill": "utility-figjam-workshop",
+  "runs_per_query": 3,
+  "trigger_threshold": 0.5,
+  "queries": [
+    {
+      "q": "Facilitate tomorrow's session on our FigJam board and get us to a decision",
+      "expect": "trigger",
+      "split": "train"
+    },
+    {
+      "q": "Our workshops produce a wall of stickies and no decisions, help me structure one",
+      "expect": "trigger",
+      "split": "train"
+    },
+    {
+      "q": "Give me a run sheet with timeboxes for the prioritization board",
+      "expect": "trigger",
+      "split": "train"
+    },
+    {
+      "q": "How do I run a remote whiteboard session so the quiet people actually contribute?",
+      "expect": "trigger",
+      "split": "train"
+    },
+    {
+      "q": "Set up roles and voting for our design sprint decide session",
+      "expect": "trigger",
+      "split": "train"
+    },
+    {
+      "q": "We need a Decider and a protocol for Friday's board session",
+      "expect": "trigger",
+      "split": "validation"
+    },
+    {
+      "q": "Plan the timeboxes backwards from our 90 minute hard stop",
+      "expect": "trigger",
+      "split": "validation"
+    },
+    {
+      "q": "Run the silent write and clustering rounds on this canvas",
+      "expect": "trigger",
+      "split": "validation"
+    },
+    {
+      "q": "Create the FigJam board with a section per workflow step",
+      "expect": "no-trigger",
+      "split": "train",
+      "near_miss_of": "utility-figjam-board"
+    },
+    {
+      "q": "Build the canvas before the session with seeded stickies",
+      "expect": "no-trigger",
+      "split": "train",
+      "near_miss_of": "utility-figjam-board"
+    },
+    {
+      "q": "Write up what came out of yesterday's board into a problem statement",
+      "expect": "no-trigger",
+      "split": "train",
+      "near_miss_of": "utility-figjam-harvest"
+    },
+    {
+      "q": "Convert the finished board into a document before we archive it",
+      "expect": "no-trigger",
+      "split": "train",
+      "near_miss_of": "utility-figjam-harvest"
+    },
+    {
+      "q": "Draft the agenda I send attendees before the meeting",
+      "expect": "no-trigger",
+      "split": "train"
+    },
+    {
+      "q": "Summarize the meeting for people who could not attend",
+      "expect": "no-trigger",
+      "split": "validation"
+    },
+    {
+      "q": "Make a mermaid diagram of this approval flow",
+      "expect": "no-trigger",
+      "split": "validation"
+    },
+    {
+      "q": "Score our OKRs for the quarter",
+      "expect": "no-trigger",
+      "split": "validation"
+    }
+  ]
+}

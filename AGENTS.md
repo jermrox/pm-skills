@@ -244,6 +244,21 @@ Facilitates and documents a team retrospective capturing what went well, what to
 
 ### Utility Skills
 
+#### figjam-board
+**Path:** `skills/utility-figjam-board/SKILL.md`
+
+Builds a structured FigJam board from a pm-skills skill, workflow, or finished artifact using the Figma MCP server, laying out sections, seeded sticky notes, connectors, and a legend so a team can work the material visually. Use when preparing a workshop canvas, turning a written artifact into something a group can annotate, or staging a workflow as a shared plan. For running the session on the board, use utility-figjam-workshop.
+
+#### figjam-harvest
+**Path:** `skills/utility-figjam-harvest/SKILL.md`
+
+Reads a worked FigJam board and converts its stickies, clusters, votes, and decisions into a structured written artifact with every claim traced to a specific sticky. Use after a workshop when board content must become a durable document, or when handing board output to a downstream pm-skill. Refuses to invent content for illegible or empty regions. For building or running the board, use utility-figjam-board or utility-figjam-workshop.
+
+#### figjam-workshop
+**Path:** `skills/utility-figjam-workshop/SKILL.md`
+
+Runs a facilitated working session on a FigJam board, producing a timeboxed run sheet with roles, a silent-first contribution sequence, voting mechanics, and a decision record. Use when a group needs to work a board together and you want the session to produce durable decisions rather than a wall of unsorted stickies. For building the board beforehand, use utility-figjam-board. For turning the finished board into an artifact, use utility-figjam-harvest.
+
 #### mermaid-diagrams
 **Path:** `skills/utility-mermaid-diagrams/SKILL.md`
 
@@ -258,6 +273,11 @@ Draft CHANGELOG entries from git log via the pm-changelog-curator sub-agent, app
 **Path:** `skills/utility-pm-critic/SKILL.md`
 
 Run adversarial review on a PM artifact via the pm-critic sub-agent. Returns findings graded P0/P1/P2/P3 with a concrete fix suggestion per finding and a machine-readable status block. Use after producing a PRD, meeting recap, OKR set, persona, or any PM artifact you want stress-tested before it ships.
+
+#### pm-figjam-facilitator
+**Path:** `skills/utility-pm-figjam-facilitator/SKILL.md`
+
+Runs the FigJam board loop through the pm-figjam-facilitator sub-agent, routing to build, run, or harvest depending on where the board already is. Use on any AI client to work a board without depending on native plugin sub-agent support. Dispatches natively on Claude Code and executes the agent definition inline elsewhere. Requires a connected Figma MCP server for board authoring and says so plainly when one is unreachable.
 
 #### pm-release-conductor
 **Path:** `skills/utility-pm-release-conductor/SKILL.md`
@@ -455,13 +475,17 @@ v2.29.0 adds a sixth sub-agent:
 
 - `pm-skill-router` - an internal tooling instrument (NOT a user-facing PM sub-agent): given the catalog and a single query, it returns the one skill that would fire, judging by `description:` match only. It is the key-free engine behind the new-skill collision gate and the trigger router-eval (dispatched on the subscription, Haiku-pinned by default). It has no dispatch skill and is not invoked directly by users.
 
+This release adds a seventh sub-agent:
+
+- `pm-figjam-facilitator` - owns the FigJam loop (build a board, run a session on it, harvest it back into a written artifact) and routes to the right step based on where the board already is. Declares the `Skill` tool to delegate to `utility-figjam-board`, `utility-figjam-workshop`, and `utility-figjam-harvest`; it adds no chain-permission entry and spawns no sub-agents. Board authoring requires a connected Figma MCP server, and the agent reports plainly when one is unreachable rather than claiming a board exists. Reachable on non-Claude clients through its dispatch skill at `skills/utility-pm-figjam-facilitator/`. Ships UNVERIFIED pending a cross-client smoke test.
+
 The canonical sub-agents catalog with full audience, trigger, lifetime, tool surface, and composition data lives at the [runtime components reference](https://product-on-purpose.github.io/pm-skills/reference/runtime-components/). Sub-agent definition files live at `agents/{name}.md`, the fixed path Claude Code's plugin runtime auto-discovers (renamed from `subagents/` in v2.17.0 W2).
 
 ### Cross-client compatibility
 
 Sub-agents are a Claude Code plugin feature. Non-Claude clients (Codex CLI, Cursor, Windsurf, Copilot, Gemini CLI) access sub-agent intent via dispatch skills at `skills/utility-pm-{role}/`. Dispatch skills detect runtime and dispatch appropriately: native sub-agent on Claude Code, or "read agent definition and execute inline" on other clients. codex-rescue is an optional shortcut for users with both Claude Code and Codex CLI; it is NOT a baseline requirement.
 
-All 4 dispatch skills shipped in v2.16.0 with Codex CLI VALIDATED 2026-05-17 (GATE B + C PASS). Cursor / Windsurf / Copilot CLI / Gemini CLI status is EXPERIMENTAL pending v2.17 cross-client expansion. See the canonical [Sub-Agent Compatibility Matrix](https://product-on-purpose.github.io/pm-skills/reference/sub-agent-compatibility/) for per-sub-agent + per-client status, safe-usage guidance, and how-to-validate-a-new-client maintainer guide. Mechanism details at [runtime components: cross-client compatibility](https://product-on-purpose.github.io/pm-skills/reference/runtime-components/#cross-client-compatibility).
+Six dispatch skills now exist, one per user-facing sub-agent. The original 4 shipped in v2.16.0 with Codex CLI VALIDATED 2026-05-17 (GATE B + C PASS); `utility-pm-workflow-orchestrator` (v2.24.0) and `utility-pm-figjam-facilitator` are UNVERIFIED on every client pending a smoke test. Cursor / Windsurf / Copilot CLI / Gemini CLI status is EXPERIMENTAL pending v2.17 cross-client expansion. See the canonical [Sub-Agent Compatibility Matrix](https://product-on-purpose.github.io/pm-skills/reference/sub-agent-compatibility/) for per-sub-agent + per-client status, safe-usage guidance, and how-to-validate-a-new-client maintainer guide. Mechanism details at [runtime components: cross-client compatibility](https://product-on-purpose.github.io/pm-skills/reference/runtime-components/#cross-client-compatibility).
 
 ---
 

@@ -64,7 +64,7 @@ See `references/TEMPLATE.md` for the canonical output structure (with the layere
 
 ## Cross-Client Notes
 
-See [Sub-Agent Compatibility Matrix](../../docs/reference/sub-agent-compatibility.md) for the canonical cross-client status of all 4 sub-agents + dispatch skills. Summary for this skill as of v2.16.0: PRODUCTION on Claude Code + Codex CLI; EXPERIMENTAL on Cursor / Windsurf / Copilot CLI / Gemini CLI. Maintainers wanting cross-client confidence on a non-Claude client can re-run the [`maintainer-gate-testing-codex.md`](../../docs/internal/release-plans/v2.16.0/maintainer-gate-testing-codex.md) harness on that client.
+See [Sub-Agent Compatibility Matrix](../../site/src/content/docs/reference/sub-agent-compatibility.md) for the canonical cross-client status of all 4 sub-agents + dispatch skills. Summary for this skill as of v2.16.0: PRODUCTION on Claude Code + Codex CLI; EXPERIMENTAL on Cursor / Windsurf / Copilot CLI / Gemini CLI. Maintainers wanting cross-client confidence on a non-Claude client can re-run the [`maintainer-gate-testing-codex.md`](../../docs/internal/release-plans/v2.16.0/maintainer-gate-testing-codex.md) harness on that client.
 
 The "read and execute inline" pattern depends on the AI being able to:
 
@@ -78,7 +78,7 @@ If any of these are unreliable on a given client, that client cannot use this di
 
 - Canonical sub-agent definition: [`agents/pm-critic.md`](../../agents/pm-critic.md)
 - Behavioral spec: [`docs/internal/release-plans/v2.16.0/spec_pm-critic.md`](../../docs/internal/release-plans/v2.16.0/spec_pm-critic.md)
-- User-facing guide: [`docs/guides/adversarial-review.md`](../../docs/guides/adversarial-review.md)
-- Runtime components catalog: [`docs/reference/runtime-components.md`](../../docs/reference/runtime-components.md)
+- User-facing guide: [`docs/guides/adversarial-review.md`](../../site/src/content/docs/guides/adversarial-review.md)
+- Runtime components catalog: [`docs/reference/runtime-components.md`](../../site/src/content/docs/reference/runtime-components.md)
 - Output template: `references/TEMPLATE.md`
 - Worked example: `references/EXAMPLE.md`

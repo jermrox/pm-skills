@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "skill": "utility-pm-figjam-facilitator",
+  "runs_per_query": 3,
+  "trigger_threshold": 0.5,
+  "queries": [
+    { "q": "Help me with our FigJam board, I am not sure what stage we are at", "expect": "trigger", "split": "train" },
+    { "q": "Use the FigJam facilitator agent on this board", "expect": "trigger", "split": "train" },
+    { "q": "I am on Codex CLI and want to run the FigJam loop end to end", "expect": "trigger", "split": "train" },
+    { "q": "Take over our board work and pick the right step for us", "expect": "trigger", "split": "train" },
+    { "q": "Run the whole board process for the discovery workflow, start to finish", "expect": "trigger", "split": "train" },
+    { "q": "Which FigJam step should we be on and can you just do it", "expect": "trigger", "split": "validation" },
+    { "q": "Dispatch the figjam facilitator for me", "expect": "trigger", "split": "validation" },
+    { "q": "Handle the board, whatever stage it is in", "expect": "trigger", "split": "validation" },
+
+    { "q": "Build a FigJam board with one section per workflow step", "expect": "no-trigger", "split": "train", "near_miss_of": "utility-figjam-board" },
+    { "q": "Create the canvas with prompts drawn from the skill contract", "expect": "no-trigger", "split": "train", "near_miss_of": "utility-figjam-board" },
+    { "q": "Facilitate Thursday's session and get us to a decision", "expect": "no-trigger", "split": "train", "near_miss_of": "utility-figjam-workshop" },
+    { "q": "Give me the run sheet with roles and timeboxes", "expect": "no-trigger", "split": "train", "near_miss_of": "utility-figjam-workshop" },
+    { "q": "Pull the stickies off the board and write them up", "expect": "no-trigger", "split": "train", "near_miss_of": "utility-figjam-harvest" },
+    { "q": "Run adversarial review on this PRD", "expect": "no-trigger", "split": "validation" },
+    { "q": "Add a mermaid flowchart to this spec", "expect": "no-trigger", "split": "validation" },
+    { "q": "Walk the release runbook gates", "expect": "no-trigger", "split": "validation" }
+  ]
+}

@@ -76,7 +76,7 @@ test('template placeholders ({{path}}, {release-url}) are not treated as links',
   assert.equal(findBrokenLinks(t, opts).length, 0);
 });
 
-// --- relativeTargetResolves: per-file resolution + Pattern S relocation alias ---
+// --- relativeTargetResolves: plain per-file resolution, no alias ---
 const RR_ROOT = path.resolve('rr-root');
 const RR_FILEDIR = path.join(RR_ROOT, 'skills', 'foo');
 const rrExists = (list) => {
@@ -92,23 +92,34 @@ test('a real sibling link resolves from the file dir', () => {
   );
 });
 
-test('a retired docs/reference link resolves via the site relocation alias', () => {
+test('the retired docs/reference form now FAILS: the alias is gone', () => {
+  // Existing under site/src/content/docs/ used to excuse this link. It no
+  // longer does, so a regression back to the retired form fails the build
+  // instead of being absorbed.
   const sitePath = path.resolve(RR_ROOT, 'site', 'src', 'content', 'docs', 'reference', 'x.md');
   assert.equal(
     relativeTargetResolves('../../docs/reference/x.md', { fileDir: RR_FILEDIR, root: RR_ROOT, fileExists: rrExists([sitePath]) }),
-    true
+    false
   );
 });
 
-test('a retired docs/releases link resolves via the site relocation alias', () => {
+test('the retired docs/releases form now FAILS too', () => {
   const sitePath = path.resolve(RR_ROOT, 'site', 'src', 'content', 'docs', 'releases', 'Release_v2.24.0.md');
   assert.equal(
     relativeTargetResolves('../../docs/releases/Release_v2.24.0.md', { fileDir: RR_FILEDIR, root: RR_ROOT, fileExists: rrExists([sitePath]) }),
+    false
+  );
+});
+
+test('the replacement form, the real on-disk path, resolves', () => {
+  const sitePath = path.resolve(RR_FILEDIR, '../../site/src/content/docs/reference/x.md');
+  assert.equal(
+    relativeTargetResolves('../../site/src/content/docs/reference/x.md', { fileDir: RR_FILEDIR, root: RR_ROOT, fileExists: rrExists([sitePath]) }),
     true
   );
 });
 
-test('docs/internal (stayed at root) resolves at root, not via the alias', () => {
+test('docs/internal stayed at the repo root and still resolves directly', () => {
   const rootPath = path.resolve(RR_FILEDIR, '../../docs/internal/plan.md');
   assert.equal(
     relativeTargetResolves('../../docs/internal/plan.md', { fileDir: RR_FILEDIR, root: RR_ROOT, fileExists: rrExists([rootPath]) }),
