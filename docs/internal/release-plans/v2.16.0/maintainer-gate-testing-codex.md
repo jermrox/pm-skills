@@ -584,6 +584,6 @@ handoff_phrase_for_claude: |
 - Master plan D30 (single-tool user assumption + dispatch skill strategy): [`plan_v2.16.0.md`](./plan_v2.16.0.md)
 - Subagents integration plan Phase 2 Task 9 (GATE definitions): [`subagents-integration-plan.md`](./subagents-integration-plan.md)
 - Canonical samples for output-shape comparison: [`../../../library/sub-agent-samples/README.md`](../../../library/sub-agent-samples/README.md)
-- Release runbook conductor reads at invocation: [`../../../docs/contributing/release-runbook.md`](../../../docs/contributing/release-runbook.md)
+- Release runbook conductor reads at invocation: [`../../../../site/src/content/docs/contributing/release-runbook.md`](../../../../site/src/content/docs/contributing/release-runbook.md)
 - Phase 0 review closure (G1 attestation reference): commit `9cb81af`
 - Spike branch HEAD: `feat/v2.16-astro-6-spike` at commit `69c61b8` (PR #147 DRAFT)

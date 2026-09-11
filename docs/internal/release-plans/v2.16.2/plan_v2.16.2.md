@@ -211,7 +211,7 @@ Walk the 6-gate runbook via `/pm-release v2.16.2` (now natively dispatchable sin
 - v2.17.0 plan (next cycle; carries F-P0-01 + F-P2-02 + F-P2-03): [`../v2.17.0/plan_v2.17.0.md`](../v2.17.0/plan_v2.17.0.md)
 - Strategic roadmap: [`../../_working/roadmap_opus-4.7-max_2026-05-14.md`](../../_working/roadmap_opus-4.7-max_2026-05-14.md)
 - Roadmap delta: [`../../_working/roadmap_opus-4.7-max_2026-05-14_issues-conflicts.md`](../../_working/roadmap_opus-4.7-max_2026-05-14_issues-conflicts.md)
-- Release runbook (load-bearing artifact; G3 procedure): [`../../../contributing/release-runbook.md`](../../../contributing/release-runbook.md)
+- Release runbook (load-bearing artifact; G3 procedure): [`../../../../site/src/content/docs/contributing/release-runbook.md`](../../../../site/src/content/docs/contributing/release-runbook.md)
 
 ---
 

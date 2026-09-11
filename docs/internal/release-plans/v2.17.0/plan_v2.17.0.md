@@ -20,7 +20,7 @@ The reframe applies the `feedback_no-effort-doc-bloat` memory rule (for refactor
 - Strategic context: [`../../_working/roadmap_opus-4.7-max_2026-05-14.md`](../../_working/roadmap_opus-4.7-max_2026-05-14.md) Section 5 (R-05) + Section 6 (R-04 carryover)
 - Delta vs. roadmap: [`../../_working/roadmap_opus-4.7-max_2026-05-14_issues-conflicts.md`](../../_working/roadmap_opus-4.7-max_2026-05-14_issues-conflicts.md)
 - v2.16.1 plan (predecessor + carryover source): [`../v2.16.1/plan_v2.16.1.md`](../v2.16.1/plan_v2.16.1.md)
-- v2.16.1 known-limitation reference (sub-agent registration deferred to v2.17.0): [`../../../releases/Release_v2.16.1.md`](../../../releases/Release_v2.16.1.md)
+- v2.16.1 known-limitation reference (sub-agent registration deferred to v2.17.0): [`../../../../site/src/content/docs/releases/Release_v2.16.1.md`](../../../../site/src/content/docs/releases/Release_v2.16.1.md)
 - v2.17.0 spec for frontmatter migration: [`spec_frontmatter-metadata-migration.md`](spec_frontmatter-metadata-migration.md)
 - v2.17.0 spec for AGENTS rename: [`spec_agents-directory-rename.md`](spec_agents-directory-rename.md)
 
@@ -358,7 +358,7 @@ The companion `pm-skills-mcp` reads pm-skills' skill manifests. v2.17.0 frontmat
 - Roadmap delta + conflicts log: [`../../_working/roadmap_opus-4.7-max_2026-05-14_issues-conflicts.md`](../../_working/roadmap_opus-4.7-max_2026-05-14_issues-conflicts.md)
 - Marketplace identity rename (v3.0.0 target; out of v2.17.0 scope): [`../../marketplace-multi-plugin-migration_2026-05-18.md`](../../marketplace-multi-plugin-migration_2026-05-18.md)
 - v2.17 vs v3.0 release scoping: [`../../release-scoping-v2.17-and-v3.0_2026-05-18.md`](../../release-scoping-v2.17-and-v3.0_2026-05-18.md)
-- Release runbook (load-bearing artifact; G3 procedure): [`../../../contributing/release-runbook.md`](../../../contributing/release-runbook.md)
+- Release runbook (load-bearing artifact; G3 procedure): [`../../../../site/src/content/docs/contributing/release-runbook.md`](../../../../site/src/content/docs/contributing/release-runbook.md)
 
 ---
 

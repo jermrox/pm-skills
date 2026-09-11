@@ -150,7 +150,7 @@ The Codex flat-namespace collision risk on bare short names is an accepted, docu
 ### Repo docs this release touches
 | Doc | What it is for |
 |---|---|
-| [`docs/reference/runtime-components.md`](../../../reference/runtime-components.md) | The public reference describing the command/skill/workflow model. Currently inaccurate (a stale `/skill-name` claim and a "12 workflows" count); Phase 3 corrects it (10 workflows, skills-not-commands). |
+| [`../../../../../site/src/content/docs/reference/runtime-components.md`](../../../../../site/src/content/docs/reference/runtime-components.md) | The public reference describing the command/skill/workflow model. Currently inaccurate (a stale `/skill-name` claim and a "12 workflows" count); Phase 3 corrects it (10 workflows, skills-not-commands). |
 
 ## Notes
 - Per the repo convention against per-item effort docs, work items live as rows/subsections here and in `implementation-plan.md`; the standard and the map are the genuinely distinct deliverables that get companion files.

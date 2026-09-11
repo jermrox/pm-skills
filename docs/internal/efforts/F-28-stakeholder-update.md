@@ -7,7 +7,7 @@ Agent: Claude Opus 4.7
 
 ## Scope
 
-Create `foundation-stakeholder-update`, a post-meeting skill that produces async communication to stakeholders. primarily non-attendees who need to know outcomes, and secondarily some attendees who want a reference version. Different from `foundation-meeting-recap` in audience, format, and purpose: not a summary of what happened, but a translation of outcomes into what-it-means for readers. Conforms to the [Meeting Skills Family Contract](../reference/skill-families/meeting-skills-contract.md).
+Create `foundation-stakeholder-update`, a post-meeting skill that produces async communication to stakeholders. primarily non-attendees who need to know outcomes, and secondarily some attendees who want a reference version. Different from `foundation-meeting-recap` in audience, format, and purpose: not a summary of what happened, but a translation of outcomes into what-it-means for readers. Conforms to the [Meeting Skills Family Contract](../../../site/src/content/docs/reference/skill-families/meeting-skills-contract.md).
 
 ## Problem
 

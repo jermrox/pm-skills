@@ -33,8 +33,8 @@ Final state on `f03d94d`: DS family validator PASSES 7/7 with `--strict`; FS fam
 ### What's next (by priority)
 
 1. **DONE - GitHub Release UI body rewrite**: published rich content at /releases/tag/v2.15.0 from `docs/releases/Release_v2.15.0.md` body (no frontmatter).
-2. **DONE - v2.15.1 patch cycle**: shipped 2026-05-17 at tag `6f89439`. Closed all 18 audit findings (P0/P1/P2/P3) + side-effect closure of 5 pre-v2.15.0 legacy drift items + 4 new preventive CI validators. See [`Release_v2.15.1.md`](../../releases/Release_v2.15.1.md).
-3. **DONE - v2.15.2 closeout patch**: shipped 2026-05-17 with audit-doc status update + plan continuity + v2.16.0 plan reconciliation + issue #132 evidence comment. See [`Release_v2.15.2.md`](../../releases/Release_v2.15.2.md). v2.15.x cycle CLOSED.
+2. **DONE - v2.15.1 patch cycle**: shipped 2026-05-17 at tag `6f89439`. Closed all 18 audit findings (P0/P1/P2/P3) + side-effect closure of 5 pre-v2.15.0 legacy drift items + 4 new preventive CI validators. See [`Release_v2.15.1.md`](../../../../site/src/content/docs/releases/Release_v2.15.1.md).
+3. **DONE - v2.15.2 closeout patch**: shipped 2026-05-17 with audit-doc status update + plan continuity + v2.16.0 plan reconciliation + issue #132 evidence comment. See [`Release_v2.15.2.md`](../../../../site/src/content/docs/releases/Release_v2.15.2.md). v2.15.x cycle CLOSED.
 4. **ACTIVE - v2.16.0 execution**: 5 sub-plans + 4 spec docs authored; 66 tasks, 14-22 sessions estimated. Theme: Active Orchestration (4 sub-agents) + Doc-Stack Modernization (Astro 6.x). See [`../v2.16.0/plan_v2.16.0.md`](../v2.16.0/plan_v2.16.0.md).
 
 ### Estimated remaining

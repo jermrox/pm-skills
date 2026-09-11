@@ -2,7 +2,7 @@
 
 This is the detailed technical specification for `foundation-meeting-agenda`. Reads together with:
 - Effort brief: [`../F-18-meeting-agenda.md`](../F-18-meeting-agenda.md)
-- Family contract: [`docs/reference/skill-families/meeting-skills-contract.md`](../../../reference/skill-families/meeting-skills-contract.md)
+- Family contract: [`../../../../site/src/content/docs/reference/skill-families/meeting-skills-contract.md`](../../../../site/src/content/docs/reference/skill-families/meeting-skills-contract.md)
 - Implementation plan: [`plan_meeting-agenda.md`](plan_meeting-agenda.md)
 
 ## Input contract

@@ -9,7 +9,7 @@ Agent: Claude Opus 4.7
 
 ## Scope
 
-Create `foundation-meeting-synthesize`, a cross-meeting analysis skill that consumes multiple meeting recaps or raw meeting outputs over a period and surfaces patterns invisible in any single meeting: how decisions evolved, who has been saying what, where threads are stalling, where contradictions have emerged. The archaeology skill. Conforms to the [Meeting Skills Family Contract](../reference/skill-families/meeting-skills-contract.md).
+Create `foundation-meeting-synthesize`, a cross-meeting analysis skill that consumes multiple meeting recaps or raw meeting outputs over a period and surfaces patterns invisible in any single meeting: how decisions evolved, who has been saying what, where threads are stalling, where contradictions have emerged. The archaeology skill. Conforms to the [Meeting Skills Family Contract](../../../site/src/content/docs/reference/skill-families/meeting-skills-contract.md).
 
 ## Problem
 

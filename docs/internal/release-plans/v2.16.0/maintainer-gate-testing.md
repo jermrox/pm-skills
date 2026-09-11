@@ -494,6 +494,6 @@ The follow-up commit will be in this same spike branch (`feat/v2.16-astro-6-spik
 - Subagents integration plan Phase 2 Task 9 (GATE A/B/C definitions): [`subagents-integration-plan.md`](./subagents-integration-plan.md)
 - Conductor dispatch SKILL.md with EXPERIMENTAL caveat: [`../../../skills/utility-pm-release-conductor/SKILL.md`](../../../skills/utility-pm-release-conductor/SKILL.md)
 - Canonical samples for output-shape comparison: [`../../../library/sub-agent-samples/README.md`](../../../library/sub-agent-samples/README.md)
-- Release runbook conductor reads at invocation: [`../../../docs/contributing/release-runbook.md`](../../../docs/contributing/release-runbook.md)
+- Release runbook conductor reads at invocation: [`../../../../site/src/content/docs/contributing/release-runbook.md`](../../../../site/src/content/docs/contributing/release-runbook.md)
 - Phase 0 review closure (G1 attestation reference): commit `9cb81af` ([`docs/internal/release-plans/v2.16.0/`](./))
 - Spike branch HEAD: `feat/v2.16-astro-6-spike` at commit `69c61b8` (PR #147 DRAFT)
