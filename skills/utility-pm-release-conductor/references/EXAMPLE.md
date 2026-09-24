@@ -187,4 +187,4 @@ This is the canonical worked example for Phase 2 GATE C validation. If GATE C re
 - Skill manifest: `SKILL.md`
 - Output template: `TEMPLATE.md`
 - Inlined children: [`agents/pm-skill-auditor.md`](../../../agents/pm-skill-auditor.md), [`agents/pm-changelog-curator.md`](../../../agents/pm-changelog-curator.md)
-- Canonical runbook: [`docs/contributing/release-runbook.md`](../../../docs/contributing/release-runbook.md)
+- Canonical runbook: [`docs/contributing/release-runbook.md`](../../../site/src/content/docs/contributing/release-runbook.md)

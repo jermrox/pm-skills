@@ -17,13 +17,13 @@
 //   - our own deployed-site URLs (https://<pages-host>/pm-skills/...) map to a real
 //     route in scripts/route-manifest.txt (the same baseline check-route-parity uses).
 //
-// Pattern S relocation alias: a relative link that resolves into the retired
-//   docs/(reference|guides|concepts)/... tree is accepted when the same tail exists
-//   under site/src/content/docs/... (where gen-site.mjs rewrites it at build time).
-//   This is an explicit, documented exception, not a silent pass: any OTHER
-//   non-resolving relative link fails. (Removing the exception is the deeper fix,
-//   but it is coupled to gen-site's rewrite contract; this guard at least stops the
-//   next Pattern-S-class regression in source files.)
+// The Pattern S relocation alias is GONE. Source files now link the published
+//   docs by their real on-disk path (site/src/content/docs/...), so every relative
+//   link is checked by plain resolution and nothing is excused. gen-site.mjs
+//   collapses those prefixes on copy, which is what made removing the alias safe:
+//   see rewriteInternalPaths / rewriteWorkflowLinks there, and the tests pinning
+//   that contract. docs/internal and the other paths that stayed at the repo root
+//   resolve directly and never needed the alias.
 //
 // External URLs (other hosts), in-page #anchors, and mailto:/tel: are skipped.
 // Anchor fragments on internal links are not resolved (presence-only, by design).
@@ -92,14 +92,7 @@ export function findBrokenLinks(text, { routes, sitePrefix, exists }) {
 export function relativeTargetResolves(rel, { fileDir, root, fileExists }) {
   const decoded = decodeURIComponent(rel);
   const abs = path.resolve(fileDir, decoded);
-  if (fileExists(abs)) return true;
-  // Pattern S moved the whole published docs/ tree under site/src/content/docs/.
-  // (docs/internal, docs/templates, docs/RESOURCES.md, docs/README.md stayed at root
-  // and are caught by the fileExists(abs) check above, so they never reach here.)
-  const relToRoot = path.relative(root, abs).split(path.sep).join('/');
-  const m = relToRoot.match(/^docs\/(.+)$/);
-  if (m && fileExists(path.resolve(root, 'site', 'src', 'content', 'docs', m[1]))) return true;
-  return false;
+  return fileExists(abs);
 }
 
 // Directory names never worth scanning: gitignored maintainer scratch. `_LOCAL/` is
@@ -159,7 +152,7 @@ function main() {
   const scope = SOURCE_DIRS.join('/') + (includeInternal ? ' + ' + INTERNAL_DIRS.join('/') : '');
   console.log(`scanned: ${files.length} markdown files (root prose + ${scope})`);
   if (problems.length === 0) {
-    console.log('\nPASS: all relative links resolve (Pattern S alias honored) and all deployed-site URLs map to a real route.');
+    console.log('\nPASS: all relative links resolve and all deployed-site URLs map to a real route.');
     process.exit(0);
   }
   console.log(`\nFAIL: ${problems.length} broken link(s):`);

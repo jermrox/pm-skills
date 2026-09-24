@@ -500,7 +500,7 @@ The existing CI audit (Section 12.4 of that file) calls this out as "1/3 enforci
 
 **Observation 4: The site has no link integrity check**
 
-`validate-docs.yml` runs `mkdocs build --strict`, which catches *some* broken links (those MkDocs can resolve from nav). But internal cross-references between docs pages (e.g., `[Frontmatter Schema](../reference/frontmatter-schema.yaml)`) are not link-validated. The existing CI audit identifies this as gap G4. My docs-pass found at least one stale link (`docs/concepts/skill-anatomy.md` says "All 25 domain skills and the foundation skill are at version 2.0.0" referencing internal docs that may have drifted). Section 14 #6 proposes a fix.
+`validate-docs.yml` runs `mkdocs build --strict`, which catches *some* broken links (those MkDocs can resolve from nav). But internal cross-references between docs pages (e.g., `[Frontmatter Schema](../../../site/src/content/docs/reference/frontmatter-schema.yaml)`) are not link-validated. The existing CI audit identifies this as gap G4. My docs-pass found at least one stale link (`docs/concepts/skill-anatomy.md` says "All 25 domain skills and the foundation skill are at version 2.0.0" referencing internal docs that may have drifted). Section 14 #6 proposes a fix.
 
 **Observation 5: The `docs/internal/` cone is large and informative**
 

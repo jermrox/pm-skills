@@ -9,7 +9,7 @@ Agent: Claude Opus 4.7
 
 ## Scope
 
-Create `foundation-meeting-agenda`, a pre-meeting skill that produces an attendee-facing structural document setting what will be discussed, who owns each topic, and how time will be spent. Conforms to the [Meeting Skills Family Contract](../reference/skill-families/meeting-skills-contract.md). Supports meeting-type variants (1-on-1, team sync, stakeholder review, decision meeting, project kickoff, working session, exec briefing).
+Create `foundation-meeting-agenda`, a pre-meeting skill that produces an attendee-facing structural document setting what will be discussed, who owns each topic, and how time will be spent. Conforms to the [Meeting Skills Family Contract](../../../site/src/content/docs/reference/skill-families/meeting-skills-contract.md). Supports meeting-type variants (1-on-1, team sync, stakeholder review, decision meeting, project kickoff, working session, exec briefing).
 
 ## Problem
 

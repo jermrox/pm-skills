@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "skill": "utility-figjam-harvest",
+  "runs_per_query": 3,
+  "trigger_threshold": 0.5,
+  "queries": [
+    {
+      "q": "Pull everything off yesterday's FigJam board and write it up",
+      "expect": "trigger",
+      "split": "train"
+    },
+    {
+      "q": "Turn the stickies and votes on this board into a document I can share",
+      "expect": "trigger",
+      "split": "train"
+    },
+    {
+      "q": "Read this FigJam board and give me the problem statement input",
+      "expect": "trigger",
+      "split": "train"
+    },
+    {
+      "q": "What did the team actually decide on this board, with the alternatives?",
+      "expect": "trigger",
+      "split": "train"
+    },
+    {
+      "q": "Convert our workshop board into written form before we archive it",
+      "expect": "trigger",
+      "split": "train"
+    },
+    {
+      "q": "Extract the clusters and vote counts from the canvas into a report",
+      "expect": "trigger",
+      "split": "validation"
+    },
+    {
+      "q": "The board is about to be archived, capture what is on it with sources",
+      "expect": "trigger",
+      "split": "validation"
+    },
+    {
+      "q": "Trace each conclusion in the write-up back to the sticky it came from",
+      "expect": "trigger",
+      "split": "validation"
+    },
+    {
+      "q": "Build a FigJam board for the discovery workflow",
+      "expect": "no-trigger",
+      "split": "train",
+      "near_miss_of": "utility-figjam-board"
+    },
+    {
+      "q": "Set up the canvas with one section per output field",
+      "expect": "no-trigger",
+      "split": "train",
+      "near_miss_of": "utility-figjam-board"
+    },
+    {
+      "q": "Facilitate the session and get us to a decision",
+      "expect": "no-trigger",
+      "split": "train",
+      "near_miss_of": "utility-figjam-workshop"
+    },
+    {
+      "q": "Give me the run sheet with roles and timeboxes",
+      "expect": "no-trigger",
+      "split": "train",
+      "near_miss_of": "utility-figjam-workshop"
+    },
+    {
+      "q": "Synthesize these twelve interview transcripts",
+      "expect": "no-trigger",
+      "split": "train"
+    },
+    {
+      "q": "Write the recap email for people who missed the meeting",
+      "expect": "no-trigger",
+      "split": "validation"
+    },
+    {
+      "q": "Draw this state machine as a mermaid diagram",
+      "expect": "no-trigger",
+      "split": "validation"
+    },
+    {
+      "q": "Grade our quarterly OKRs against the targets",
+      "expect": "no-trigger",
+      "split": "validation"
+    }
+  ]
+}

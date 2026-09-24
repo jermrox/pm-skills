@@ -50,7 +50,7 @@ Per-skill execution plan. Reads together with the effort brief ([`../F-18-meetin
    - **Anti-meeting check** flow step (shared with meeting-brief)
    - Process section (reference specification.md for detail)
    - Quality checklist
-   - Link to family contract: `See: [Meeting Skills Family Contract](../../docs/reference/skill-families/meeting-skills-contract.md)`
+   - Link to family contract: `See: [Meeting Skills Family Contract](../../../../site/src/content/docs/reference/skill-families/meeting-skills-contract.md)`
 3. **Write TEMPLATE.md** with:
    - Full universal-base-field frontmatter + agenda-specific fields
    - `## Shareable summary` section scaffold

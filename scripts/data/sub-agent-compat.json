@@ -1,5 +1,5 @@
 {
-  "intro_tail": "sub-agents (5 user-facing PM sub-agents plus the internal tooling instrument `pm-skill-router`, added v2.29.0). The \"as of\" stamp tracks the latest inventory refresh; per-row status claims stay pinned to whatever date or version they were last independently verified, exactly as recorded in the prose below the table.",
+  "intro_tail": "sub-agents (6 user-facing PM sub-agents plus the internal tooling instrument `pm-skill-router`, added v2.29.0). The \"as of\" stamp tracks the latest inventory refresh; per-row status claims stay pinned to whatever date or version they were last independently verified, exactly as recorded in the prose below the table.",
   "clients": [
     "Claude Code (native)",
     "Codex CLI",
@@ -10,25 +10,41 @@
       "id": "pm-critic",
       "label": "pm-critic",
       "dispatch": "utility-pm-critic",
-      "cells": ["PRODUCTION", "PRODUCTION", "EXPERIMENTAL"]
+      "cells": [
+        "PRODUCTION",
+        "PRODUCTION",
+        "EXPERIMENTAL"
+      ]
     },
     {
       "id": "pm-skill-auditor",
       "label": "pm-skill-auditor",
       "dispatch": "utility-pm-skill-auditor",
-      "cells": ["PRODUCTION", "PRODUCTION", "EXPERIMENTAL"]
+      "cells": [
+        "PRODUCTION",
+        "PRODUCTION",
+        "EXPERIMENTAL"
+      ]
     },
     {
       "id": "pm-changelog-curator",
       "label": "pm-changelog-curator",
       "dispatch": "utility-pm-changelog-curator",
-      "cells": ["PRODUCTION", "PRODUCTION", "EXPERIMENTAL"]
+      "cells": [
+        "PRODUCTION",
+        "PRODUCTION",
+        "EXPERIMENTAL"
+      ]
     },
     {
       "id": "pm-release-conductor",
       "label": "pm-release-conductor",
       "dispatch": "utility-pm-release-conductor",
-      "cells": ["PRODUCTION", "DRY-RUN VALIDATED (live UNTESTED)", "EXPERIMENTAL"]
+      "cells": [
+        "PRODUCTION",
+        "DRY-RUN VALIDATED (live UNTESTED)",
+        "EXPERIMENTAL"
+      ]
     },
     {
       "id": "pm-workflow-orchestrator",
@@ -48,6 +64,16 @@
         "PRODUCTION for its maintainer-tooling role (key-free `Agent`-tool dispatch, Haiku-pinned by default)",
         "N/A - no dispatch skill; not a cross-client user path",
         "N/A - no dispatch skill; not a cross-client user path"
+      ]
+    },
+    {
+      "id": "pm-figjam-facilitator",
+      "label": "pm-figjam-facilitator (added unreleased)",
+      "dispatch": "utility-pm-figjam-facilitator",
+      "cells": [
+        "UNVERIFIED - not yet smoke-tested. Dispatches natively to the sub-agent, which declares the `Skill` tool to reach the three FigJam skills. Board authoring additionally requires a connected Figma MCP server and a seat that can edit",
+        "UNVERIFIED - dispatch skill executes the agent definition inline; requires a connected Figma MCP server",
+        "UNVERIFIED - dispatch skill executes the agent definition inline; requires a connected Figma MCP server"
       ]
     }
   ]

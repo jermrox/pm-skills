@@ -175,7 +175,7 @@ Coordination rules during this v2.13.1 release prep:
 
 ## Related artifacts
 
-- Release notes: [`../../releases/Release_v2.13.1.md`](../../releases/Release_v2.13.1.md)
+- Release notes: [`../../../../site/src/content/docs/releases/Release_v2.13.1.md`](../../../../site/src/content/docs/releases/Release_v2.13.1.md)
 - Validator documentation: [`../../../scripts/validate-plugin-install.md`](../../../scripts/validate-plugin-install.md)
 - v2.13.0 master plan: [`../v2.13.0/plan_v2.13.0.md`](../v2.13.0/plan_v2.13.0.md)
 - v2.14.0 master plan (next cycle): [`../v2.14.0/plan_v2.14.0.md`](../v2.14.0/plan_v2.14.0.md)

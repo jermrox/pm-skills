@@ -853,7 +853,7 @@ pm-skills is built as a static site (SSG; no SSR, no server islands, no Cloudfla
 
 ## 9. Related artifacts
 
-- v2.13.0 release notes (the cycle that returned Zensical NO-GO and proposed Starlight): [`../../../releases/Release_v2.13.0.md`](../../../releases/Release_v2.13.0.md)
+- v2.13.0 release notes (the cycle that returned Zensical NO-GO and proposed Starlight): [`../../../../site/src/content/docs/releases/Release_v2.13.0.md`](../../../../site/src/content/docs/releases/Release_v2.13.0.md)
 - Backlog-canonical: [`../../backlog-canonical.md`](../../backlog-canonical.md)
 - Decision Brief convention (codified in Claude memory; future plans should follow): in `feedback_decision-brief-pattern.md` durable memory
 

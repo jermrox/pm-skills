@@ -27,7 +27,7 @@ The two "recommended" blocks also gain an "old way still works" pointer.
 ```
 **Add immediately after the closing fence:**
 ```markdown
-> Already installed via the old `pm-skills-marketplace`? It keeps working - no action needed. To move to the new home, see [Already installed the old way?](docs/releases/Release_v2.21.0.md#already-installed-the-old-way).
+> Already installed via the old `pm-skills-marketplace`? It keeps working - no action needed. To move to the new home, see [Already installed the old way?](../../../../site/src/content/docs/releases/Release_v2.21.0.md#already-installed-the-old-way).
 ```
 
 ## Edit 2 - README.md Featured Install Paths (around line 409-412)
@@ -36,7 +36,7 @@ Same command swap as Edit 1. Add the same pointer after the block (repo-root-rel
 
 ## Edit 3 - docs/getting-started/platforms.md "Modern Claude Code" (around line 32-35)
 
-Same command swap. Add the pointer (path relative to this file): `[Already installed the old way?](../releases/Release_v2.21.0.md#already-installed-the-old-way)`.
+Same command swap. Add the pointer (path relative to this file): `[Already installed the old way?](../../../../site/src/content/docs/releases/Release_v2.21.0.md#already-installed-the-old-way)`.
 
 **Preserve unchanged** the local-working-copy block immediately below (lines ~41-44):
 ```

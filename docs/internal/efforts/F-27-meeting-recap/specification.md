@@ -2,7 +2,7 @@
 
 Reads together with:
 - Effort brief: [`../F-27-meeting-recap.md`](../F-27-meeting-recap.md)
-- Family contract: [`docs/reference/skill-families/meeting-skills-contract.md`](../../../reference/skill-families/meeting-skills-contract.md)
+- Family contract: [`../../../../site/src/content/docs/reference/skill-families/meeting-skills-contract.md`](../../../../site/src/content/docs/reference/skill-families/meeting-skills-contract.md)
 - Implementation plan: [`plan_meeting-recap.md`](plan_meeting-recap.md)
 
 ## Input contract

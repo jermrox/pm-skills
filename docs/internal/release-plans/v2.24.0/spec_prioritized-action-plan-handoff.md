@@ -244,7 +244,7 @@ This is the skill's FIRST HISTORY.md. Per `docs/internal/skill-versioning.md`, H
 
 ## 1.1.0 (<ship-date>)
 
-Released in [v2.24.0](../../docs/releases/Release_v2.24.0.md).
+Released in [v2.24.0](../../../../site/src/content/docs/releases/Release_v2.24.0.md).
 
 Added an optional HANDOFF mode. After producing a plan, the skill can offer to
 run the plan's runnable Section 7 prompts through `utility-pm-workflow-orchestrator`,
@@ -279,7 +279,7 @@ at v2.24.0 because `utility-pm-workflow-orchestrator` now exists. Recorded also 
 
 ## 1.0.0 (2026-05-31)
 
-Released in [v2.23.0](../../docs/releases/Release_v2.23.0.md).
+Released in [v2.23.0](../../../../site/src/content/docs/releases/Release_v2.23.0.md).
 
 Initial release. An evidence-grounded prioritized action plan skill built on
 Theory of Constraints (binding-constraint prioritization) and Cynefin (confidence

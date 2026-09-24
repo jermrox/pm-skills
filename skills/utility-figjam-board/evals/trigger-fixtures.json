@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "skill": "utility-figjam-board",
+  "runs_per_query": 3,
+  "trigger_threshold": 0.5,
+  "queries": [
+    {
+      "q": "Set up a FigJam board for our discovery workflow before Thursday's session",
+      "expect": "trigger",
+      "split": "train"
+    },
+    {
+      "q": "Turn this PRD into a whiteboard the team can annotate and push back on",
+      "expect": "trigger",
+      "split": "train"
+    },
+    {
+      "q": "Build me a FigJam canvas with one section per step of the design sprint",
+      "expect": "trigger",
+      "split": "train"
+    },
+    {
+      "q": "I want the opportunity tree on a board so the team can add branches",
+      "expect": "trigger",
+      "split": "train"
+    },
+    {
+      "q": "Stage our launch checklist as a shared visual plan with the gates marked",
+      "expect": "trigger",
+      "split": "train"
+    },
+    {
+      "q": "Create a collaborative canvas from the lean canvas skill with the nine blocks laid out",
+      "expect": "trigger",
+      "split": "validation"
+    },
+    {
+      "q": "Prepare a whiteboard with seeded stickies so people do not arrive to a blank board",
+      "expect": "trigger",
+      "split": "validation"
+    },
+    {
+      "q": "Lay the journey map out in FigJam with a lane per stage",
+      "expect": "trigger",
+      "split": "validation"
+    },
+    {
+      "q": "Facilitate the workshop on the board we already built and get us to a decision",
+      "expect": "no-trigger",
+      "split": "train",
+      "near_miss_of": "utility-figjam-workshop"
+    },
+    {
+      "q": "Pull the stickies off this FigJam board and write them up as a document",
+      "expect": "no-trigger",
+      "split": "train",
+      "near_miss_of": "utility-figjam-harvest"
+    },
+    {
+      "q": "Run the session, keep us to timeboxes, and record who decided what",
+      "expect": "no-trigger",
+      "split": "train",
+      "near_miss_of": "utility-figjam-workshop"
+    },
+    {
+      "q": "Read the board and tell me what the team concluded",
+      "expect": "no-trigger",
+      "split": "train",
+      "near_miss_of": "utility-figjam-harvest"
+    },
+    {
+      "q": "Add a mermaid sequence diagram to this technical spec",
+      "expect": "no-trigger",
+      "split": "train"
+    },
+    {
+      "q": "Build the component library in Figma Design from our design tokens",
+      "expect": "no-trigger",
+      "split": "validation"
+    },
+    {
+      "q": "Write the agenda I send attendees before the meeting",
+      "expect": "no-trigger",
+      "split": "validation"
+    },
+    {
+      "q": "Synthesize these interview transcripts into themes",
+      "expect": "no-trigger",
+      "split": "validation"
+    }
+  ]
+}

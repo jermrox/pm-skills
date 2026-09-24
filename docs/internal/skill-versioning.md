@@ -128,7 +128,7 @@ A per-skill changelog that connects versions to efforts and releases.
 
 ## 1.1.0 (2026-05-15)
 
-Released in [v2.9.0](../../docs/releases/Release_v2.9.0.md). Effort: F-18 (#130).
+Released in [v2.9.0](../../site/src/content/docs/releases/Release_v2.9.0.md). Effort: F-18 (#130).
 
 [2-5 sentence description of what changed and why.]
 
@@ -137,7 +137,7 @@ Released in [v2.9.0](../../docs/releases/Release_v2.9.0.md). Effort: F-18 (#130)
 
 ## 1.0.0 (2026-03-22)
 
-Released in [v2.7.0](../../docs/releases/Release_v2.7.0.md). Effort: F-05 (#113).
+Released in [v2.7.0](../../site/src/content/docs/releases/Release_v2.7.0.md). Effort: F-05 (#113).
 
 [2-5 sentence description of initial release.]
 

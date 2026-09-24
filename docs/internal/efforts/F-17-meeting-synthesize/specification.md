@@ -2,7 +2,7 @@
 
 Reads together with:
 - Effort brief: [`../F-17-meeting-synthesize.md`](../F-17-meeting-synthesize.md)
-- Family contract: [`docs/reference/skill-families/meeting-skills-contract.md`](../../../reference/skill-families/meeting-skills-contract.md)
+- Family contract: [`../../../../site/src/content/docs/reference/skill-families/meeting-skills-contract.md`](../../../../site/src/content/docs/reference/skill-families/meeting-skills-contract.md)
 - Implementation plan: [`plan_meeting-synthesize.md`](plan_meeting-synthesize.md)
 
 ## Input contract

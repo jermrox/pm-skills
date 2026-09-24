@@ -135,7 +135,7 @@ Illustrative shape (real paths):
 ## Guides
 | Resource | Description | Live page | Repo source |
 |---|---|---|---|
-| Prompt Gallery | Real prompts across three styles | [site](https://product-on-purpose.github.io/pm-skills/guides/prompt-gallery/) | [.md](../site/src/content/docs/guides/prompt-gallery.md) |
+| Prompt Gallery | Real prompts across three styles | [site](https://product-on-purpose.github.io/pm-skills/guides/prompt-gallery/) | [.md](../../../../../site/src/content/docs/guides/prompt-gallery.md) |
 
 ## Skills - Deliver
 | Skill | Description | Live page | SKILL.md |

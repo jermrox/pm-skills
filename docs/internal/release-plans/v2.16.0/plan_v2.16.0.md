@@ -14,7 +14,7 @@
   - 3 stale-framing audit fixes + 3 mermaid diagrams in release-runbook + ci-overview + adversarial-review (`64ba259`)
   - CHANGELOG + Release notes + docs/reference/index.md + skill-families landing + README finalized for v2.16.0 currency (`3f0ffe0`)
 - **Validators:** all 27 enforcing PASS locally via `bash scripts/pre-tag-validate.sh`. check-internal-link-validity --strict PASS (183 files; 0 broken). check-count-consistency PASS (0 stale). check-generated-content-untouched PASS (63 pages). validate-docs-frontmatter --strict PASS (65 docs). check-no-body-h1 --strict PASS (0 duplications). check-em-dashes: 0 violations.
-- **GATE B + GATE C cross-client tests:** PASSED on Codex CLI 0.128.0 2026-05-17 per [`gate-test-results_2026-05-17_codex.md`](./gate-test-results_2026-05-17_codex.md); 3 of 4 dispatch skills PRODUCTION on Codex CLI; conductor DRY-RUN VALIDATED on Codex CLI; canonical matrix at [`docs/reference/sub-agent-compatibility.md`](../../reference/sub-agent-compatibility.md).
+- **GATE B + GATE C cross-client tests:** PASSED on Codex CLI 0.128.0 2026-05-17 per [`gate-test-results_2026-05-17_codex.md`](./gate-test-results_2026-05-17_codex.md); 3 of 4 dispatch skills PRODUCTION on Codex CLI; conductor DRY-RUN VALIDATED on Codex CLI; canonical matrix at [`../../../../site/src/content/docs/reference/sub-agent-compatibility.md`](../../../../site/src/content/docs/reference/sub-agent-compatibility.md).
 
 Spike PR [#147](https://github.com/product-on-purpose/pm-skills/pull/147) is DRAFT pending maintainer push approval -> PR ready conversion -> CI green confirmation -> merge -> conductor live tag.
 **Owner:** Maintainers

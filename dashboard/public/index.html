@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PM-Skills Dashboard</title>
+<style>
+  :root {
+    --bg: #0f1117; --panel: #171a23; --panel2: #1e2230; --border: #2a2f40;
+    --text: #e6e9f2; --muted: #9aa3b8; --accent: #6c8cff; --accent2: #47c78f;
+    --warn: #e5a54b; --danger: #e06c75; --chip: #262b3d;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+  header { display: flex; align-items: center; gap: 16px; padding: 14px 24px; border-bottom: 1px solid var(--border); background: var(--panel); position: sticky; top: 0; z-index: 10; }
+  header h1 { font-size: 17px; margin: 0; letter-spacing: 0.3px; }
+  header .stats { color: var(--muted); font-size: 12.5px; }
+  nav { display: flex; gap: 4px; margin-left: auto; }
+  nav button { background: none; border: 1px solid transparent; color: var(--muted); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13.5px; }
+  nav button.active { color: var(--text); background: var(--panel2); border-color: var(--border); }
+  main { padding: 20px 24px 60px; max-width: 1280px; margin: 0 auto; }
+  .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+  input[type=text], input[type=search], select, textarea { background: var(--panel2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px 10px; font-size: 13.5px; }
+  input[type=search] { min-width: 260px; }
+  textarea { width: 100%; font-family: inherit; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 14px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .card h3 { margin: 0; font-size: 14.5px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .card p { margin: 0; color: var(--muted); font-size: 12.8px; line-height: 1.5; max-height: 110px; overflow: auto; }
+  .badge { font-size: 10.5px; padding: 2px 8px; border-radius: 999px; background: var(--chip); color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .badge.phase-discover { color: #7fb7ff; } .badge.phase-define { color: #b18cff; }
+  .badge.phase-develop { color: #58d3c0; } .badge.phase-deliver { color: #7fd47f; }
+  .badge.phase-measure { color: #ffc46b; } .badge.phase-iterate { color: #ff9b9b; }
+  .badge.foundation { color: #6c8cff; } .badge.utility { color: #d0a5ff; } .badge.tool { color: #7fd4b5; }
+  .badge.local { color: var(--accent2); border: 1px solid var(--accent2); background: transparent; }
+  .badge.repo { color: var(--warn); border: 1px solid var(--warn); background: transparent; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .chip { background: var(--chip); border-radius: 999px; padding: 3px 10px; font-size: 11.5px; color: var(--text); display: inline-flex; gap: 6px; align-items: center; }
+  .chip button { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 12px; padding: 0; }
+  button.action { background: var(--accent); color: #0d1020; border: none; border-radius: 8px; padding: 7px 12px; font-size: 12.8px; font-weight: 600; cursor: pointer; }
+  button.action.secondary { background: var(--panel2); color: var(--text); border: 1px solid var(--border); font-weight: 500; }
+  button.action.danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+  button.action:hover { filter: brightness(1.12); }
+  .empty { color: var(--muted); padding: 40px; text-align: center; }
+  label { font-size: 12.5px; color: var(--muted); display: block; margin: 12px 0 4px; }
+  .builder { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .builder .preview pre { background: var(--panel2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; font-size: 11.8px; overflow: auto; max-height: 560px; white-space: pre-wrap; }
+  .checks { display: flex; flex-wrap: wrap; gap: 8px; }
+  .checks label { display: inline-flex; align-items: center; gap: 6px; margin: 0; background: var(--panel2); border: 1px solid var(--border); padding: 5px 10px; border-radius: 8px; cursor: pointer; color: var(--text); }
+  .skillpick { max-height: 220px; overflow: auto; border: 1px solid var(--border); border-radius: 10px; padding: 10px; background: var(--panel2); display: flex; flex-wrap: wrap; gap: 6px; }
+  pre.copyblock { background: var(--panel2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; font-size: 12px; overflow: auto; white-space: pre-wrap; max-height: 420px; }
+  .section { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-bottom: 18px; }
+  .section h2 { margin: 0 0 6px; font-size: 15.5px; }
+  .section .hint { color: var(--muted); font-size: 12.5px; margin: 0 0 12px; }
+  #toast { position: fixed; bottom: 20px; right: 20px; background: var(--accent2); color: #0d1020; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; opacity: 0; transition: opacity 0.25s; pointer-events: none; }
+  #toast.show { opacity: 1; }
+  dialog { background: var(--panel); color: var(--text); border: 1px solid var(--border); border-radius: 14px; padding: 20px; max-width: 460px; width: 90%; }
+  dialog::backdrop { background: rgba(0,0,0,0.55); }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <h1>PM-Skills Dashboard</h1>
+  <span class="stats" id="stats"></span>
+  <nav>
+    <button data-tab="skills" class="active">Skills</button>
+    <button data-tab="agents">Agents</button>
+    <button data-tab="builder">Agent Builder</button>
+    <button data-tab="workflows">Workflows</button>
+    <button data-tab="figjam">FigJam Studio</button>
+  </nav>
+</header>
+<main>
+  <section id="tab-skills">
+    <div class="toolbar">
+      <input type="search" id="skill-search" placeholder="Search skills...">
+      <select id="skill-group">
+        <option value="">All groups</option>
+        <option value="phase">Phase</option>
+        <option value="foundation">Foundation</option>
+        <option value="utility">Utility</option>
+        <option value="tool">Tool</option>
+      </select>
+      <select id="skill-phase">
+        <option value="">All phases</option>
+        <option>discover</option><option>define</option><option>develop</option>
+        <option>deliver</option><option>measure</option><option>iterate</option>
+      </select>
+    </div>
+    <div class="grid" id="skills-grid"></div>
+  </section>
+
+  <section id="tab-agents" hidden>
+    <div class="toolbar">
+      <span class="hint" style="color: var(--muted); font-size: 12.5px;">
+        Repo agents are curated and read-only; clone one to customize it locally.
+        Local agents live in <code>.claude/agents/</code> and are auto-discovered by Claude Code.
+      </span>
+    </div>
+    <div class="grid" id="agents-grid"></div>
+  </section>
+
+  <section id="tab-builder" hidden>
+    <div class="builder">
+      <div>
+        <div class="section">
+          <h2>Create a new agent</h2>
+          <p class="hint">Follows the pm-skills sub-agent framework: frontmatter contract, isolated context, no Agent tool (chain depth rule D14). Saved to <code>.claude/agents/</code>.</p>
+          <label>Name (lowercase-hyphenated)</label>
+          <input type="text" id="b-name" placeholder="pm-launch-writer" style="width: 100%">
+          <label>Description (when should Claude delegate to this agent?)</label>
+          <textarea id="b-desc" rows="3" placeholder="Use when the user needs launch collateral: release notes, launch checklist, stakeholder update..."></textarea>
+          <label>Focus (what it does, in one or two sentences)</label>
+          <textarea id="b-focus" rows="2" placeholder="Produces launch-phase artifacts using the applied deliver skills."></textarea>
+          <label>Model</label>
+          <select id="b-model"></select>
+          <label>Memory</label>
+          <select id="b-memory"><option>none</option><option>project</option><option>user</option></select>
+          <label>Tools</label>
+          <div class="checks" id="b-tools"></div>
+          <label>Apply skills (click to toggle)</label>
+          <input type="search" id="b-skill-search" placeholder="Filter skills..." style="width: 100%; margin-bottom: 8px;">
+          <div class="skillpick" id="b-skills"></div>
+          <div style="margin-top: 16px;" class="row">
+            <button class="action" id="b-create">Create agent</button>
+            <span id="b-status" style="font-size: 12.5px; color: var(--muted);"></span>
+          </div>
+        </div>
+      </div>
+      <div class="preview">
+        <div class="section">
+          <h2>Live preview</h2>
+          <p class="hint">This exact markdown is written to <code>.claude/agents/&lt;name&gt;.md</code>.</p>
+          <pre id="b-preview"></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tab-workflows" hidden>
+    <div class="grid" id="workflows-grid"></div>
+  </section>
+
+  <section id="tab-figjam" hidden>
+    <div class="section">
+      <h2>FigJam Studio</h2>
+      <p class="hint">
+        Turn any skill, agent, or workflow into a FigJam board. Pick a source and a board style;
+        copy the generated prompt into Claude Code (with the Figma MCP server connected) to have it
+        build the board in FigJam, or copy the mermaid diagram and paste it into FigJam directly.
+        See <a href="https://help.figma.com/hc/en-us/articles/1500004362321" target="_blank" rel="noopener">FigJam docs</a> for diagram import.
+      </p>
+      <div class="toolbar">
+        <select id="fj-source-type">
+          <option value="workflow">Workflow board</option>
+          <option value="skill">Skill working session</option>
+          <option value="agent">Agent kickoff board</option>
+        </select>
+        <select id="fj-source"></select>
+        <select id="fj-style">
+          <option value="workshop">Workshop (stickies + voting)</option>
+          <option value="diagram">Diagram (flow)</option>
+          <option value="kanban">Kanban (phase columns)</option>
+        </select>
+        <button class="action" id="fj-generate">Generate</button>
+      </div>
+      <div id="fj-output" hidden>
+        <h2 style="font-size: 14px;">Claude Code + Figma MCP prompt</h2>
+        <p class="hint">Paste into a Claude Code session that has the Figma MCP server connected. It uses the FigJam tools (get_figjam / generate_diagram) to build the board.</p>
+        <pre class="copyblock" id="fj-prompt"></pre>
+        <button class="action secondary" data-copy="fj-prompt">Copy prompt</button>
+        <div id="fj-mermaid-wrap">
+          <h2 style="font-size: 14px; margin-top: 18px;">Mermaid board skeleton</h2>
+          <p class="hint">In FigJam: open a board, paste this into a code block or use a mermaid import plugin, or ask Claude via the Figma MCP generate_diagram tool to render it.</p>
+          <pre class="copyblock" id="fj-mermaid"></pre>
+          <button class="action secondary" data-copy="fj-mermaid">Copy mermaid</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog id="apply-dialog">
+  <h3 style="margin-top: 0;">Apply <span id="apply-skill-name"></span></h3>
+  <p style="color: var(--muted); font-size: 13px;">Choose an agent. Repo agents are cloned to a local copy first.</p>
+  <div id="apply-agent-list" class="row" style="flex-direction: column; align-items: stretch; gap: 8px;"></div>
+  <div class="row" style="margin-top: 14px; justify-content: flex-end;">
+    <button class="action secondary" onclick="document.getElementById('apply-dialog').close()">Cancel</button>
+  </div>
+</dialog>
+
+<div id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -213,7 +213,7 @@ The revised pitch carries more credibility (social proof of existing traction) a
 
 - Full distribution plan: [`../2026-04-22_skills-sh.md`](../2026-04-22_skills-sh.md)
 - Evergreen reference: [`../skills-sh.md`](../skills-sh.md)
-- v2.11.1 release notes: [`../../../releases/Release_v2.11.1.md`](../../../releases/Release_v2.11.1.md)
+- v2.11.1 release notes: [`../../../../site/src/content/docs/releases/Release_v2.11.1.md`](../../../../site/src/content/docs/releases/Release_v2.11.1.md)
 - Lint rules that prevent the YAML gotchas: [`../../../../scripts/lint-skills-frontmatter.md`](../../../../scripts/lint-skills-frontmatter.md)
 
 ---

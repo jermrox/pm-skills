@@ -7,7 +7,7 @@ Agent: Claude Opus 4.7
 
 ## Scope
 
-Create `foundation-meeting-brief`, a pre-meeting skill that produces a user's private strategic preparation document capturing stakes, stakeholder dynamics, messaging strategy, and anticipated tensions. Distinct from `foundation-meeting-agenda` because this artifact is not shared with attendees. it is the user's personal tactical read on the conversation. Conforms to the [Meeting Skills Family Contract](../reference/skill-families/meeting-skills-contract.md).
+Create `foundation-meeting-brief`, a pre-meeting skill that produces a user's private strategic preparation document capturing stakes, stakeholder dynamics, messaging strategy, and anticipated tensions. Distinct from `foundation-meeting-agenda` because this artifact is not shared with attendees. it is the user's personal tactical read on the conversation. Conforms to the [Meeting Skills Family Contract](../../../site/src/content/docs/reference/skill-families/meeting-skills-contract.md).
 
 ## Problem
 

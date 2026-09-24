@@ -52,12 +52,16 @@ export const BATCHES = {
   'wave1-foundation-measure': ['foundation-stakeholder-update', 'foundation-lean-canvas', 'measure-survey-analysis'],
   'wave1-utility': ['utility-pm-changelog-curator', 'utility-mermaid-diagrams'],
   // v2.32.0 WS-4 wave-2: the 10 remaining utility-* skills, completing the roster at
-  // 53 of 53 triggerable (the 15 tool-* sprint stages are excluded by design, see
+  // 53 of 53 triggerable at that point (the 15 tool-* sprint stages are excluded by design, see
   // trigger-eval-roster.yaml). Collision-critical batches first, per the ordering rule
   // above: the two batches below carry all three newly declared collision pairs.
   'collision-skill-authoring': ['utility-pm-skill-builder', 'utility-pm-skill-iterate', 'utility-pm-skill-validate', 'utility-pm-skill-auditor'],
   'collision-workflow': ['utility-pm-workflow-builder', 'utility-pm-workflow-orchestrator'],
   'wave2-utility-rest': ['utility-pm-critic', 'utility-pm-release-conductor', 'utility-slideshow-creator', 'utility-update-pm-skills'],
+  // FigJam loop (unreleased): one batch, because all three of its collision pairs
+  // are internal to the trio. Splitting them would measure each against skills it
+  // does not actually collide with.
+  'collision-figjam': ['utility-figjam-board', 'utility-figjam-workshop', 'utility-figjam-harvest', 'utility-pm-figjam-facilitator'],
 };
 
 /** Parse headless output (stream-json lines or a single JSON document) into events. */

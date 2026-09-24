@@ -17,7 +17,7 @@ Cross-client dispatch wrapper for the `pm-release-conductor` sub-agent. Detects 
 
 > **Status summary (v2.16.0):** PRODUCTION on Claude Code (native sub-agent path). DRY-RUN VALIDATED on Codex CLI 2026-05-17 per [`gate-test-results_2026-05-17_codex.md`](../../docs/internal/release-plans/v2.16.0/gate-test-results_2026-05-17_codex.md); LIVE release on Codex CLI is NOT independently exercised, so use with caution and run `--dry-run` first as a rehearsal. EXPERIMENTAL on Cursor / Windsurf / Copilot CLI / Gemini CLI (UNTESTED at v2.16.0 ship).
 >
-> See [Sub-Agent Compatibility Matrix](../../docs/reference/sub-agent-compatibility.md) for the canonical safe-usage matrix + what-was-validated detail + v2.17 expansion plan. For live release on a non-Claude client, ideally re-run the harness at [`maintainer-gate-testing-codex.md`](../../docs/internal/release-plans/v2.16.0/maintainer-gate-testing-codex.md) on that specific client first.
+> See [Sub-Agent Compatibility Matrix](../../site/src/content/docs/reference/sub-agent-compatibility.md) for the canonical safe-usage matrix + what-was-validated detail + v2.17 expansion plan. For live release on a non-Claude client, ideally re-run the harness at [`maintainer-gate-testing-codex.md`](../../docs/internal/release-plans/v2.16.0/maintainer-gate-testing-codex.md) on that specific client first.
 
 ## When to Use
 
@@ -69,11 +69,11 @@ Because non-Claude clients cannot natively chain, the auditor and curator behavi
 ## Reference Files
 
 - Canonical sub-agent definition: [`agents/pm-release-conductor.md`](../../agents/pm-release-conductor.md)
-- Canonical runbook: [`docs/contributing/release-runbook.md`](../../docs/contributing/release-runbook.md)
+- Canonical runbook: [`docs/contributing/release-runbook.md`](../../site/src/content/docs/contributing/release-runbook.md)
 - Behavioral spec: [`docs/internal/release-plans/v2.16.0/spec_pm-release-conductor.md`](../../docs/internal/release-plans/v2.16.0/spec_pm-release-conductor.md)
 - Chain child (inlined at G0 + G2.5): [`agents/pm-skill-auditor.md`](../../agents/pm-skill-auditor.md)
 - Chain child (inlined at G2): [`agents/pm-changelog-curator.md`](../../agents/pm-changelog-curator.md)
 - Pre-tag validator bundle: `scripts/pre-tag-validate.{sh,ps1}`
-- Runtime components catalog: [`docs/reference/runtime-components.md`](../../docs/reference/runtime-components.md)
+- Runtime components catalog: [`docs/reference/runtime-components.md`](../../site/src/content/docs/reference/runtime-components.md)
 - Output template: `references/TEMPLATE.md`
 - Worked example: `references/EXAMPLE.md`

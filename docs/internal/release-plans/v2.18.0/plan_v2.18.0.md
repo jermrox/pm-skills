@@ -267,7 +267,7 @@ The 4 new skills compose naturally with existing ones:
   - [`spec_define-prioritization-framework.md`](spec_define-prioritization-framework.md) - W2
   - [`spec_discover-journey-map.md`](spec_discover-journey-map.md) - W3
   - [`spec_measure-survey-analysis.md`](spec_measure-survey-analysis.md) - W4
-- Release runbook (load-bearing artifact; G3 procedure): [`../../../contributing/release-runbook.md`](../../../contributing/release-runbook.md)
+- Release runbook (load-bearing artifact; G3 procedure): [`../../../../site/src/content/docs/contributing/release-runbook.md`](../../../../site/src/content/docs/contributing/release-runbook.md)
 
 ---
 

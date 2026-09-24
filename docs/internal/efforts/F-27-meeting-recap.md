@@ -7,7 +7,7 @@ Agent: Claude Opus 4.7
 
 ## Scope
 
-Create `foundation-meeting-recap`, a post-meeting skill that produces a topic-segmented summary for attendees with decisions highlighted and actions captured inline per topic (plus a consolidated action view at the end). Absorbs what would otherwise be a separate "meeting-actions" skill. actions live alongside their context, not in a sibling artifact. Conforms to the [Meeting Skills Family Contract](../reference/skill-families/meeting-skills-contract.md).
+Create `foundation-meeting-recap`, a post-meeting skill that produces a topic-segmented summary for attendees with decisions highlighted and actions captured inline per topic (plus a consolidated action view at the end). Absorbs what would otherwise be a separate "meeting-actions" skill. actions live alongside their context, not in a sibling artifact. Conforms to the [Meeting Skills Family Contract](../../../site/src/content/docs/reference/skill-families/meeting-skills-contract.md).
 
 ## Problem
 

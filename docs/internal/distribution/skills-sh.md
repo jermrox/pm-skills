@@ -537,7 +537,7 @@ This pattern will be codified as F-38 `/pm-release` utility skill.
 
 - [Dated execution plan](2026-04-22_skills-sh.md) for the v2.11.1 submission effort
 - [v2.11.1 release plan](../pm-release-plans/v2.11.1/plan_v2.11.1.md)
-- [v2.11.1 release notes](../../releases/Release_v2.11.1.md)
+- [v2.11.1 release notes](../../../site/src/content/docs/releases/Release_v2.11.1.md)
 - [Lint script documentation](../../../scripts/lint-skills-frontmatter.md)
 - [F-38 `/pm-release` utility skill effort brief](../efforts/F-38-release-skill.md)
 
